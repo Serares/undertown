@@ -1,0 +1,10 @@
+/node_modules
+**/node_modules
+/dist
+
+.env
+/config
+.vscode
+/js_custom_files
+/nodemon.json
+.idea
