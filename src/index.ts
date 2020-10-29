@@ -91,9 +91,9 @@ class App {
 
         // upload login moved to routes because it acts as a middleware
         // app.use(multer({ storage: fileStorage, fileFilter: fileFilter}).array('imagini', 10));
-        console.log("Directory name is:", __dirname);
-        this.app.use(express.static(path.join(__dirname, 'public')));
-        this.app.set('views', path.join(__dirname, 'views'));
+        console.log("Directory name is:", process.cwd());
+        this.app.use(express.static(path.join(process.cwd(), 'public')));
+        this.app.set('views', path.join(process.cwd(), 'views'));
         this.app.set('view engine', 'ejs');
 
         this.app.use(helmet());
