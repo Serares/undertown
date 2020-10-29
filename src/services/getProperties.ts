@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Property } from '../models/property';
+import { IProperty, Property } from '../models/property';
 import { SEARCH_STATUS } from '../controllers/home';
 // TODO create this as an interface or something:
 import { getPropertyTypes } from '../utils/getPropertyTypes';
@@ -8,7 +8,7 @@ import { CustomError } from '../utils/Error';
 export const getProperties = async function (req: Request, res: Response, next: NextFunction, searchCode: SEARCH_STATUS) {
     let pageTitle: string;
     let pagePath: string = "";
-    let biggestPrice: number;
+    let biggestPrice: number = 0;
     // i need to send the sort and filter parameters when navigating through pages
     // figure out how
     // this function does not return properties actually 
@@ -33,21 +33,34 @@ export const getProperties = async function (req: Request, res: Response, next: 
 
         propertyTypes = await getPropertyTypes();
         //get biggest price
-        let biggestPriceProperty = await Property.find({})
+        let biggestPriceProperty: IProperty[] = await Property.find({})
             .sort({ pret: -1 })
             .limit(1);
-        biggestPrice = biggestPriceProperty[0].pret;
+        if (biggestPriceProperty.length > 0) {
+            biggestPrice = biggestPriceProperty[0].pret;
 
-        return res.status(200).render('pages/home/properties', {
-            path: `/${pagePath}`,
-            pageTitle: pageTitle,
-            imageUrl: '/img/banner-pages.jpg',
-            maxPrice: biggestPrice,
-            search_status: SEARCH_STATUS,
-            search_input: search_input,
-            property_type: property_type,
-            propertyTypes: propertyTypes
-        });
+            return res.status(200).render('pages/home/properties', {
+                path: `/${pagePath}`,
+                pageTitle: pageTitle,
+                imageUrl: '/img/banner-pages.jpg',
+                maxPrice: biggestPrice,
+                search_status: searchCode,
+                search_input: search_input,
+                property_type: property_type,
+                propertyTypes: propertyTypes
+            });
+        } else {
+            return res.status(401).render('pages/home/properties', {
+                path: `/${pagePath}`,
+                pageTitle: pageTitle,
+                imageUrl: '/img/banner-pages.jpg',
+                maxPrice: biggestPrice,
+                search_status: searchCode,
+                search_input: search_input,
+                property_type: property_type,
+                propertyTypes: propertyTypes
+            })
+        }
 
     } catch (err) {
         //TODO make a function to avoid repetition
