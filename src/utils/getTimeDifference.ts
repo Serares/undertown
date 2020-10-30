@@ -18,6 +18,6 @@ export const getTimeDifferenceEachProperty = function (properties: IProperty[]) 
         const diffDaysString = `Adaugat cu ${diffDays} zile in urmă`;
         const createdTimeAgo = diffHours > 36 ? diffDaysString : diffHoursString;
         property["createdTimeAgo"] = createdTimeAgo;
-    })
-}
+    });
+};
 
