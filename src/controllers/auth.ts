@@ -1,29 +1,29 @@
 import { NextFunction, Request, Response } from "express";
-import { IUser, User } from '../models/user';
-import bcrypt from 'bcryptjs';
-import { validationResult } from 'express-validator/check';
-import { IRequestSession } from '../interfaces/IRequestSession';
-import sgMail from '@sendgrid/mail';
-import crypto from 'crypto';
+import { IUser, User } from "../models/user";
+import bcrypt from "bcryptjs";
+import { validationResult } from "express-validator/check";
+import { IRequestSession } from "../interfaces/IRequestSession";
+import sgMail from "@sendgrid/mail";
+import crypto from "crypto";
 
 export class AuthController {
 
   public getLogin(req: Request, res: Response, next: NextFunction): void {
-    let message = req.flash('message');
+    let message = req.flash("message");
     if (message.length > 0) {
       message = message[0];
     } else {
       message = null;
     }
-    res.render('auth/login', {
-      path: '/login',
-      pageTitle: 'Login',
-      imageUrl: '/img/hero-image.jpg',
+    res.render("auth/login", {
+      path: "/login",
+      pageTitle: "Login",
+      imageUrl: "/img/hero-image.jpg",
       //get the key set when redirected this is sent as an array so might check if the array is empty or not
       errorMessage: message,
       oldInput: {
-        email: '',
-        password: ''
+        email: "",
+        password: ""
       },
       validationErrors: []
     });
@@ -36,10 +36,10 @@ export class AuthController {
 
     if (!errors.isEmpty()) {
       console.log(errors.array());
-      return res.status(422).render('auth/login', {
-        path: '/login',
-        pageTitle: 'Login',
-        imageUrl: '/img/hero-image.jpg',
+      return res.status(422).render("auth/login", {
+        path: "/login",
+        pageTitle: "Login",
+        imageUrl: "/img/hero-image.jpg",
         errorMessage: errors.array()[0].msg,
         oldInput: {
           email: email,
@@ -52,11 +52,11 @@ export class AuthController {
     User.findOne({ email: email })
       .then(user => {
         if (!user) {
-          return res.status(422).render('auth/login', {
-            path: '/login',
-            pageTitle: 'Login',
+          return res.status(422).render("auth/login", {
+            path: "/login",
+            pageTitle: "Login",
             errorMessage: "Invalid email or password",
-            imageUrl: '/img/hero-image.jpg',
+            imageUrl: "/img/hero-image.jpg",
             oldInput: {
               email: email,
               password: password
@@ -76,19 +76,19 @@ export class AuthController {
               // here we are adding the auth with the user object so it can be used in other controllers
               return req.session.save(err => {
                 console.log(err);
-                let userStatus = user.status;
-                if (userStatus === 'admin') {
-                  res.redirect('/admin');
+                const userStatus = user.status;
+                if (userStatus === "admin") {
+                  res.redirect("/admin");
                 } else {
-                  res.redirect('/');
+                  res.redirect("/");
                 }
               });
             } else {
-              return res.status(422).render('auth/login', {
-                path: '/login',
-                pageTitle: 'Login',
+              return res.status(422).render("auth/login", {
+                path: "/login",
+                pageTitle: "Login",
                 errorMessage: "Invalid email or password",
-                imageUrl: '/img/hero-image.jpg',
+                imageUrl: "/img/hero-image.jpg",
                 oldInput: {
                   email: email,
                   password: password
@@ -99,7 +99,7 @@ export class AuthController {
           })
           .catch(err => {
             console.log(err);
-            res.redirect('/login');
+            res.redirect("/login");
           });
       })
       .catch(err => console.log(err));
@@ -107,28 +107,28 @@ export class AuthController {
 
   public getSignup(req: Request, res: Response, next: NextFunction): void {
 
-    let message = req.flash('error');
+    let message = req.flash("error");
     if (message.length > 0) {
       message = message[0];
     } else {
       message = null;
     }
-    res.render('auth/signup', {
-      path: '/signup',
-      pageTitle: 'Signup',
+    res.render("auth/signup", {
+      path: "/signup",
+      pageTitle: "Signup",
       errorMessage: message,
-      imageUrl: '/img/hero-image.jpg',
+      imageUrl: "/img/hero-image.jpg",
       oldInput: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        phoneNumber: ''
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        phoneNumber: ""
       },
       validationErrors: []
     });
-  };
+  }
 
   public postSignup(req: Request, res: Response, next: NextFunction): void {
     // TODO create an interface/ class to hold this data
@@ -142,11 +142,11 @@ export class AuthController {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors.array());
-      return res.status(422).render('auth/signup', {
-        path: '/signup',
-        pageTitle: 'Signup',
+      return res.status(422).render("auth/signup", {
+        path: "/signup",
+        pageTitle: "Signup",
         errorMessage: errors.array()[0].msg,
-        imageUrl: '/img/hero-image.jpg',
+        imageUrl: "/img/hero-image.jpg",
         oldInput: {
           firstName: firstName,
           lastName: lastName,
@@ -173,14 +173,14 @@ export class AuthController {
         return user.save();
       })
       .then(result => {
-        let msg = {
+        const msg = {
           to: email,
-          from: 'suport@undertown.ro',
-          subject: 'Signup succeded!',
-          html: '<h1>Salutare</h1>'
-        }
+          from: "suport@undertown.ro",
+          subject: "Signup succeded!",
+          html: "<h1>Salutare</h1>"
+        };
         // TODO create a sending emails method
-        res.redirect('/login');
+        res.redirect("/login");
         return sgMail.send(msg);
       })
       .then((data) => {
@@ -189,64 +189,64 @@ export class AuthController {
       .catch(err => {
         console.log("SignUp error: ", err);
       });
-  };
+  }
 
 
   public adminLogout(req: IRequestSession, res: Response, next: NextFunction): void {
 
     req.session.destroy((err) => {
-      console.log('Deleting Session');
+      console.log("Deleting Session");
       // deleting the session from mongodb and cookie from browser
       console.log(err);
-      res.redirect('/login');
+      res.redirect("/login");
     });
   }
 
   public basicLogout(req: IRequestSession, res: Response, next: NextFunction): void {
     req.session.destroy((err) => {
       console.log("Deleting session");
-      res.status(200).json({ message: "Logged out user" + req.user.firstName })
-    })
+      res.status(200).json({ message: "Logged out user" + req.user.firstName });
+    });
   }
 
   public getReset(req: Request, res: Response, next: NextFunction): void {
-    let message = req.flash('error');
+    let message = req.flash("error");
     if (message.length > 0) {
       message = message[0];
     } else {
       message = null;
     }
-    res.render('auth/reset', {
-      path: '/reset',
-      pageTitle: 'Reset Password',
+    res.render("auth/reset", {
+      path: "/reset",
+      pageTitle: "Reset Password",
       errorMessage: message
     });
-  };
+  }
 
   public postReset(req: Request, res: Response, next: NextFunction): void {
     // here we create a token that is going to be storred in the users object in the DB
     crypto.randomBytes(32, async (err, buffer) => {
       if (err) {
         console.log(err);
-        return res.redirect('/reset');
+        return res.redirect("/reset");
       }
-      const token = buffer.toString('hex');
+      const token = buffer.toString("hex");
       //sending the email from the reset password form
       try {
-        let foundUser = await User.findOne({ email: req.body.email });
+        const foundUser = await User.findOne({ email: req.body.email });
         if (foundUser) {
           //if the user is found we add the token and expiration date
           foundUser.resetToken = token;
           foundUser.resetTokenExpiration = Date.now() + 3600000;
           await foundUser.save();
-          res.redirect('/');
+          res.redirect("/");
           //sending the email with the token
           // TODO in the link of the email it will pe the domain link from .env
           // TODO create a method for sending emails
           sgMail.send({
             to: req.body.email,
-            from: 'suport@undertown.ro',
-            subject: 'Password reset',
+            from: "suport@undertown.ro",
+            subject: "Password reset",
             html: `
               <p>You requested a password reset</p>
               <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
@@ -254,14 +254,14 @@ export class AuthController {
           });
 
         } else {
-          req.flash('error', 'No account with that email found.');
-          return res.redirect('/reset');
+          req.flash("error", "No account with that email found.");
+          return res.redirect("/reset");
         }
       } catch (err) {
         console.log(err);
       }
     });
-  };
+  }
 
   public getNewPassword(req: Request, res: Response, next: NextFunction): void {
     const token = req.params.token;
@@ -270,16 +270,16 @@ export class AuthController {
     // resetTokenExpiration: { $gt: Date.now() } this is how to check if the tokenExpiration $greaterThan Date.now()
     User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
       .then(user => {
-        let message = req.flash('error');
+        let message = req.flash("error");
         if (message.length > 0) {
           message = message[0];
         } else {
           message = null;
         }
         if (user) {
-          res.render('auth/new-password', {
-            path: '/new-password',
-            pageTitle: 'New Password',
+          res.render("auth/new-password", {
+            path: "/new-password",
+            pageTitle: "New Password",
             errorMessage: message,
             userId: user._id.toString(),
             passwordToken: token
@@ -289,7 +289,7 @@ export class AuthController {
       .catch(err => {
         console.log(err);
       });
-  };
+  }
 
 
   public postNewPassword(req: Request, res: Response, next: NextFunction): void {
@@ -317,12 +317,12 @@ export class AuthController {
         return resetUser.save();
       })
       .then(result => {
-        req.flash('message', 'Your password has been changed');
-        res.redirect('/login');
+        req.flash("message", "Your password has been changed");
+        res.redirect("/login");
       })
       .catch(err => {
         console.log(err);
       });
-  };
+  }
 }
 

@@ -1,21 +1,21 @@
 import { NextFunction, Request, Response } from "express";
-import { CustomError } from '../utils/Error';
+import { CustomError } from "../utils/Error";
 
-import {Property} from '../models/property';
+import {Property} from "../models/property";
 
-import sendgridApi from '@sendgrid/mail';
+import sendgridApi from "@sendgrid/mail";
 sendgridApi.setApiKey(process.env.SENDGRID_KEY || "");
 
-import { validationResult } from 'express-validator/check';
-import { getTimeDifferenceEachProperty } from '../utils/getTimeDifference';
+import { validationResult } from "express-validator/check";
+import { getTimeDifferenceEachProperty } from "../utils/getTimeDifference";
 
-import { getProperties } from '../services/getProperties';
-import { queriedProperties } from '../services/queryProperties';
-import { getSingleProperty } from '../services/getSingleProperty';
-import { getPropertyTypes } from '../utils/getPropertyTypes';
-import { addDisplayPriceProperties } from '../utils/addDisplayPriceProperties';
+import { getProperties } from "../services/getProperties";
+import { queriedProperties } from "../services/queryProperties";
+import { getSingleProperty } from "../services/getSingleProperty";
+import { getPropertyTypes } from "../utils/getPropertyTypes";
+import { addDisplayPriceProperties } from "../utils/addDisplayPriceProperties";
 
-import url from 'url';
+import url from "url";
 
 export enum SEARCH_STATUS {
     RENT = 2,
@@ -33,7 +33,7 @@ export class HomeController {
  */
     public async getHomepage(req: Request, res: Response, next: NextFunction): Promise<void> {
         let featProperties = [];
-        let message = req.flash('message');
+        let message = req.flash("message");
         if (message.length > 0) {
             message = message[0];
         } else {
@@ -45,7 +45,7 @@ export class HomeController {
             getTimeDifferenceEachProperty(featProperties);
             addDisplayPriceProperties(featProperties);
 
-            let propertyTypes = await getPropertyTypes();
+            const propertyTypes = await getPropertyTypes();
             return res.render("pages/home/home", {
                 path: "/",
                 pageTitle: "UNDERTOWN",
@@ -53,15 +53,15 @@ export class HomeController {
                 errorMessage: message,
                 validationErrors: [],
                 oldInput: {
-                    search: ''
+                    search: ""
                 },
                 property_type: null,
                 propertyTypes: propertyTypes
-            })
+            });
             //TODO create an interface for error objects
         } catch (e) {
             console.log("Got an error:", e);
-            let error = new CustomError("Network error");
+            const error = new CustomError("Network error");
             error.statusCode = 500;
             error.statusMessage = "error";
             next(error);
@@ -79,45 +79,46 @@ export class HomeController {
 
     public async getPropertyRent(req: Request, res: Response, next: NextFunction): Promise<void> {
         //TODO create an enum or an interface for path constants
-        const path = '/inchiriere_s';
+        const path = "/inchiriere_s";
         return getSingleProperty(req, res, next, path);
     }
 
     public async getPropertySale(req: Request, res: Response, next: NextFunction): Promise<void> {
         // TODO path constant
-        const path = '/vanzare_s';
+        const path = "/vanzare_s";
         return getSingleProperty(req, res, next, path);
     }
 
     public getContactpage(req: Request, res: Response, next: NextFunction): void {
         return res.render("pages/home/contact", {
-            path: '/contact',
+            path: "/contact",
             pageTitle: "Contact",
-            imageUrl: '/img/banner-pages.jpg'
-        })
+            imageUrl: "/img/banner-pages.jpg"
+        });
     }
 
     public getAboutpage(req: Request, res: Response, next: NextFunction): void {
         return res.render("pages/home/about_us", {
-            path: '/about',
+            path: "/about",
             pageTitle: "Despre Noi",
-            imageUrl: '/img/hero-image.jpg',
-            middleImageUrl: '/img/about/about_us_middle_image.jpg'
-        })
+            imageUrl: "/img/hero-image.jpg",
+            middleImageUrl: "/img/about/about_us_middle_image.jpg"
+        });
     }
 
     public async properties(req: Request, res: Response, next: NextFunction): Promise<Response<void> | undefined> {
         //filtrare dupa adresa din filtre
         try {
+            // TODO find a logic where you don't need to use null a a parameter
             // doing a sorting only on price, surface and floor
-            let dbInformations = await queriedProperties(req, null);
-            let properties = JSON.parse(JSON.stringify(dbInformations.properties.slice()));
-            let paginationData = dbInformations.paginationData;
+            const dbInformations = await queriedProperties(req, null);
+            const properties = JSON.parse(JSON.stringify(dbInformations.properties.slice()));
+            const paginationData = dbInformations.paginationData;
 
             addDisplayPriceProperties(properties);
 
             if (!properties) {
-                let error = new CustomError("Something went wrong");
+                const error = new CustomError("Something went wrong");
                 error.statusCode = 404;
                 error.statusMessage = "Can't find properties when filtering";
                 throw error;
@@ -135,10 +136,10 @@ export class HomeController {
         } catch (err) {
             if (err.statusCode === 404) {
                 console.log(err);
-                return res.status(404).json({ message: err.status })
+                return res.status(404).json({ message: err.status });
             } else {
                 console.log("Got an error line 140:", err);
-                let error = new CustomError("Network error");
+                const error = new CustomError("Network error");
                 error.statusCode = 500;
                 error.statusMessage = "Server error";
                 next(error);
@@ -172,12 +173,12 @@ export class HomeController {
         // data that will be in here
         sendgridApi.send(email)
             .then(() => {
-                return res.status(200).json({ message: "Email trimis, cu succes" })
+                return res.status(200).json({ message: "Email trimis, cu succes" });
             })
             // TODO add a type to this error from @sendgrid/mail
             .catch((err: any) => {
                 console.log("Eroare trimitere email", RECIVER_EMAIL, err);
-                return res.status(404).json({ message: "Emailul nu a putut fi trimis" })
+                return res.status(404).json({ message: "Emailul nu a putut fi trimis" });
             });
     }
 
@@ -186,14 +187,14 @@ export class HomeController {
         if (!errors.isEmpty()) {
             console.log(errors.array());
             try {
-                let featProperties = await Property.find({ featured: 1 });
+                const featProperties = await Property.find({ featured: 1 });
                 getTimeDifferenceEachProperty(featProperties);
                 addDisplayPriceProperties(featProperties);
-                let propertyTypes = await getPropertyTypes();
+                const propertyTypes = await getPropertyTypes();
 
                 return res.status(422).render("pages/home/home", {
-                    path: '/',
-                    pageTitle: 'UNDERTOWN',
+                    path: "/",
+                    pageTitle: "UNDERTOWN",
                     featProperties: featProperties,
                     errorMessage: errors.array()[0].msg,
                     validationErrors: errors.array(),
@@ -205,18 +206,18 @@ export class HomeController {
                 });
             } catch (err) {
                 console.log("Error eccured in homepageController: ", err);
-                let error = new CustomError("Network error");
+                const error = new CustomError("Network error");
                 error.statusCode = 500;
                 error.statusMessage = "Server error";
                 next(error);
             }
         }
         // if no error is present, redirects to the searched criteria
-        let queryObject = { ...req.body };
-        let pathName = "/" + (req.body.property_status === '1' ? "vanzare" : "inchiriere");
+        const queryObject = { ...req.body };
+        const pathName = "/" + (req.body.property_status === "1" ? "vanzare" : "inchiriere");
         return res.status(302).redirect(url.format({
             pathname: pathName,
             query: queryObject
-        }))
+        }));
     }
 }

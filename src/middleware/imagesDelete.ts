@@ -1,4 +1,4 @@
-import aws from 'aws-sdk';
+import aws from "aws-sdk";
 // TODO refactor this to typescript using a class
 
 const deleteImagesS3 = (imagesArray: any[]) => {
@@ -6,7 +6,7 @@ const deleteImagesS3 = (imagesArray: any[]) => {
         return "No images to delete";
     }
 
-    let s3 = new aws.S3({
+    const s3 = new aws.S3({
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
     });
@@ -18,8 +18,8 @@ const deleteImagesS3 = (imagesArray: any[]) => {
         objectsArray = imagesArray.map(image => {
             return {
                 Key: image
-            }
-        })
+            };
+        });
     }
     const bucket = process.env.S3_BUCKET || "";
 
@@ -32,14 +32,14 @@ const deleteImagesS3 = (imagesArray: any[]) => {
             }
         }, function (err, data) {
             if (err) {
-                console.log('Error s3 deletion', err, err.stack);
+                console.log("Error s3 deletion", err, err.stack);
                 return reject(err);
             } else {
                 console.log("Successfully deleted", imagesArray, data);
                 return resolve(data);
             }
-        })
-    })
-}
+        });
+    });
+};
 
 export default deleteImagesS3;

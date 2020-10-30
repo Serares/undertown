@@ -1,13 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
-import { Property } from '../models/property';
-import { IRequestUserCredentials } from '../interfaces/IRequestUserCredentials';
+import { Request, Response, NextFunction } from "express";
+import { Property } from "../models/property";
+import { IRequestUserCredentials } from "../interfaces/IRequestUserCredentials";
 // TODO refactor middleware for TS
-import deleteImagesS3 from '../middleware/imagesDelete';
-import faker from 'faker';
-import { User } from '../models/user';
-import fs from 'fs';
-import path from 'path';
-import { CustomError } from '../utils/Error';
+import deleteImagesS3 from "../middleware/imagesDelete";
+import faker from "faker";
+import { User } from "../models/user";
+import fs from "fs";
+import path from "path";
+import { CustomError } from "../utils/Error";
 
 export class AdminController {
     private handleError(): void {
@@ -20,17 +20,17 @@ export class AdminController {
             */
 
         try {
-            let properties = await Property.find();
+            const properties = await Property.find();
             if (!properties) {
                 const error = new Error("No properties in the DB");
                 throw error;
             }
             // console.log("Found properties", properties);
-            res.status(200).json({ message: "Properties that you requested", properties: properties })
+            res.status(200).json({ message: "Properties that you requested", properties: properties });
         } catch (err) {
             console.log("An error occured ", err);
             // TODO create a method to handle error in here
-            const error = new CustomError('Cant fetch properties');
+            const error = new CustomError("Cant fetch properties");
             error.statusCode = 500;
             error.statusMessage = "err";
             next(error);
@@ -44,21 +44,21 @@ export class AdminController {
          */
 
         // last image in the array is the first one selected actually :)
-        let files = req.files as { [fieldname: string]: Express.Multer.File[] };
+        const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
-        let imagesKeys = Object.keys(files);
+        const imagesKeys = Object.keys(files);
 
         console.log("Images -------", files);
         // console.log("Req body", objectFromClient);
         //TODO create a type for this array
 
         if (!imagesKeys) {
-            let error = new CustomError("No images added");
+            const error = new CustomError("No images added");
             error.statusCode = 401;
             throw error;
-        };
+        }
         // TODO think of a way to create the property and use the typechecking for Property properties/variables
-        let property = new Property({
+        const property = new Property({
             // this is the person that's adding the property
             userId: req.user,
             persoanaContact: req.body.persoanaContact,
@@ -86,7 +86,7 @@ export class AdminController {
         } catch (err) {
             console.log("An error occured ", err);
             // TODO create a method to handle error in here
-            const error = new CustomError('Cant fetch properties');
+            const error = new CustomError("Cant fetch properties");
             error.statusCode = 500;
             error.statusMessage = "err";
             next(error);
@@ -95,12 +95,12 @@ export class AdminController {
     }
 
     public async deleteProperty(req: Request, res: Response, next: NextFunction): Promise<void> {
-        let propertyId = req.params.id;
+        const propertyId = req.params.id;
         // console.log("Got the request", propertyId);
         try {
-            let foundProperty = await Property.findById(propertyId);
+            const foundProperty = await Property.findById(propertyId);
             if (foundProperty && foundProperty.imagini && foundProperty.imagini.length > 0) {
-                let deletedImagesResponse = await deleteImagesS3(foundProperty.imagini);
+                const deletedImagesResponse = await deleteImagesS3(foundProperty.imagini);
                 console.log("Deleted images status S3", deletedImagesResponse);
             }
             await Property.findByIdAndRemove(propertyId);
@@ -109,7 +109,7 @@ export class AdminController {
         } catch (err) {
             console.log("An error occured ", err);
             // TODO create a method to handle error in here
-            const error = new CustomError('Cant fetch properties');
+            const error = new CustomError("Cant fetch properties");
             error.statusCode = 500;
             error.statusMessage = "err";
             next(error);
@@ -119,11 +119,11 @@ export class AdminController {
     public async changeProperty(req: Request, res: Response, next: NextFunction): Promise<void> {
         // console.log("Got property data", req.body);
         // console.log("Got images", req.files);
-        let propertyId = req.body.property_id;
+        const propertyId = req.body.property_id;
         let deletedImages: Array<string> = [];
         let newImages: Array<string> = [];
         let existingImages: Array<string> = [];
-        let imagesFiles = req.files;
+        const imagesFiles = req.files;
 
         if (imagesFiles) {
             // TODO check what the object looks like
@@ -133,7 +133,7 @@ export class AdminController {
             // }
         } else {
             //TODO create a message that there are no new images added
-            console.log("No new images added-- provide FE feedback")
+            console.log("No new images added-- provide FE feedback");
         }
 
         if (req.body.deletedImages) {
@@ -144,11 +144,11 @@ export class AdminController {
 
         try {
             if (deletedImages.length > 0) {
-                let deletedImagesResponse = await deleteImagesS3(deletedImages);
+                const deletedImagesResponse = await deleteImagesS3(deletedImages);
                 console.log("Deleted images status S3", deletedImagesResponse);
             }
             // TODO test if .findById can return a null value
-            let foundProperty = await Property.findById(propertyId);
+            const foundProperty = await Property.findById(propertyId);
             if (foundProperty) {
                 existingImages = [...foundProperty.imagini];
             }
@@ -156,14 +156,14 @@ export class AdminController {
             if (deletedImages) {
                 deletedImages.forEach(deletedImg => {
                     existingImages = existingImages.filter(existingImg => existingImg !== deletedImg);
-                })
+                });
             }
             // had to add this guard for type checking
             // but there is no way that it would get here and 'foundProperty'
             // to be null, because try block will throw an error
             if (foundProperty) {
                 // merging filteredImages array with newImages array
-                let finalImagesForDb = [...existingImages, ...newImages];
+                const finalImagesForDb = [...existingImages, ...newImages];
                 foundProperty.persoanaContact = req.body.persoanaContact;
                 foundProperty.titlu = req.body.titlu;
                 foundProperty.thumbnail = finalImagesForDb[0];
@@ -191,7 +191,7 @@ export class AdminController {
         } catch (err) {
             console.log("An error occured ", err);
             // TODO create a method to handle error in here
-            const error = new CustomError('Cant fetch properties');
+            const error = new CustomError("Cant fetch properties");
             error.statusCode = 500;
             error.statusMessage = "err";
             next(error);
@@ -205,17 +205,17 @@ export class AdminController {
     public getPropertyFormFields(req: Request, res: Response, next: NextFunction): void {
         try {
             let obj;
-            let rootDir = path.dirname(__dirname);
+            const rootDir = path.dirname(__dirname);
 
-            fs.readFile(path.join(rootDir, 'models', 'propertyFields.json'), 'utf8', function (err, data) {
+            fs.readFile(path.join(rootDir, "models", "propertyFields.json"), "utf8", function (err, data) {
                 if (err) throw err;
                 obj = data;
-                res.status(200).json(JSON.parse(data))
-            })
+                res.status(200).json(JSON.parse(data));
+            });
         } catch (err) {
             console.log("An error occured ", err);
             // TODO create a method to handle error in here
-            const error = new CustomError('Cant fetch properties');
+            const error = new CustomError("Cant fetch properties");
             error.statusCode = 500;
             error.statusMessage = "err";
             next(error);
@@ -224,12 +224,12 @@ export class AdminController {
 
     public async getAdminAccounts(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-            let adminUsers = await User.find({ status: 'admin' });
+            const adminUsers = await User.find({ status: "admin" });
             res.status(200).json({ accounts: adminUsers });
         } catch (err) {
             console.log("An error occured ", err);
             // TODO create a method to handle error in here
-            const error = new CustomError('Cant fetch properties');
+            const error = new CustomError("Cant fetch properties");
             error.statusCode = 500;
             error.statusMessage = "err";
             next(error);
@@ -238,11 +238,11 @@ export class AdminController {
 
     public async createProperties(req: Request, res: Response, next: NextFunction): Promise<void> {
         // TODO create a MongoDB cluster for development purposes
-        let numberOfProperties = Number(req.params.number);
+        const numberOfProperties = Number(req.params.number);
         for (let i = 0; i < numberOfProperties; i++) {
-            let imagesForProperty = ["images/1588526089612-1.jpg", "images/1588526089626-2.jpg", "images/1588526089655-3.jpg"];
+            const imagesForProperty = ["images/1588526089612-1.jpg", "images/1588526089626-2.jpg", "images/1588526089655-3.jpg"];
 
-            let property = new Property({
+            const property = new Property({
                 userId: "5e9dd6c613b2f23ca039612c",
                 persoanaContact: "5e9dd6c613b2f23ca039612c",
                 titlu: faker.name.jobArea(),
@@ -269,13 +269,13 @@ export class AdminController {
             } catch (err) {
                 console.log("An error occured ", err);
                 // TODO create a method to handle error in here
-                const error = new CustomError('Cant fetch properties');
+                const error = new CustomError("Cant fetch properties");
                 error.statusCode = 500;
                 error.statusMessage = "err";
                 next(error);
             }
         }
-        console.log('Created properties', numberOfProperties);
+        console.log("Created properties", numberOfProperties);
         res.status(200).json({ message: "Date primite" });
     }
 }

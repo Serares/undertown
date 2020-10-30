@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
 export class ErrorControllers {
     public notFound(req: Request, res: Response, next: NextFunction): void {
-        res.status(404).render('pages/404',
+        res.status(404).render("pages/404",
             {
                 pageTitle: "Not Found",
-                path: "", imageUrl: '/img/hero-image.jpg'
+                path: "", imageUrl: "/img/hero-image.jpg"
             });
     }
 }

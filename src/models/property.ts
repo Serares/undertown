@@ -1,4 +1,4 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model, Document, Types } from "mongoose";
 
 interface ILocation {
     lat: number,
@@ -30,14 +30,14 @@ interface IProperty extends Document {
     tipProprietate: number;
     thumbnail: string;
     userId: Types.ObjectId | Record<string, unknown>;
-};
+}
 
 const PropertySchemaFields = {
 
     userId: {
         //this is the id of the user that posted this property
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
         required: true
     },
     titlu: {
@@ -47,7 +47,7 @@ const PropertySchemaFields = {
     persoanaContact: {
         required: true,
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: "User"
     },
     thumbnail: String,
     imagini: {
@@ -106,12 +106,12 @@ const PropertySchemaFields = {
         type: Number,
         required: true
     }
-}
+};
 
 const PropertySchema = new Schema(PropertySchemaFields, { timestamps: true });
 
 // adding generic type will help with later trying to query the DB
-const Property = model<IProperty>('Property', PropertySchema);
+const Property = model<IProperty>("Property", PropertySchema);
 
 export { IProperty, Property };
 // export default model>("Property", PropertySchema);
