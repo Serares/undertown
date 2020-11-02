@@ -34,7 +34,7 @@ export class App {
         return this._app;
     }
 
-    get MongoURI(): string{
+    get MongoURI(): string {
         return this._MongoURI;
     }
 
@@ -49,13 +49,13 @@ export class App {
             uri: this._MongoURI,
             collection: "sessions"
         });
-
+        // TODO debug why 404 endpoint is not hit
         // initiating routes
         //pagina de admin cred ca va deveni un api separat
-        this._app.use(this.homeRouter.router);
-        this._app.use(this.adminRouter.router);
+        this._app.use("/",this.homeRouter.router);
+        this._app.use("/admin",this.adminRouter.router);
         this._app.use(this.authRouter.router);
-        this.errorRouter.routes(this._app);
+        this._app.use(this.errorRouter.router);
     }
 
     private config(): void {
@@ -138,9 +138,6 @@ export class App {
                 .catch(err => console.log(err));
         });
 
-
-
-
         this._app.use((error: any, req: Request, res: Response, next: NextFunction) => {
             console.log("Error", error);
             // res.status(500).render('500', {
@@ -151,5 +148,5 @@ export class App {
             res.status(error.statusCode).json({ message: "Erorare", error: error });
         });
     }
-    
+
 }
