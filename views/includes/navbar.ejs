@@ -1,0 +1,67 @@
+<link rel="stylesheet" href="/css/nav-bar.css">
+
+<div class="main_header_1">
+        <div class="container">
+                <div class="row">
+                        <div class="col-md-12 col-sm-12">
+                                <nav class="navbar navbar-expand-lg navbar-light w-100"> <a class="navbar-brand"
+                                                href="/"><img class="nav-logo" src="/img/ut-navlogo-transp.png"
+                                                        alt="logo"></a>
+                                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                                                data-target="#navbarSupportedContent"
+                                                aria-controls="navbarSupportedContent" aria-expanded="false"
+                                                aria-label="Toggle navigation"> <span
+                                                        class="navbar-toggler-icon"></span> </button>
+                                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                                <ul class="navbar-nav ml-5">
+                                                        <li class="nav-item"> <a
+                                                                        class="nav-link <%= path === '/' ? 'active' : '' %>"
+                                                                        href="/">Acasa</a>
+                                                        </li>
+                                                        <li class="nav-item"> <a class="nav-link <%= 
+                                                                        path === '/inchiriere' ||  path === '/inchiriere_s' ? 
+                                                                        'active' : '' %>"
+                                                                        href="/inchiriere">Inchiriere</a>
+                                                        </li>
+                                                        <li class="nav-item"> <a class="nav-link <%= 
+                                                                        path === '/vanzare' || path === '/vanzare_s' ? 
+                                                                        'active' : '' %>" href="/vanzare">Vanzare</a>
+                                                        </li>
+                                                        <li class="nav-item"> <a
+                                                                        class="nav-link <%= path === '/about' ? 'active' : '' %>"
+                                                                        href="/about">Despre noi</a>
+                                                        </li>
+                                                        <li class="nav-item"> <a
+                                                                        class="nav-link <%= path === '/contact' ? 'active' : '' %>"
+                                                                        href="/contact">Contact</a></li>
+                                                        <% if (!isAuthenticated) { %>
+                                                        <!-- <li class="nav-item"> <a
+                                                                        class="nav-link <%= path === '/signup' ? 'active' : '' %>"
+                                                                        href="/signup">Creează cont</a></li> -->
+                                                        <li class="nav-item"> <a
+                                                                        class="nav-link <%= path === '/login' ? 'active' : '' %>"
+                                                                        href="/login">Intră in cont</a></li>
+                                                        <%} %>
+                                                        <% if (isAuthenticated && userStatus === "admin") { %>
+                                                        <li class="nav-item"> <a class="nav-link"
+                                                                        href="/admin/logout">Delogare</a></li>
+                                                        <%} else if(isAuthenticated && userStatus !== "admin"){%>
+                                                        <li class="nav-item"> <a class="nav-link" href="#"
+                                                                        id="basic_logout">Delogare</a></li>
+                                                        <%} %>
+                                                </ul>
+                                                <!-- <div class="submit_property ml-2"><a class="btn btn_primary_bg"
+                                                                href="/submit_property">Submit Property</a></div> -->
+                                                <% if (userStatus === 'admin') { %>
+                                                <div class="submit_property ml-2"><a class="nav-link"
+                                                                href="/admin">Admin</a></div>
+                                                <% } %>
+                                                <!--  -->
+                                        </div>
+                                </nav>
+                        </div>
+                </div>
+        </div>
+</div>
+
+<script src="/js/custom/navbar.js"></script>

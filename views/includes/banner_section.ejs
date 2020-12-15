@@ -1,0 +1,26 @@
+<section class="full_row bg_img_5 py_80 overlay_1 page-banner" style="background-image: url('<%= imageUrl %>')">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page_banner">
+                    <h3 class="title text_white d-table float-left"><%= pageTitle %></h3>
+                    <ul class="page_location float-right">
+                        <li><a href="/">Acasa</a> </li>
+                        <%  if(path === "/vanzare_s" || path === "/inchiriere_s") { 
+                        let middle_path_name = path.replace('/', '').replace('_s', '');
+                        let display_middle_path = middle_path_name[0].toUpperCase() + middle_path_name.slice('1');
+                            %>
+                        
+                        <li><i class="fa fa-angle-right" aria-hidden="true"></i> </li>
+                        <li><span><%= display_middle_path %></span> </li>
+
+                        }
+                        <% } %>
+                        <li><i class="fa fa-angle-right" aria-hidden="true"></i> </li>
+                        <li><span><%= pageTitle %></span> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
