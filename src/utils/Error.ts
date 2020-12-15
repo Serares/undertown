@@ -1,5 +1,5 @@
-import { integer } from 'aws-sdk/clients/cloudfront';
-import IError from '../interfaces/IError';
+import { integer } from "aws-sdk/clients/cloudfront";
+import IError from "../interfaces/IError";
 
 export class CustomError extends Error implements IError{
     private _message: string;

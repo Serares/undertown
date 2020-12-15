@@ -1,19 +1,19 @@
-import { IProperty } from '../models/property';
+import { IProperty } from "../models/property";
 
-let currencyFormat = new Intl.NumberFormat('de-DE', {
-    style: 'currency',
-    currency: 'EUR'
-})
+const currencyFormat = new Intl.NumberFormat("de-DE", {
+    style: "currency",
+    currency: "EUR"
+});
 
-export const addDisplayPriceProperty = function (property: IProperty) {
-    let displayPrice = currencyFormat.format(property['pret']);
-    property['displayPrice'] = displayPrice;
-}
+export const addDisplayPriceProperty = function (property: IProperty): void {
+    const displayPrice = currencyFormat.format(property["pret"]);
+    property["displayPrice"] = displayPrice;
+};
 
 
-export const addDisplayPriceProperties = function (properties: IProperty[]) {
+export const addDisplayPriceProperties = function (properties: IProperty[]): void {
     properties.forEach(property => {
-        let displayPrice = currencyFormat.format(property['pret']);
-        property['displayPrice'] = displayPrice;
+        const displayPrice = currencyFormat.format(property["pret"]);
+        property["displayPrice"] = displayPrice;
     });
-}
+};

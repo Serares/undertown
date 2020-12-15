@@ -1,7 +1,8 @@
 const fs = require("fs").promises;
 import path from "path";
 
-// TODO create a class from this
+// I think this will be deprecated because Ill move the file to admin page on frontend
+
 export const getPropertyTypes = async function () {
     let parsedData;
     let propertyTypes;
