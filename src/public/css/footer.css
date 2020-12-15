@@ -1,0 +1,8 @@
+.full_row .copyright_text a {
+    color: #efefef;
+}
+
+.full_row .copyright_text a:hover {
+    color: #007cf5;
+    text-decoration: underline;
+}

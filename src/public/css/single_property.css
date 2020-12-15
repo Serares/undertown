@@ -1,0 +1,47 @@
+.single_property_detail .more_information .list-informations-specificatii {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.single_property_detail .more_information .specificatii-lists {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.single_property_detail .more_information .specificatii-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.single_property_detail .more_information .spec-name {
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    float: none;
+    display: block;
+}
+
+.single_property_detail .more_information .specificatii_title {
+    font-weight: bold;
+}
+
+.single_property_detail .subtitle_prop {
+    border-bottom: 1px solid #a8a7a7;
+    padding-bottom: 5px;
+}
+
+.container .price_text {
+    font-size: 25px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.single_property_detail .property_detalii {
+    white-space: pre-wrap;
+}

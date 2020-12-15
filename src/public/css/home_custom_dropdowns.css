@@ -1,0 +1,29 @@
+.bootstrap-select .dropdown-item {
+	padding: 0 8px;
+	line-height: 2;
+	margin-bottom: 5px;
+	font-family: "Montserrat", sans-serif;
+}
+
+.dropdown-menu li a {
+	display: block;
+	padding: 0 20px;
+	clear: both;
+	font-size: 12px;
+	line-height: 30px;
+	font-family: 'Montserrat', sans-serif;
+	white-space: nowrap;
+	font-weight: 500;
+}
+
+section.full_row .container #filter_icons {
+	justify-content: center;
+}
+
+.row .invalid {
+	border: 1px solid red;
+}
+
+.row #error_message {
+	color: red;
+}
