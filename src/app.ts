@@ -14,7 +14,7 @@ import { AuthRouter } from "./routes/auth";
 import { ErrorRouter } from "./routes/error";
 import { HomeRouter } from "./routes/home";
 import { AdminRouter } from "./routes/admin";
-import { MONGO_DB } from "./utils/secrets";
+import { MONGO_DB, MONGO_DB_SESSION_DB, S3_BUCKET } from "./utils/secrets";
 
 //TODO implement Jest testing
 // TODO create a test cluster on mongoDB: so when developing , you don't have to use the actual DB
@@ -47,7 +47,7 @@ export class App {
         // setting the communication with database and session
         this.store = new this._mongoDBStore({
             uri: this._MongoURI,
-            collection: "sessions"
+            collection: MONGO_DB_SESSION_DB
         });
         // TODO debug why 404 endpoint is not hit
         // initiating routes
@@ -90,7 +90,7 @@ export class App {
         });
 
         this._app.get("/images/*", s3proxy({
-            bucket: process.env.S3_BUCKET,
+            bucket: S3_BUCKET,
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
             overrideCacheControl: "max-age=2592000"
@@ -138,6 +138,7 @@ export class App {
                 .catch(err => console.log(err));
         });
 
+        // TODO add this error handler in error controller
         this._app.use((error: any, req: Request, res: Response, next: NextFunction) => {
             console.log("Error", error);
             // res.status(500).render('500', {

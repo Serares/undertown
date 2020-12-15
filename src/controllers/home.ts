@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../utils/Error";
 
 import {Property} from "../models/property";
-
+// TODO sendgrid free tier is over, find other ways to send emails
 import sendgridApi from "@sendgrid/mail";
 sendgridApi.setApiKey(process.env.SENDGRID_KEY || "");
 

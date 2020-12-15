@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document } from "mongoose";
 
 interface IUser extends Document {
     email: string;
@@ -39,11 +39,11 @@ const UserSchemaFields = {
         required: false,
         default: "0000"
     }
-}
+};
 
 const userSchema = new Schema(UserSchemaFields, { timestamps: true });
 
 // module.exports = mongoose.model('User', userSchema);
-const User = model<IUser>('User', userSchema);
+const User = model<IUser>("User", userSchema);
 
 export { User, IUser };

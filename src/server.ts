@@ -1,10 +1,9 @@
-import { App } from './app';
+import { App } from "./app";
 import mongoose from "mongoose";
-import express from 'express';
+import express from "express";
 
 const PORT = process.env.PORT || 5000;
-
-
+// TODO create a connection to DB for development and production
 class Server {
     private _expressApp: express.Application;
     private _classApp: App;
@@ -27,5 +26,5 @@ class Server {
     }
 }
 
-let server = new Server(new App());
+const server = new Server(new App());
 server.startServer();

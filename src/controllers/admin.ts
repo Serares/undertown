@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { Property } from "../models/property";
+import { User } from "../models/user";
 import { IRequestUserCredentials } from "../interfaces/IRequestUserCredentials";
 // TODO refactor middleware for TS
 import deleteImagesS3 from "../middleware/imagesDelete";
 import faker from "faker";
-import { User } from "../models/user";
 import fs from "fs";
 import path from "path";
 import { CustomError } from "../utils/Error";
@@ -81,7 +81,7 @@ export class AdminController {
             featured: req.body.featured
         });
         try {
-            // await property.save();
+            await property.save();
             res.status(200).json({ message: "Date primite", response: "Property saved " + req.body.titlu });
         } catch (err) {
             console.log("An error occured ", err);
