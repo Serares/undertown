@@ -3,7 +3,7 @@ import { Property } from "../models/property";
 import { User } from "../models/user";
 import { IRequestUserCredentials } from "../interfaces/IRequestUserCredentials";
 // TODO refactor middleware for TS
-import deleteImagesS3 from "../middleware/imagesDelete";
+import deleteImagesGCS from "../middleware/imagesDelete";
 import faker from "faker";
 import fs from "fs";
 import path from "path";
@@ -100,8 +100,8 @@ export class AdminController {
         try {
             const foundProperty = await Property.findById(propertyId);
             if (foundProperty && foundProperty.imagini && foundProperty.imagini.length > 0) {
-                const deletedImagesResponse = await deleteImagesS3(foundProperty.imagini);
-                console.log("Deleted images status S3", deletedImagesResponse);
+                // const deletedImagesResponse = await deleteImagesS3(foundProperty.imagini);
+                console.log("Deleted images status S3", []);
             }
             await Property.findByIdAndRemove(propertyId);
 
@@ -144,8 +144,8 @@ export class AdminController {
 
         try {
             if (deletedImages.length > 0) {
-                const deletedImagesResponse = await deleteImagesS3(deletedImages);
-                console.log("Deleted images status S3", deletedImagesResponse);
+                // const deletedImagesResponse = await deleteImagesS3(deletedImages);
+                console.log("Deleted images status S3", []);
             }
             // TODO test if .findById can return a null value
             const foundProperty = await Property.findById(propertyId);

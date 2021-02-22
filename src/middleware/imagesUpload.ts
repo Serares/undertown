@@ -1,9 +1,8 @@
-import aws from "aws-sdk";
 import { Request } from "express";
 import multer from "multer";
-import multerS3 from "multer-s3";
 
 // TODO refactor middleware for TS
+// TODO this will be used in admin backend
 const fileFilter = (req: Request, file: { mimetype: string; }, cb: (arg0: null, arg1: boolean) => void) => {
     if (
         file.mimetype === "image/png" ||
@@ -16,6 +15,7 @@ const fileFilter = (req: Request, file: { mimetype: string; }, cb: (arg0: null, 
         cb(null, false);
     }
 };
+/*
 aws.config.update({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
@@ -23,7 +23,6 @@ aws.config.update({
 
 const s3 = new aws.S3();
 const bucket = process.env.S3_BUCKET || "";
-
 const upload = multer({
     fileFilter: fileFilter,
     storage: multerS3({
@@ -44,3 +43,6 @@ const upload = multer({
 export const uploadImages = function () {
     return upload.array("imagini", 10);
 };
+*/
+
+export const uploadImages = function() {};

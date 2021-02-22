@@ -1,7 +1,8 @@
-import aws from "aws-sdk";
 // TODO refactor this to typescript using a class
+// TODO this will be used in admin backend 
 
-const deleteImagesS3 = (imagesArray: any[]) => {
+const deleteImagesGCS = (imagesArray: any[]) => {
+    /*
     if (imagesArray.length < 1) {
         return "No images to delete";
     }
@@ -40,6 +41,7 @@ const deleteImagesS3 = (imagesArray: any[]) => {
             }
         });
     });
+    */
 };
 
-export default deleteImagesS3;
+export default deleteImagesGCS;

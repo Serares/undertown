@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { IUser, User } from "../models/user";
 import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator/check";
-import { IRequestSession } from "../interfaces/IRequestSession";
-import sgMail from "@sendgrid/mail";
+import { RequestSessionType } from "../interfaces/RequestSessionType";
 import crypto from "crypto";
 
 export class AuthController {
@@ -29,7 +28,7 @@ export class AuthController {
     });
   }
 
-  public postLogin(req: IRequestSession, res: Response, next: NextFunction): void {
+  public postLogin(req: RequestSessionType, res: Response, next: NextFunction): void {
     const email = req.body.email;
     const password = req.body.password;
     const errors = validationResult(req);
@@ -181,7 +180,7 @@ export class AuthController {
         };
         // TODO create a sending emails method
         res.redirect("/login");
-        return sgMail.send(msg);
+        return "Mesaj"
       })
       .then((data) => {
         console.log("Email sent success", data);
@@ -192,7 +191,7 @@ export class AuthController {
   }
 
 
-  public adminLogout(req: IRequestSession, res: Response, next: NextFunction): void {
+  public adminLogout(req: RequestSessionType, res: Response, next: NextFunction): void {
 
     req.session.destroy((err) => {
       console.log("Deleting Session");
@@ -202,8 +201,8 @@ export class AuthController {
     });
   }
 
-  public basicLogout(req: IRequestSession, res: Response, next: NextFunction): void {
-    req.session.destroy((err) => {
+  public basicLogout(req: RequestSessionType, res: Response, next: NextFunction): void {
+    req.session.destroy((err: any) => {
       console.log("Deleting session");
       res.status(200).json({ message: "Logged out user" + req.user.firstName });
     });
@@ -239,19 +238,19 @@ export class AuthController {
           foundUser.resetToken = token;
           foundUser.resetTokenExpiration = Date.now() + 3600000;
           await foundUser.save();
-          res.redirect("/");
+          return res.redirect("/");
           //sending the email with the token
           // TODO in the link of the email it will pe the domain link from .env
           // TODO create a method for sending emails
-          sgMail.send({
-            to: req.body.email,
-            from: "suport@undertown.ro",
-            subject: "Password reset",
-            html: `
-              <p>You requested a password reset</p>
-              <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
-            `
-          });
+          // sgMail.send({
+          //   to: req.body.email,
+          //   from: "suport@undertown.ro",
+          //   subject: "Password reset",
+          //   html: `
+          //     <p>You requested a password reset</p>
+          //     <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</p>
+          //   `
+          // });
 
         } else {
           req.flash("error", "No account with that email found.");

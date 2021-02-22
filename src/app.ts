@@ -1,12 +1,10 @@
 import express, { Request, Response, NextFunction } from "express";
-
+import { createProxyMiddleware } from "http-proxy-middleware";
 import path from "path";
 import session from "express-session";
 import MongoDBStore from "connect-mongodb-session";
 import { User } from "./models/user";
 import flash from "connect-flash";
-// TODO create this module in TS
-import s3proxy from "s3-proxy";
 import helmet from "helmet";
 //
 import compression from "compression";
@@ -14,15 +12,12 @@ import { AuthRouter } from "./routes/auth";
 import { ErrorRouter } from "./routes/error";
 import { HomeRouter } from "./routes/home";
 import { AdminRouter } from "./routes/admin";
-import { MONGO_DB, MONGO_DB_SESSION_DB, S3_BUCKET } from "./utils/secrets";
+import { MONGO_DB, MONGO_DB_SESSION_DB, GCS_BUCKET } from "./utils/secrets";
 
 //TODO implement Jest testing
-// TODO create a test cluster on mongoDB: so when developing , you don't have to use the actual DB
 export class App {
-    // TODO use the underline convention for private properties
     private _app: express.Application;
     private _MongoURI: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-xyshh.mongodb.net/${MONGO_DB}`;
-    // TODO read how mongoDbStore works exactly
     private _mongoDBStore = MongoDBStore(session);
     private store: any;
     private errorRouter: ErrorRouter = new ErrorRouter();
@@ -64,13 +59,10 @@ export class App {
         // use plug-ins for the app
         //configuration for sessions and cookies
         //TODO make all callback functions private methods
-        // private session: void {}
         this._app.use(session({
             secret: process.env.SESSION_SECRET,
             cookie: {
                 maxAge: 1000 * 60 * 90,
-                // SOLVED A BUG HERE
-                // without TS i would add a number, and the sessions would expire after a very long time
                 expires: tomorrowDate
             },
             resave: false,
@@ -89,12 +81,14 @@ export class App {
             next();
         });
 
-        this._app.get("/images/*", s3proxy({
-            bucket: S3_BUCKET,
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-            overrideCacheControl: "max-age=2592000"
-        }));
+        // TODO create a proxy to serve files like s3 proxy
+        this._app.use(createProxyMiddleware(
+            "/images",
+            {
+                target: `https://storage.googleapis.com/${GCS_BUCKET}`,
+                changeOrigin: true
+            })
+        );
 
         // upload login moved to routes because it acts as a middleware
         // app.use(multer({ storage: fileStorage, fileFilter: fileFilter}).array('imagini', 10));
