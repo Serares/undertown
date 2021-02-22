@@ -15,7 +15,7 @@ const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
 export const SESSION_SECRET = process.env["SESSION_SECRET"];
 export const MONGO_DB = prod ? process.env["MONGO_DB"] : process.env["MONGO_DB_DEV"];
 export const MONGO_DB_SESSION_DB = process.env["MONGO_DB_SESSION_DB"];
-export const S3_BUCKET = prod ? process.env["S3_BUCKET"] : process.env["S3_BUCKET_DEVELOPMENT"];
+export const GCS_BUCKET = prod ? process.env["GCLOUD_BUCKET_PROD"] : process.env["GCLOUD_BUCKET_DEV"];
 
 if (!SESSION_SECRET) {
     logger.error("No client secret. Set SESSION_SECRET environment variable.");
