@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from "express";
-import { IRequestSession } from "../interfaces/IRequestSession";
+import { RequestSessionType } from "../interfaces/RequestSessionType";
 
-export function blockNotAuthenticatedAndNotAdmin(req: IRequestSession, res: Response, next: NextFunction): void {
+export function blockNotAuthenticatedAndNotAdmin(req: RequestSessionType, res: Response, next: NextFunction): void {
     //this middleware helps protect routes
     //in case a user that is not logged in types in browser ' /admin ' or ' /add-product'
     // the routs will simply not exist
@@ -14,7 +14,7 @@ export function blockNotAuthenticatedAndNotAdmin(req: IRequestSession, res: Resp
     next();
 }
 
-export function blockAuthenticated(req: IRequestSession, res: Response, next: NextFunction): void {
+export function blockAuthenticated(req: RequestSessionType, res: Response, next: NextFunction): void {
     if (req.session.isLoggedIn) {
         return res.redirect("/");
     }

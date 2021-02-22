@@ -5,7 +5,7 @@ import { check, body } from "express-validator/check";
 import { User } from "../models/user";
 import bodyParser from "body-parser";
 import { blockAuthenticated } from "../middleware/isAuth";
-import { IRequestSession } from "../interfaces/IRequestSession";
+import { RequestSessionType } from "../interfaces/RequestSessionType";
 
 export class AuthRouter {
     // TODO try to create a Interface or Abstract class for Router classes
@@ -41,15 +41,15 @@ export class AuthRouter {
                 .isLength({ min: 5 })
                 .isAlphanumeric()
                 .trim()
-            ], (req: IRequestSession | any, res: Response, next: NextFunction) => {
+            ], (req: RequestSessionType | any, res: Response, next: NextFunction) => {
                 this.controller.postLogin(req, res, next);
             });
 
-        this._router.post("/logout", (req: IRequestSession | any, res: Response, next: NextFunction) => {
+        this._router.post("/logout", (req: RequestSessionType | any, res: Response, next: NextFunction) => {
             this.controller.adminLogout(req, res, next);
         });
 
-        this._router.delete("/logout", (req: IRequestSession | any, res: Response, next: NextFunction) => {
+        this._router.delete("/logout", (req: RequestSessionType | any, res: Response, next: NextFunction) => {
             this.controller.basicLogout(req, res, next);
         });
 
@@ -94,7 +94,7 @@ export class AuthRouter {
         ], this.controller.postSignup);
     }
 
-    private blockIfAuthenticated(req: IRequestSession| any, res: Response, next: NextFunction): void {
+    private blockIfAuthenticated(req: RequestSessionType | any, res: Response, next: NextFunction): void {
         blockAuthenticated(req, res, next);
     }
 
