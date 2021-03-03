@@ -34,29 +34,20 @@
                                                         <li class="nav-item"> <a
                                                                         class="nav-link <%= path === '/contact' ? 'active' : '' %>"
                                                                         href="/contact">Contact</a></li>
-                                                        <% if (!isAuthenticated) { %>
-                                                        <!-- <li class="nav-item"> <a
+                                                        <% if (isAuthenticated) { %>
+                                                                <li class="nav-item"> <a class="nav-link" href="#"
+                                                                        id="basic_logout">Delogare</a></li>
+                                                        <%} else {%>
+                                                                <li class="nav-item"> <a
                                                                         class="nav-link <%= path === '/signup' ? 'active' : '' %>"
-                                                                        href="/signup">Creează cont</a></li> -->
+                                                                        href="/signup">Creează cont</a></li>
                                                         <li class="nav-item"> <a
                                                                         class="nav-link <%= path === '/login' ? 'active' : '' %>"
                                                                         href="/login">Intră in cont</a></li>
-                                                        <%} %>
-                                                        <% if (isAuthenticated && userStatus === "admin") { %>
-                                                        <li class="nav-item"> <a class="nav-link"
-                                                                        href="/admin/logout">Delogare</a></li>
-                                                        <%} else if(isAuthenticated && userStatus !== "admin"){%>
-                                                        <li class="nav-item"> <a class="nav-link" href="#"
-                                                                        id="basic_logout">Delogare</a></li>
-                                                        <%} %>
+                                                        <% } %>
                                                 </ul>
-                                                <!-- <div class="submit_property ml-2"><a class="btn btn_primary_bg"
-                                                                href="/submit_property">Submit Property</a></div> -->
-                                                <% if (userStatus === 'admin') { %>
-                                                <div class="submit_property ml-2"><a class="nav-link"
-                                                                href="/admin">Admin</a></div>
-                                                <% } %>
-                                                <!--  -->
+                                                <div class="submit_property ml-2"><a class="btn btn_primary_bg"
+                                                                href="/submit_property">Adauga proprietate</a></div>
                                         </div>
                                 </nav>
                         </div>

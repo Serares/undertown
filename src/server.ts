@@ -7,9 +7,9 @@ class Server {
 
     public startServer(): void {
         this._app.listen(PORT, () => {
-            console.log("App is running at http://localhost:" + PORT)
+            console.log("App is running at http://localhost:" + PORT);
             console.log("  Press CTRL-C to stop\n");
-        })
+        });
     }
 }
 

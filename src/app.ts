@@ -2,14 +2,16 @@ import express, { Request, Response, NextFunction } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import path from "path";
 import flash from "connect-flash";
+import session from "express-session";
+import bodyParser from "body-parser";
 import helmet from "helmet";
 import compression from "compression";
 // import { AuthRouter } from "./routes/auth";
 import { ErrorRouter } from "./routes/error";
 import { HomeRouter } from "./routes/home";
-import { GCS_BUCKET } from "./utils/secrets";
+import { GCS_BUCKET, SESSION_SECRET } from "./utils/secrets";
+import { EPropertyTypes } from "./interfaces/EPropertyTypes";
 
-//TODO implement Jest testing
 export class App {
     private _app: express.Application;
     private errorRouter: ErrorRouter = new ErrorRouter();
@@ -25,14 +27,19 @@ export class App {
         this.homeRouter = new HomeRouter();
         // this.authRouter = new AuthRouter();
         this.config();
-        
+
         // initiating routes
-        this._app.use("/",this.homeRouter.router);
+        this._app.use("/", this.homeRouter.router);
         // this._app.use(this.authRouter.router);
         this._app.use(this.errorRouter.router);
     }
 
     private config(): void {
+
+        this._app.use(bodyParser.json());
+        this._app.use(bodyParser.urlencoded({ extended: true }));
+        this._app.use(session({ secret: SESSION_SECRET, cookie: { maxAge: 60000 } }));
+        this._app.use(flash());
 
         this._app.use((req: Request, res: Response, next: NextFunction) => {
             //DON'T FORGET TO UNCOMMENT THIS IN PRODUCTION
@@ -54,8 +61,6 @@ export class App {
             })
         );
 
-        // upload login moved to routes because it acts as a middleware
-        // app.use(multer({ storage: fileStorage, fileFilter: fileFilter}).array('imagini', 10));
         this._app.use(express.static(path.join(process.cwd(), "dist", "public")));
         this._app.set("views", path.join(process.cwd(), "views"));
         this._app.set("view engine", "ejs");
@@ -63,7 +68,11 @@ export class App {
         this._app.use(helmet());
         this._app.use(compression());
 
-        this._app.use(flash());
+        this._app.use((req, res, next) => {
+            res.locals.isAuthenticated = false;
+            res.locals.propertyTypes = Object.values(EPropertyTypes);
+            next();
+        })
 
         // TODO add this error handler in error controller
         this._app.use((error: any, req: Request, res: Response, next: NextFunction) => {

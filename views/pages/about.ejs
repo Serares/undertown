@@ -1,0 +1,149 @@
+<%- include('../includes/header.ejs') %>
+</head>
+
+<body class="page-load">
+    <%- include('../includes/preload.ejs') %>
+
+    <!-- Wrapper Start -->
+    <div id="page_wrapper" class="container-fluid">
+        <div class="row">
+            <header id="header" class="w-100 bg_white nav-on-top">
+
+                <!-- Nav Header Start -->
+                <%- include('../includes/navbar.ejs') %>
+                <!-- Nav Header End -->
+            </header>
+
+            <!-- Banner Section Start -->
+            <%- include('../includes/banner_section.ejs', {pageTitle: pageTitle, imageUrl:imageUrl}) %>
+            <!-- Banner Section End -->
+
+            <!-- Who We Are Part Start -->
+            <section class="bg_secondary bg_img_6 full_row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-7">
+                            <div class="who_text py-5">
+                                <h2 class="text_white mb-4">Cine suntem noi?</h2>
+                                <p><b>UnderTown</b> aduce în piața imobiliară gura de aer proaspăt și inovația de care
+                                    aveți nevoie.</p>
+                                <ul class="icon_list_2 mt-1">
+                                    <li>Oferă suport și consultanță individuală persoanelor fizice cât
+                                        și celor juridice pentru a găsii împreună varianta potrivită de
+                                        investiție</li>
+
+                                    <li>O echipă tânără ce îmbină tehnologia cu arta negocierii ceea
+                                        ce face ca vânzarea și găsirea proprietăților să fie mai
+                                        inteligentă și cu mai puține dureri de cap</li>
+                                    <li>Noi iti vom gasi casa visurilor</li>
+                                    <li>Misiunea noastră este să găsim investiția perfectă pentru tine</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Who We Are Part End -->
+
+            <!-- About Accordion Part Start -->
+            <section class="py_80 bg_gray full_row">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <h2 class="mb-4">Cu ce <span class="text_primary">Ne Ocupam</span></h2>
+                            <p>UnderTown este o companie care merge în pas cu noile tendințe ale
+                                pieții. Folosim instrumente și tehnologii inteligente pentru a ușura
+                                modul prin care agenții și clienții navighează în procesul de găsire sau
+                                de vânzare a unei case.</p>
+                            <div class="according mt-4">
+                                <div class="according_area">
+                                    <div class="according_title active">Mereu in pas cu trendurile</div>
+                                    <div class="according_details">
+                                        <p>Ștergem granițele dintre noi și clienții noștrii printr-o învățare și
+                                            creștere continuă împreună.</p>
+                                    </div>
+                                </div>
+                                <div class="according_area">
+                                    <div class="according_title">Ambiția de care dăm dovadă</div>
+                                    <div class="according_details">
+                                        <p>Ne accelerăm eforturile pentru a putea inova și evolua cu viteză.</p>
+                                    </div>
+                                </div>
+                                <div class="according_area">
+                                    <div class="according_title">Calitățile noastre</div>
+                                    <div class="according_details">
+                                        <p>Suntem definiți prin diversitate de tot felul, deschiși în felul în care
+                                            ascultăm, cinstiți în felul în care vorbim, vorați în pofta noastră de a
+                                            înțelege puncte de vedere și experiențe unice.
+                                            Credem în utilizarea puterii transformatoare a automatizării pentru a
+                                            elibera potențialul nelimitat al oamenilor.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <h2 class="mb-4 mt_md_50">misiunea <span class="text_primary">noastră</span></h2>
+                            <p>Vedem un potențial nelimitat în felul în care trăim.
+                                Conduce modul în care lucrăm.</p>
+                            <ul class="misson_area mt-4">
+                                <li> <img src="/img/about/lightbulb-regular.svg" alt="satisfy"> <span>Găsim zona optimă
+                                        pentru
+                                        locuință</span>
+                                </li>
+                                <li> <img src="/img/about/shipping-fast-solid.svg" alt="reliable"> <span>Viteză de
+                                        răspuns</span>
+
+                                </li>
+                                <li> <img src="/img/about/smile-beam-regular.svg" alt="fast"> <span>Garantăm
+                                        satisfacția</span>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- About Accordion Part End -->
+
+            <!-- Team Section Start -->
+            <!-- <section class="full_row py_80 bg_gray">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="d-table float-left mb_30">Echipa <span class="text_primary">Noastră</span></h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="owl-carousel owl_carousel_2">
+                                <div class="team_member_1 bg_white text-center">
+                                    <div class="zoom_effect_1"><a href="agent_profile_grid.html"><img
+                                                src="/img/teams/1.jpg" alt="Image Not Found!"></a> </div>
+                                    <h5 class="name p-4"><a href="agent_profile_grid.html">Taylor Swift</a></h5>
+                                </div>
+                                <div class="team_member_1 bg_white text-center">
+                                    <div class="zoom_effect_1"><a href="agent_profile_grid.html"><img
+                                                src="/img/teams/2.jpg" alt="Image Not Found!"></a> </div>
+                                    <h5 class="name p-4"><a href="agent_profile_grid.html">Susan White</a></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section> -->
+            <!-- Team Section End -->
+
+            <!-- Footer Section Start -->
+            <%- include ../includes/footer.ejs %>
+            <!-- Footer Section End -->
+
+            <!-- Find Part Satrt -->
+            <a href="#" id="scroll"><i class="fas fa-arrow-up"></i></a>
+            <!-- Find Part Satrt -->
+        </div>
+    </div>
+    <!-- Wrapper End -->
+    <%- include ../includes/scripts.ejs %>
+</body>
+
+</html>

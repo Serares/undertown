@@ -1,0 +1,187 @@
+<%- include('../../includes/header.ejs') %>
+<link rel="stylesheet" href="/css/loading_spinner.css">
+</head>
+
+<body class="page-load">
+    <%- include('../../includes/preload.ejs') %>
+
+    <!-- Wrapper Start -->
+    <div id="page_wrapper" class="container-fluid">
+        <div class="row">
+            <header id="header" class="w-100 bg_white nav-on-top">
+                <!-- Nav Header Start -->
+                <%- include('../../includes/navbar.ejs') %>
+                <!-- Nav Header End -->
+            </header>
+
+            <!-- Banner Section Start -->
+            <!-- TODO ADD THIS TO INCLUDES -->
+            <%- include('../../includes/banner_section.ejs', {pageTitle: pageTitle, imageUrl:imageUrl}) %>
+            <!-- Banner Section End -->
+
+            <!-- Property List Start -->
+            <section class="full_row py_80 bg_gray">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="property_sidebar">
+                                <div class="property_form sidebar-widget">
+                                    <form class="price-filter" id="filter_form">
+
+                                        <div class="row">
+                                            <div class="col-lg-12 col-sm-8">
+                                                <p>Căutat după:</p>
+
+                                            </div>
+                                            <div class="col-lg-12 col-sm-8">
+                                                <input id="search_input" value="<%-search_input%>" name="search_input"
+                                                    class="form-control mb-4" type="text"
+                                                    placeholder="Caută o adresă, Ex: Dristor">
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <h4 class="widget-title mb-4">Preț</h4>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="price_range mb-5">
+                                                    <div class="price-filter"> <span class="price-slider">
+                                                            <input class="filter_price" type="text" name="price"
+                                                                value="0;<%- maxPrice %>" />
+                                                        </span> </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <h4 class="widget-title mb-4">Suprafață</h4>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="area_range mb-5">
+                                                    <div class="area-filter">
+                                                        <span class="area-slider">
+                                                            <input class="area_filter" type="text" name="area"
+                                                                value="0;10000" />
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <h4 class="widget-title mb-4">Filtre</h4>
+                                            </div>
+                                            <!-- TODO dynamically crete those fields -->
+                                            <div class="col-lg-12 col-md-6">
+                                                <div class="form-group">
+                                                    <select class="selectpicker form-control" name="property_status">
+                                                        <option selected disabled>Locuinte Mobilate</option>
+                                                        <option value="0">Nu</option>
+                                                        <option value="1">Da</option>
+                                                        <option value="-1">Oricare</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-md-6">
+                                                <div class="form-group">
+                                                    <%- include('../../includes/property_types_dropdown.ejs', {property_type: property_type}) %>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <h4 class="widget-title mb-4">Etaj</h4>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="price_range mb-5">
+                                                    <div class="etaj-filter"> <span class="etaj-slider">
+                                                            <input class="etaj_filter" type="text" name="etaj"
+                                                                value="0;<%- maxPrice %>" />
+                                                        </span> </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="form-group">
+                                                    <select class="selectpicker form-control" name="camere">
+                                                        <option selected disabled>Nr Camere</option>
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option value="4">4+</option>
+                                                        <option value="-1">Oricate</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="form-group">
+                                                    <select class="selectpicker form-control" name="bai">
+                                                        <option selected disabled>Nr băi</option>
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option value="3">3+</option>
+                                                        <option value="-1">Oricate</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <button name="search" class="btn btn_primary w-100"
+                                                    type="submit">caută</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="property_sorting mb_30 d-inline-block w-100 mt_md_50">
+                                        <form class="property_filter" id="sort_form">
+                                            <div class="col-lg-6 col-md-6">
+                                                <p class="properties_result">
+                                                    <span class="p_count"></span>
+                                                </p>
+                                            </div>
+                                            <ul class="float-right">
+                                                <li> <span>Order:</span>
+                                                    <select class="selectpicker form-control" data-width="fit"
+                                                        name="sort_order">
+                                                        <option selected disabled>Default Order</option>
+                                                        <option value="pret;-1">Preț (desc)</option>
+                                                        <option value="pret;1">Preț (cres)</option>
+                                                        <option value="suprafata;1">Suprafață (cresc)</option>
+                                                        <option value="suprafata;-1">Suprafață (desc)</option>
+                                                        <option value="createdAt;-1">Data publicării (desc)</option>
+                                                    </select>
+                                                </li>
+                                            </ul>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Property List Start -->
+                            <div class="row" id="properties-row">
+                                <div>
+
+                                </div>
+                            </div>
+                            <!-- End Property list -->
+                            <%- include('../../includes/pagination.ejs') %>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Property List End -->
+
+            <!-- Footer Section Start -->
+            <%- include('../../includes/footer.ejs') %>
+            <!-- Footer Section End -->
+
+            <!-- Find Part Satrt -->
+            <a href="#" id="scroll"><i class="fas fa-arrow-up"></i></a>
+            <!-- Find Part Satrt -->
+        </div>
+        <input type="hidden" value="<%-maxPrice%>" id="max_price_input" />
+        <input type="hidden" value="<%-search_status%>" id="search_status" />
+        <input type="hidden" value="<%-property_type%>" id="property_type" />
+    </div>
+    <!-- Wrapper End -->
+    <%- include('../../includes/scripts.ejs') %>
+    <script src="/js/custom/properties.js"></script>
+    <script src="/js/custom/sliders.js"></script>
+</body>
+
+</html>

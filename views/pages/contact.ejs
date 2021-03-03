@@ -1,0 +1,94 @@
+<%- include ../includes/header.ejs %>
+<link rel="stylesheet" href="/css/contact.css">
+</head>
+
+<body class="page-load">
+    <%- include ../includes/preload.ejs %>
+
+    <!-- Wrapper Start -->
+    <div id="page_wrapper" class="container-fluid">
+        <div class="row">
+            <header id="header" class="w-100 bg_white nav-on-top">
+
+                <!-- Nav Header Start -->
+                <%- include('../includes/navbar.ejs') %>
+                <!-- Nav Header End -->
+            </header>
+
+            <!-- Banner Section Start -->
+            <%- include('../includes/banner_section.ejs', {pageTitle: pageTitle, imageUrl:imageUrl}) %>
+            <!-- Banner Section End -->
+
+            <!-- Contact Section Start -->
+            <section id="contact" class="py_80 bg_gray full_row">
+                <div class="container">
+                    <h2 class="mb-4">TRIMITE-NE <span class="text_primary">UN MESAJ</span></h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="contact_area">
+                                <p>Incercăm să răspundem cât mai repede posibil</p>
+                                <form id="contact-form" class="contact_message mt_30">
+                                    <div class="row">
+                                        <div class="form-group col-md-6 col-sm-6">
+                                            <input class="form-control" id="firstname" type="text" name="firstname"
+                                                placeholder="Prenume">
+                                        </div>
+                                        <div class="form-group col-md-6 col-sm-6">
+                                            <input class="form-control" id="lastname" type="text" name="lastname"
+                                                placeholder="Nume">
+                                        </div>
+                                        <div class="form-group col-md-6 col-sm-6">
+                                            <input class="form-control" id="email" type="text" name="email"
+                                                placeholder="Adresa Email">
+                                        </div>
+                                        <div class="form-group col-md-12 col-sm-12">
+                                            <textarea class="form-control" id="message" name="message"
+                                                placeholder="Mesaj" rows="5"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-12 col-sm-12">
+                                            <input id="send" class="btn btn_primary" type="submit" value="Send">
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="error-handel">
+                                                <div id="success">Mesajul a fost trimis.</div>
+                                                <div id="error">Eroare la procesarea mesajului, te rog incearcă din nou.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="contact_right">
+                                        <h5 class="mb-4">Informații</h5>
+                                        <p>+40 727 971 584, undertown.ro@gmail.com</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="contact_right">
+                                        <div id="map"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Contact Section End -->
+            <!-- Footer Section Start -->
+            <%- include ../includes/footer.ejs %>
+            <!-- Footer Section End -->
+            <!-- Find Part Satrt -->
+            <a href="#" id="scroll"><i class="fas fa-arrow-up"></i></a>
+            <!-- Find Part Satrt -->
+        </div>
+    </div>
+    <!-- Wrapper End -->
+    <%- include ../includes/scripts.ejs %>
+    <script src="/js/custom/contact.js"></script>
+</body>
+
+</html>

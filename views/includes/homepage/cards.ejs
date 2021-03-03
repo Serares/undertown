@@ -1,0 +1,13 @@
+<% switch (property.propertyType) { 
+    case 1: %>
+<%- include('./apartment.ejs' , {propertyInfo: property}) %>
+<% break; 
+  case 2: %>
+<%- include('./house.ejs' , {propertyInfo: property}) %>
+<% break; 
+  case 4: %>
+<%- include('./landAndCommercial.ejs' , {propertyInfo: property}) %>
+<% break; 
+default: 
+  "No property type included"
+break; } %>
