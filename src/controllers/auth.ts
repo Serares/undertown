@@ -1,3 +1,4 @@
+/*
 import { NextFunction, Request, Response } from "express";
 import { IUser, User } from "../models/user";
 import bcrypt from "bcryptjs";
@@ -324,4 +325,4 @@ export class AuthController {
       });
   }
 }
-
+*/

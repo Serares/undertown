@@ -1,21 +1,91 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../utils/Error";
 
-import {Property} from "../models/property";
-// TODO sendgrid free tier is over, find other ways to send emails
-import sendgridApi from "@sendgrid/mail";
-sendgridApi.setApiKey(process.env.SENDGRID_KEY || "");
-
 import { validationResult } from "express-validator/check";
-import { getTimeDifferenceEachProperty } from "../utils/getTimeDifference";
-
-import { getProperties } from "../services/getProperties";
-import { queriedProperties } from "../services/queryProperties";
-import { getSingleProperty } from "../services/getSingleProperty";
-import { getPropertyTypes } from "../utils/getPropertyTypes";
-import { addDisplayPriceProperties } from "../utils/addDisplayPriceProperties";
 
 import url from "url";
+
+let featProperties = [
+    {
+        identification: {
+            propertyType: "apartment",
+            alias: "123123",
+            agent: "Vlady Object.ID",
+            ownerData: "Burlan Cornelia"
+        },
+        localization: {
+            residentialComplex: false,
+            county: "Bucuresti",
+            sector: "Sector 5",
+            address: "Calea Plevnei"
+        },
+        price: {
+            rent: {
+                currency: "EUR",
+                per_month: 700
+            },
+            sale: {
+                currency: "EUR",
+                price: 30000
+            },
+            includesVAT: true,
+            details: "nu persoanelor sub 18 ani",
+            comission: "30%"
+        },
+        features: {
+            homeType: "apartament",
+            partitioning: "decomandat",
+            floor: 4,
+            comfort: "lucs",
+            usableArea: 33,
+            totalUsavleArea: 24,
+            builtArea: 12,
+            title: "Luxury Apartment Shuttle",
+            description: "Super bomba"
+        },
+        rooms: {
+            number: 1,
+            kitchens: 3,
+            bathrooms: 1,
+            balconies: 1,
+            garages: 2,
+            parkinglots: 2
+        },
+        buildingType: {
+            type: "bloc de apartamente",
+            floorsNumber: 21,
+            basement: true,
+            semiBasement: true,
+            groundFloor: true,
+            attic: true,
+            constructionStatus: "la rosu",
+            finishConstructionYear: "2019",
+            constructionPeriod: "Dupa 2010",
+            resitenceStructure: "something"
+        },
+        energyCertificate: {
+            class: "A",
+            totalConsumption: "10W",
+            co2Emission: "20"
+        },
+        otherDetails: {
+            details: "disponibil imediat",
+            vicii: "vicentiu",
+        },
+        destination: {
+            residential: true,
+            commercial: false,
+            office: false,
+            vacation: false
+        },
+        utility: {
+            general: ["Curent", "Apa", "Canalizare"],
+            heatingSystem: ["Centrala Proprie"],
+            conditioning: ["Aer conditionat"],
+
+        }
+    }
+];
 
 export enum SEARCH_STATUS {
     RENT = 2,
@@ -24,15 +94,47 @@ export enum SEARCH_STATUS {
 
 export class HomeController {
     /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- * @param {String} SEARCH_STATUS inchiriere/vanzare
- * @param {Number} pageNumber 
- */
+    * @param {*} req 
+    * @param {*} res 
+    * @param {*} next
+    * @param {String} SEARCH_STATUS inchiriere/vanzare
+    * @param {Number} pageNumber 
+    */
     public async getHomepage(req: Request, res: Response, next: NextFunction): Promise<void> {
-        let featProperties = [];
+        
+        let featuredProperties = [
+            {
+                shortId: 1,
+                thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
+                propertyType: 1,
+                title: "Lucs apartments",
+                address: "Bd Roseti",
+                surface: 200,
+                rooms: 3,
+                price: 100,
+                status: 1
+            },
+            {
+                shortId: 2,
+                thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
+                propertyType: 2,
+                adress: "strada meduzei",
+                rooms: 2,
+                surface: 100,
+                price: 200,
+                status: 2
+            },
+            {
+                shortId: 4,
+                thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
+                propertyType: 3,
+                adress: "strada meduzei",
+                surface: 100,
+                price: 200,
+                status: 2
+            }
+        ];
+
         let message = req.flash("message");
         if (message.length > 0) {
             message = message[0];
@@ -41,22 +143,15 @@ export class HomeController {
         }
 
         try {
-            featProperties = await Property.find({ featured: 1 });
-            getTimeDifferenceEachProperty(featProperties);
-            addDisplayPriceProperties(featProperties);
-
-            const propertyTypes = await getPropertyTypes();
-            return res.render("pages/home/home", {
+            return res.render("pages/home", {
                 path: "/",
                 pageTitle: "UNDERTOWN",
-                featProperties: featProperties,
+                featuredProperties: featuredProperties,
                 errorMessage: message,
                 validationErrors: [],
                 oldInput: {
                     search: ""
-                },
-                property_type: null,
-                propertyTypes: propertyTypes
+                }
             });
             //TODO create an interface for error objects
         } catch (e) {
@@ -68,131 +163,12 @@ export class HomeController {
         }
     }
 
-    public async getRent(req: Request, res: Response, next: NextFunction): Promise<void> {
-        // TODO create a class of services that hass all the files as methods
-        return getProperties(req, res, next, SEARCH_STATUS.RENT);
-    }
-
-    public async getSale(req: Request, res: Response, next: NextFunction): Promise<void> {
-        return getProperties(req, res, next, SEARCH_STATUS.SALE);
-    }
-
-    public async getPropertyRent(req: Request, res: Response, next: NextFunction): Promise<void> {
-        //TODO create an enum or an interface for path constants
-        const path = "/inchiriere_s";
-        return getSingleProperty(req, res, next, path);
-    }
-
-    public async getPropertySale(req: Request, res: Response, next: NextFunction): Promise<void> {
-        // TODO path constant
-        const path = "/vanzare_s";
-        return getSingleProperty(req, res, next, path);
-    }
-
-    public getContactpage(req: Request, res: Response, next: NextFunction): void {
-        return res.render("pages/home/contact", {
-            path: "/contact",
-            pageTitle: "Contact",
-            imageUrl: "/img/banner-pages.jpg"
-        });
-    }
-
-    public getAboutpage(req: Request, res: Response, next: NextFunction): void {
-        return res.render("pages/home/about_us", {
-            path: "/about",
-            pageTitle: "Despre Noi",
-            imageUrl: "/img/hero-image.jpg",
-            middleImageUrl: "/img/about/about_us_middle_image.jpg"
-        });
-    }
-
-    public async properties(req: Request, res: Response, next: NextFunction): Promise<Response<void> | undefined> {
-        //filtrare dupa adresa din filtre
-        try {
-            // TODO find a logic where you don't need to use null a a parameter
-            // doing a sorting only on price, surface and floor
-            const dbInformations = await queriedProperties(req, null);
-            const properties = JSON.parse(JSON.stringify(dbInformations.properties.slice()));
-            const paginationData = dbInformations.paginationData;
-
-            addDisplayPriceProperties(properties);
-
-            if (!properties) {
-                const error = new CustomError("Something went wrong");
-                error.statusCode = 404;
-                error.statusMessage = "Can't find properties when filtering";
-                throw error;
-            }
-            if (properties.length < 1) {
-                return res.status(404).json({ message: "No properties found", properties: [] });
-            }
-
-            return res.status(200).json(
-                {
-                    message: "Filtered properties",
-                    properties: JSON.stringify(properties),
-                    paginationData: JSON.stringify(paginationData)
-                });
-        } catch (err) {
-            if (err.statusCode === 404) {
-                console.log(err);
-                return res.status(404).json({ message: err.status });
-            } else {
-                console.log("Got an error line 140:", err);
-                const error = new CustomError("Network error");
-                error.statusCode = 500;
-                error.statusMessage = "Server error";
-                next(error);
-            }
-        }
-    }
-
-    public postSendEmail(req: Request, res: Response, next: NextFunction): Response<void> | void {
-        // check if there are errors and display 'em
-        // send data back with the fields that need to be highlighted red
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            console.log(errors.array());
-            return res.status(422).json({ error: errors });
-        }
-        // if there is no contactPerson(single_property) then use the default email ( contact page )
-        const RECIVER_EMAIL = req.body["CONTACT_PERSON_EMAIL"] || process.env.DEFAULT_EMAIL;
-        console.log("Reciver email", RECIVER_EMAIL);
-        // TODO create an object for this message
-        const email = {
-            to: RECIVER_EMAIL,
-            from: process.env.FROM_EMAIL || "",
-            subject: "UNDERTOWN MESAJ",
-            html: `
-        <h2>Numele: ${req.body.firstname} ${req.body.lastname} </h2>
-        <h2>Email: ${req.body.email} </h2>
-        <p>${req.body.message}</p>
-      `
-        };
-
-        // data that will be in here
-        sendgridApi.send(email)
-            .then(() => {
-                return res.status(200).json({ message: "Email trimis, cu succes" });
-            })
-            // TODO add a type to this error from @sendgrid/mail
-            .catch((err: any) => {
-                console.log("Eroare trimitere email", RECIVER_EMAIL, err);
-                return res.status(404).json({ message: "Emailul nu a putut fi trimis" });
-            });
-    }
-
     public async postHomepage(req: Request, res: Response, next: NextFunction): Promise<void> {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             console.log(errors.array());
             try {
-                const featProperties = await Property.find({ featured: 1 });
-                getTimeDifferenceEachProperty(featProperties);
-                addDisplayPriceProperties(featProperties);
-                const propertyTypes = await getPropertyTypes();
-
-                return res.status(422).render("pages/home/home", {
+                return res.status(422).render("pages/home", {
                     path: "/",
                     pageTitle: "UNDERTOWN",
                     featProperties: featProperties,
@@ -200,9 +176,7 @@ export class HomeController {
                     validationErrors: errors.array(),
                     oldInput: {
                         search: req.body.search_input
-                    },
-                    property_type: null,
-                    propertyTypes: propertyTypes
+                    }
                 });
             } catch (err) {
                 console.log("Error eccured in homepageController: ", err);
@@ -220,4 +194,5 @@ export class HomeController {
             query: queryObject
         }));
     }
+    
 }

@@ -1,29 +1,23 @@
 import express, { Request, Response, NextFunction } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import path from "path";
-import session from "express-session";
 import MongoDBStore from "connect-mongodb-session";
-import { User } from "./models/user";
 import flash from "connect-flash";
 import helmet from "helmet";
 //
 import compression from "compression";
-import { AuthRouter } from "./routes/auth";
+// import { AuthRouter } from "./routes/auth";
 import { ErrorRouter } from "./routes/error";
 import { HomeRouter } from "./routes/home";
-import { AdminRouter } from "./routes/admin";
 import { MONGO_DB, MONGO_DB_SESSION_DB, GCS_BUCKET } from "./utils/secrets";
 
 //TODO implement Jest testing
 export class App {
     private _app: express.Application;
     private _MongoURI: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0-xyshh.mongodb.net/${MONGO_DB}`;
-    private _mongoDBStore = MongoDBStore(session);
-    private store: any;
     private errorRouter: ErrorRouter = new ErrorRouter();
     private homeRouter: HomeRouter;
-    private adminRouter: AdminRouter;
-    private authRouter: AuthRouter;
+    // private authRouter: AuthRouter;
 
     get app(): express.Application {
         return this._app;
@@ -36,20 +30,12 @@ export class App {
     constructor() {
         this._app = express();
         this.homeRouter = new HomeRouter();
-        this.adminRouter = new AdminRouter();
-        this.authRouter = new AuthRouter();
+        // this.authRouter = new AuthRouter();
         this.config();
-        // setting the communication with database and session
-        this.store = new this._mongoDBStore({
-            uri: this._MongoURI,
-            collection: MONGO_DB_SESSION_DB
-        });
-        // TODO debug why 404 endpoint is not hit
+        
         // initiating routes
-        //pagina de admin cred ca va deveni un api separat
         this._app.use("/",this.homeRouter.router);
-        this._app.use("/admin",this.adminRouter.router);
-        this._app.use(this.authRouter.router);
+        // this._app.use(this.authRouter.router);
         this._app.use(this.errorRouter.router);
     }
 
@@ -120,16 +106,7 @@ export class App {
             if (!req.session.user) {
                 return next();
             }
-            // if there is a user in session then get it's ID and add it in req.user so we can use it's mongoose object with all methods
-            User.findById(req.session.user._id)
-                .then(user => {
-                    if (!user) {
-                        return next();
-                    }
-                    req.user = user;
-                    next();
-                })
-                .catch(err => console.log(err));
+            // use redis to add authentication sessions
         });
 
         // TODO add this error handler in error controller
