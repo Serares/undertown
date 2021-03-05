@@ -1,4 +1,3 @@
-import { integer } from "aws-sdk/clients/cloudfront";
 import IError from "../interfaces/IError";
 
 export class CustomError extends Error implements IError{
@@ -14,6 +13,14 @@ export class CustomError extends Error implements IError{
         this._statusMessage = "";
     }
 
+    get statusCode(){
+        return this._statusCode;
+    }
+
+    get statusMessage(){
+        return this._statusMessage;
+    }
+
     set statusCode(status: number){
         this._statusCode = status;
     }
@@ -26,5 +33,4 @@ export class CustomError extends Error implements IError{
         console.log("An error has occured", this._message, this._statusCode, this._statusMessage);
         return `Error with status: ${this._statusCode}; Message: ${this._statusMessage}`;
     }
-
 }

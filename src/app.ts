@@ -7,83 +7,53 @@ import bodyParser from "body-parser";
 import helmet from "helmet";
 import compression from "compression";
 // import { AuthRouter } from "./routes/auth";
-import { ErrorRouter } from "./routes/error";
-import { HomeRouter } from "./routes/home";
+import ErrorRouter from "./routes/error";
+import HomeRouter from "./routes/home";
 import { GCS_BUCKET, SESSION_SECRET } from "./utils/secrets";
 import { EPropertyTypes } from "./interfaces/EPropertyTypes";
 
-export class App {
-    private _app: express.Application;
-    private errorRouter: ErrorRouter = new ErrorRouter();
-    private homeRouter: HomeRouter;
-    // private authRouter: AuthRouter;
 
-    get app(): express.Application {
-        return this._app;
+const app = express();
+
+app.use(helmet());
+app.use(compression());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(session({ secret: SESSION_SECRET, cookie: { maxAge: 60000 } }));
+app.use(flash());
+
+app.use(express.static(path.join(process.cwd(), "dist", "public")));
+app.set("views", path.join(process.cwd(), "views"));
+app.set("view engine", "ejs");
+
+// initiating routes
+app.use("/", HomeRouter);
+// app.use(authRouter.router);
+app.use(ErrorRouter);
+
+// app.use(createProxyMiddleware(
+//     "/images",
+//     {
+//         target: `https://storage.googleapis.com/${GCS_BUCKET}`,
+//         changeOrigin: true
+//     })
+// );
+
+app.use((req, res, next) => {
+    // TODO this is added just so views don't crash
+    res.locals.isAuthenticated = false;
+    res.locals.propertyTypes = Object.values(EPropertyTypes);
+    next();
+})
+
+app.use((err: any, req: any, res: any, next: any) => {
+    console.error(err);
+    if (err.statusCode) {
+        res.status(err.statusCode);
     }
+    // TODO render error page
+    res.send("<p>Error</p>");
+})
 
-    constructor() {
-        this._app = express();
-        this.homeRouter = new HomeRouter();
-        // this.authRouter = new AuthRouter();
-        this.config();
-
-        // initiating routes
-        this._app.use("/", this.homeRouter.router);
-        // this._app.use(this.authRouter.router);
-        // this._app.use(this.errorRouter.router);
-    }
-
-    private config(): void {
-
-        this._app.use(bodyParser.json());
-        this._app.use(bodyParser.urlencoded({ extended: true }));
-        this._app.use(session({ secret: SESSION_SECRET, cookie: { maxAge: 60000 } }));
-        this._app.use(flash());
-
-        this._app.use((req: Request, res: Response, next: NextFunction) => {
-            //DON'T FORGET TO UNCOMMENT THIS IN PRODUCTION
-            //TODO set admin page in a separate URL and use the cors stuff only for MVC
-            //this does not send a response just sets a Header
-            // you can lock cors to one domain 'exampledomain.com'
-            // res.setHeader('Access-Control-Allow-Origin', '*');
-            // res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
-            // res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-            next();
-        });
-
-        this._app.use(createProxyMiddleware(
-            "/images",
-            {
-                target: `https://storage.googleapis.com/${GCS_BUCKET}`,
-                changeOrigin: true
-            })
-        );
-
-        this._app.use(express.static(path.join(process.cwd(), "dist", "public")));
-        this._app.set("views", path.join(process.cwd(), "views"));
-        this._app.set("view engine", "ejs");
-
-        this._app.use(helmet());
-        this._app.use(compression());
-
-        this._app.use((req, res, next) => {
-            res.locals.isAuthenticated = false;
-            res.locals.propertyTypes = Object.values(EPropertyTypes);
-            next();
-        })
-
-        // TODO add this error handler in error controller
-        this._app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-            console.log("Error", error);
-            // res.status(500).render('500', {
-            //     pageTitle: 'Error!',
-            //     path: '/500',
-            //     isAuthenticated: false
-            // });
-            res.status(error.statusCode);
-            res.send("<p>Error occured</p>");
-        });
-    }
-
-}
+export default app;

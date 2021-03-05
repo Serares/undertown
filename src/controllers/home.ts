@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../utils/Error";
 import { validationResult } from "express-validator/check";
 import url from "url";
-import { DataFormatting } from "../services/dataFormatting";
+import { dataFormatting } from "../services/dataFormatting";
 
 const featProperties = [
     {
@@ -102,7 +102,7 @@ const featuredProperties = [
         shortId: 2,
         thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
         propertyType: 2,
-        title:"Casa",
+        title: "Casa",
         address: "strada meduzei",
         rooms: 2,
         surface: 100,
@@ -113,7 +113,7 @@ const featuredProperties = [
         shortId: 4,
         thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
         propertyType: 3,
-        title:"teren",
+        title: "teren",
         address: "strada meduzei",
         surface: 100,
         price: 201,
@@ -126,75 +126,73 @@ export enum SEARCH_STATUS {
     SALE = 1
 }
 
-export class HomeController {
-    /**
-    * @route GET /
-    */
-    public async getHomepage(req: Request, res: Response, next: NextFunction): Promise<void> {
+/**
+* @route GET /
+*/
+export const getHomepage = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 
-        let message = req.flash("message");
-        if (message.length > 0) {
-            message = message[0];
-        } else {
-            message = null;
-        }
+    let message = req.flash("message");
+    if (message.length > 0) {
+        message = message[0];
+    } else {
+        message = null;
+    }
 
+    try {
+        let data = await dataFormatting(featuredProperties);
+
+        console.log(data);
+        return res.render("pages/home", {
+            path: "/",
+            pageTitle: "UNDERTOWN",
+            featuredProperties: featuredProperties,
+            errorMessage: message,
+            validationErrors: [],
+            oldInput: {
+                search: ""
+            }
+        });
+        //TODO create an interface for error objects
+    } catch (e) {
+        console.log("Got an error:", e);
+        const error = new CustomError("Network error");
+        error.statusCode = 500;
+        error.statusMessage = "error";
+        next(error);
+    }
+}
+
+/**
+ * @route POST / 
+ */
+export const postHomepage = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log(errors.array());
         try {
-            let data = await new DataFormatting(featuredProperties).generate();
-            console.log(data);
-            return res.render("pages/home", {
+            return res.status(422).render("pages/home", {
                 path: "/",
                 pageTitle: "UNDERTOWN",
-                featuredProperties: featuredProperties,
-                errorMessage: message,
-                validationErrors: [],
+                featProperties: featuredProperties,
+                errorMessage: errors.array()[0].msg,
+                validationErrors: errors.array(),
                 oldInput: {
-                    search: ""
+                    search: req.body.search_input
                 }
             });
-            //TODO create an interface for error objects
-        } catch (e) {
-            console.log("Got an error:", e);
+        } catch (err) {
+            console.log("Error eccured in homepageController: ", err);
             const error = new CustomError("Network error");
             error.statusCode = 500;
-            error.statusMessage = "error";
+            error.statusMessage = "Server error";
             next(error);
         }
     }
-
-    /**
-     * @route POST / 
-     */
-    public async postHomepage(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            console.log(errors.array());
-            try {
-                return res.status(422).render("pages/home", {
-                    path: "/",
-                    pageTitle: "UNDERTOWN",
-                    featProperties: featuredProperties,
-                    errorMessage: errors.array()[0].msg,
-                    validationErrors: errors.array(),
-                    oldInput: {
-                        search: req.body.search_input
-                    }
-                });
-            } catch (err) {
-                console.log("Error eccured in homepageController: ", err);
-                const error = new CustomError("Network error");
-                error.statusCode = 500;
-                error.statusMessage = "Server error";
-                next(error);
-            }
-        }
-        // if no error is present, redirects to the searched criteria
-        const queryObject = { ...req.body };
-        const pathName = "/" + (req.body.property_status === "1" ? "vanzare" : "inchiriere");
-        return res.status(302).redirect(url.format({
-            pathname: pathName,
-            query: queryObject
-        }));
-    }
-    
+    // if no error is present, redirects to the searched criteria
+    const queryObject = { ...req.body };
+    const pathName = "/" + (req.body.property_status === "1" ? "vanzare" : "inchiriere");
+    return res.status(302).redirect(url.format({
+        pathname: pathName,
+        query: queryObject
+    }));
 }

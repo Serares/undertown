@@ -11,6 +11,7 @@ if (fs.existsSync(".env")) {
 export const ENVIRONMENT = process.env.NODE_ENV;
 // environment will be overriten by launch.json in vscode debug
 const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
+logger.debug("ENVIRONMENT IS: " + process.env.NODE_ENV);
 
 export const SESSION_SECRET = process.env["SESSION_SECRET"];
 export const MONGO_DB = prod ? process.env["MONGO_DB"] : process.env["MONGO_DB_DEV"];
