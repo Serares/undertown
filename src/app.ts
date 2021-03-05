@@ -31,7 +31,7 @@ export class App {
         // initiating routes
         this._app.use("/", this.homeRouter.router);
         // this._app.use(this.authRouter.router);
-        this._app.use(this.errorRouter.router);
+        // this._app.use(this.errorRouter.router);
     }
 
     private config(): void {
@@ -52,7 +52,6 @@ export class App {
             next();
         });
 
-        // TODO create a proxy to serve files like s3 proxy
         this._app.use(createProxyMiddleware(
             "/images",
             {
@@ -82,7 +81,8 @@ export class App {
             //     path: '/500',
             //     isAuthenticated: false
             // });
-            res.status(error.statusCode).json({ message: "Erorare", error: error });
+            res.status(error.statusCode);
+            res.send("<p>Error occured</p>");
         });
     }
 

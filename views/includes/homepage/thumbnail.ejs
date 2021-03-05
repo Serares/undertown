@@ -2,9 +2,6 @@
     <div class="upper_1 bg_secondary text-white">
         <%- status===1 ? 'Vanzare' : 'Inchiriere' %>
     </div>
-    <div class="upper_2 bg_primary text-white">
-        Casa
-    </div>
     <a href="/<%- status == 1 ? 'vanzare' : 'inchiriere' %>/<%- id %>"><img
-            src="/<%- thumbnail %>" alt="imagine"></a>
+            src="<%- thumbnail %>" alt="imagine"></a>
 </div>

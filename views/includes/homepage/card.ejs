@@ -1,0 +1,27 @@
+<div class="column mix mix_all <%- propertyInfo.propertyType %> col-lg-4 col-md-6">
+  <div class="property_grid_1 property_item bg-white mb_30">
+      <%- include('./thumbnail.ejs' , {status: propertyInfo.status, thumbnail: propertyInfo.thumbnail, id: propertyInfo.shortId}) %>
+          <div class="property_text p-3">
+              <%- include('./title.ejs' , {status: propertyInfo.status, title: propertyInfo.title, address:propertyInfo.address, id: propertyInfo.shortId}) %>
+                  <div class="quantity">
+                      <ul>
+                        <% 
+                        var propertyFeatures = propertyInfo.features;
+
+                        for(let feature in propertyFeatures) {%>
+                            <li><%= propertyFeatures[feature]["display"] %> <%= propertyFeatures[feature]["value"] %>  </li>
+                          <% } %>
+                      </ul>
+                  </div>
+          </div>
+          <div class="bed_area d-table w-100">
+              <ul>
+                  <li>
+                      <%- include('../utils/formatPrice.ejs' , {price: propertyInfo.price}) %>
+                  </li>
+                  <li class="icon_medium"><a href="#"><i class="flaticon-like"></i></a> </li>
+                  <li class="icon_medium"><a href="#"><i class="flaticon-connections"></i></a> </li>
+              </ul>
+          </div>
+  </div>
+</div>

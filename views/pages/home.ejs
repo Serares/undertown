@@ -80,7 +80,7 @@
                                             <li class="active filter" data-role="button" data-filter="all">Toate</li>
                                             <li class="filter" data-role="button" data-filter=".1">Casă</li>
                                             <li class="filter" data-role="button" data-filter=".2">Apartament</li>
-                                            <li class="filter" data-role="button" data-filter=".3">Garsoniera</li>
+                                            <li class="filter" data-role="button" data-filter=".3">Terenuri</li>
                                         </ul>
                                     </div>
                                     <!--Filter List-->
@@ -88,7 +88,7 @@
                                     <!-- Tab Content -->
                                     <div class="row filter-list clearfix">
                                         <% for(let property of featuredProperties) { %>
-                                            <%- include('../includes/homepage/cards.ejs' , {property: property})  %>
+                                            <%- include('../includes/homepage/card.ejs' , {propertyInfo: property})  %>
                                         <% }%>
 
                                     </div>

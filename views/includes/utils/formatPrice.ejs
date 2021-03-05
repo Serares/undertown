@@ -1,4 +1,7 @@
 <span>
-    <!-- TODO make the currency dynamic -->
-    <%- price %> EUR
+    <% var formatter = new Intl.NumberFormat('ro-RO', {
+        style: "currency",
+        currency: "EUR"
+    })%>
+    <%- formatter.format(price) %>
 </span>

@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../utils/Error";
-
 import { validationResult } from "express-validator/check";
-
 import url from "url";
+import { DataFormatting } from "../services/dataFormatting";
 
-let featProperties = [
+const featProperties = [
     {
         identification: {
             propertyType: "apartment",
@@ -87,6 +86,41 @@ let featProperties = [
     }
 ];
 
+const featuredProperties = [
+    {
+        shortId: 1,
+        thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
+        propertyType: 1,
+        title: "Lucs apartments",
+        address: "Bd Roseti",
+        surface: 200,
+        rooms: 3,
+        price: 103,
+        status: 1
+    },
+    {
+        shortId: 2,
+        thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
+        propertyType: 2,
+        title:"Casa",
+        address: "strada meduzei",
+        rooms: 2,
+        surface: 100,
+        price: 202,
+        status: 2
+    },
+    {
+        shortId: 4,
+        thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
+        propertyType: 3,
+        title:"teren",
+        address: "strada meduzei",
+        surface: 100,
+        price: 201,
+        status: 2
+    }
+];
+
 export enum SEARCH_STATUS {
     RENT = 2,
     SALE = 1
@@ -94,46 +128,9 @@ export enum SEARCH_STATUS {
 
 export class HomeController {
     /**
-    * @param {*} req 
-    * @param {*} res 
-    * @param {*} next
-    * @param {String} SEARCH_STATUS inchiriere/vanzare
-    * @param {Number} pageNumber 
+    * @route GET /
     */
     public async getHomepage(req: Request, res: Response, next: NextFunction): Promise<void> {
-        
-        let featuredProperties = [
-            {
-                shortId: 1,
-                thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
-                propertyType: 1,
-                title: "Lucs apartments",
-                address: "Bd Roseti",
-                surface: 200,
-                rooms: 3,
-                price: 100,
-                status: 1
-            },
-            {
-                shortId: 2,
-                thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
-                propertyType: 2,
-                adress: "strada meduzei",
-                rooms: 2,
-                surface: 100,
-                price: 200,
-                status: 2
-            },
-            {
-                shortId: 4,
-                thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
-                propertyType: 3,
-                adress: "strada meduzei",
-                surface: 100,
-                price: 200,
-                status: 2
-            }
-        ];
 
         let message = req.flash("message");
         if (message.length > 0) {
@@ -143,6 +140,8 @@ export class HomeController {
         }
 
         try {
+            let data = await new DataFormatting(featuredProperties).generate();
+            console.log(data);
             return res.render("pages/home", {
                 path: "/",
                 pageTitle: "UNDERTOWN",
@@ -163,6 +162,9 @@ export class HomeController {
         }
     }
 
+    /**
+     * @route POST / 
+     */
     public async postHomepage(req: Request, res: Response, next: NextFunction): Promise<void> {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -171,7 +173,7 @@ export class HomeController {
                 return res.status(422).render("pages/home", {
                     path: "/",
                     pageTitle: "UNDERTOWN",
-                    featProperties: featProperties,
+                    featProperties: featuredProperties,
                     errorMessage: errors.array()[0].msg,
                     validationErrors: errors.array(),
                     oldInput: {
