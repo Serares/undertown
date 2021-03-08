@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../utils/Error";
 import { validationResult } from "express-validator/check";
 import url from "url";
-import { dataFormatting } from "../services/dataFormatting";
+import { formatting } from "../modelView/formatting";
 
 const featProperties = [
     {
@@ -139,9 +139,8 @@ export const getHomepage = async (req: Request, res: Response, next: NextFunctio
     }
 
     try {
-        let data = await dataFormatting(featuredProperties);
+        await formatting(featuredProperties);
 
-        console.log(data);
         return res.render("pages/home", {
             path: "/",
             pageTitle: "UNDERTOWN",
@@ -152,6 +151,7 @@ export const getHomepage = async (req: Request, res: Response, next: NextFunctio
                 search: ""
             }
         });
+
         //TODO create an interface for error objects
     } catch (e) {
         console.log("Got an error:", e);

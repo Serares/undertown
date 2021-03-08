@@ -9,12 +9,19 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-        "*": [
-            "node_modules/*",
-            "src/types/*"
-        ]
+      "*": [
+        "node_modules/*",
+        "src/types/*"
+      ]
     }
   },
-    "include": ["./src/**/*", "jest.config.js"],
-    "exclude": ["node_modules", "admin_page"]
+  "include": [
+    "./src/**/*",
+    "jest.config.js",
+    "src/utils/.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "admin_page"
+  ]
 }

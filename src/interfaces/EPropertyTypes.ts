@@ -1,6 +1,5 @@
-export enum EPropertyType {
+export enum EPropertyTypes {
     APARTMENT = "1",
-    SINGLEROOM = "2",
-    HOUSE = "3",
-    LANDANDCOMMERCIAL = "4"
+    HOUSE = "2",
+    LANDANDCOMMERCIAL = "3"
 }
