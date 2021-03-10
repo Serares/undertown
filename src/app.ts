@@ -7,17 +7,14 @@ import helmet from "helmet";
 import compression from "compression";
 // import { AuthRouter } from "./routes/auth";
 import ErrorRouter from "./routes/error";
-import HomeRouter from "./routes/home";
+import homeRouter from "./routes/home";
+import listingRouter from "./routes/listing";
 import { GCS_BUCKET, SESSION_SECRET } from "./utils/secrets";
-import { EPropertyTypes } from "./interfaces/EPropertyTypes";
-import bodyParser from 'body-parser';
-
+import { propertyTypes } from "./modelView/values";
 
 const app = express();
 
-
-
-app.use(express.static(path.join(process.cwd(), "dist", "public")));
+app.use(express.static(path.join(process.cwd(), "public")));
 app.set("views", path.join(process.cwd(), "views"));
 app.set("view engine", "ejs");
 
@@ -26,10 +23,8 @@ app.use(flash());
 
 app.use(helmet());
 app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // app.use(createProxyMiddleware(
 //     "/images",
@@ -42,9 +37,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req: Request, res: Response, next: NextFunction) => {
     // TODO this is added just so views don't crash
     res.locals.isAuthenticated = false;
-    res.locals.propertyTypes = Object.values(EPropertyTypes);
+    res.locals.propertyTypes = propertyTypes;
     next();
-})
+});
 
 // TODO add error handler to error controller
 // app.use((err: any, req: any, res: any, next: any) => {
@@ -60,7 +55,8 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // })
 
 // initiating routes
-app.use("/", HomeRouter);
+app.use("/", homeRouter);
+app.use(listingRouter);
 // app.use(authRouter.router);
 app.use(ErrorRouter);
 

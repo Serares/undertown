@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { CustomError } from "../utils/Error";
 import { validationResult } from "express-validator/check";
 import url from "url";
-import { formatting } from "../modelView/formatting";
+import { homepageFormatting } from "../modelView/homepageFormatting";
 
 const featProperties = [
     {
@@ -89,78 +89,60 @@ const featProperties = [
 const featuredProperties = [
     {
         shortId: 1,
-        thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
+        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
         propertyType: 1,
         title: "Lucs apartments",
         address: "Bd Roseti",
         surface: 200,
         rooms: 3,
         price: 103,
-        status: 1
+        transactionStatus: 1
     },
     {
         shortId: 2,
-        thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
+        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
         propertyType: 2,
         title: "Casa",
         address: "strada meduzei",
         rooms: 2,
         surface: 100,
         price: 202,
-        status: 2
+        transactionStatus: 2
     },
     {
         shortId: 4,
-        thumbnail: "https://storage.googleapis.com/undertownstaticdevelopment/images/1587377791647-p1-black-border.jpg",
+        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
         propertyType: 3,
         title: "teren",
         address: "strada meduzei",
         surface: 100,
         price: 201,
-        status: 2
+        transactionStatus: 2
     }
 ];
-
-export enum SEARCH_STATUS {
-    RENT = 2,
-    SALE = 1
-}
 
 /**
 * @route GET /
 */
 export const getHomepage = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 
-    let message = req.flash("message");
-    if (message.length > 0) {
-        message = message[0];
-    } else {
-        message = null;
-    }
-
     try {
-        await formatting(featuredProperties);
-
+        await homepageFormatting(featuredProperties);
         return res.render("pages/home", {
             path: "/",
             pageTitle: "UNDERTOWN",
             featuredProperties: featuredProperties,
-            errorMessage: message,
+            errorMessage: null,
             validationErrors: [],
             oldInput: {
                 search: ""
             }
         });
-
-        //TODO create an interface for error objects
     } catch (e) {
-        console.log("Got an error:", e);
-        const error = new CustomError("Network error");
-        error.statusCode = 500;
-        error.statusMessage = "error";
+        const error = new CustomError("Network error", 500, "Home Controller Error");
         next(error);
     }
-}
+};
 
 /**
  * @route POST / 
@@ -173,7 +155,7 @@ export const postHomepage = async (req: Request, res: Response, next: NextFuncti
             return res.status(422).render("pages/home", {
                 path: "/",
                 pageTitle: "UNDERTOWN",
-                featProperties: featuredProperties,
+                featuredProperties: featuredProperties,
                 errorMessage: errors.array()[0].msg,
                 validationErrors: errors.array(),
                 oldInput: {
@@ -181,10 +163,7 @@ export const postHomepage = async (req: Request, res: Response, next: NextFuncti
                 }
             });
         } catch (err) {
-            console.log("Error eccured in homepageController: ", err);
-            const error = new CustomError("Network error");
-            error.statusCode = 500;
-            error.statusMessage = "Server error";
+            const error = new CustomError("Network error", 500, "Home Controller Error, POST");
             next(error);
         }
     }
@@ -195,4 +174,4 @@ export const postHomepage = async (req: Request, res: Response, next: NextFuncti
         pathname: pathName,
         query: queryObject
     }));
-}
+};

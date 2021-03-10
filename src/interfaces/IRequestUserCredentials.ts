@@ -1,5 +1,6 @@
 import { Request } from "express";
-import { IUser } from "../models/user";
+import {IUser} from "./IUser";
+
 
 // had to create this interface
 // because request object sometimes contains
