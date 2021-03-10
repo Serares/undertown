@@ -1,8 +1,5 @@
-import { AnyLengthString } from "aws-sdk/clients/comprehendmedical";
 import { Request } from "express";
-import { IProperty, Property } from "../models/property";
-import { addDisplayPriceProperties } from "../utils/addDisplayPriceProperties";
-import { SEARCH_STATUS } from "../controllers/home";
+import { SEARCH_STATUS } from "../interfaces/ESearchStatus";
 
 //TODO add them in interfaces folder
 interface IPaginationData {
@@ -10,13 +7,26 @@ interface IPaginationData {
 }
 
 interface IReturnedData {
-    properties: IProperty[];
     paginationData: IPaginationData;
+    properties: Array<{ [key: string]: string | number }>;
 }
 
-// TODO create an interface for all the objects that are beeing used in here for sorting / filtering
-//create a function that is returning the properties filtered and paginated
-export const queriedProperties = async function (req: Request, SEARCH_STATUS_GETPROP: null | number) {
+const propertiesListings = [
+    {
+        shortId: 1,
+        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
+        propertyType: 1,
+        title: "Lucs apartments",
+        address: "Bd Roseti",
+        surface: 200,
+        rooms: 3,
+        price: 103,
+        transactionStatus: 1,
+        imagesNumber: 9
+    }
+];
+
+export const queriedProperties = async function (req: Request, SEARCH_STATUS_GETPROP: null | number): Promise<IReturnedData> {
     const ITEMS_PER_PAGE = 5;
     // TODO add a interface/enum for search status
     const SEARCH_STATUS: SEARCH_STATUS = SEARCH_STATUS_GETPROP || +req.body.SEARCH_STATUS;
@@ -25,7 +35,8 @@ export const queriedProperties = async function (req: Request, SEARCH_STATUS_GET
     const filterConditions = {};
     Object.assign(filterConditions, { status: SEARCH_STATUS });
     const paginationData: IPaginationData = {};
-    let properties: IProperty[];
+
+    let properties: [];
     const returnedData: IReturnedData = {
         properties: [],
         paginationData: {}
@@ -109,34 +120,21 @@ export const queriedProperties = async function (req: Request, SEARCH_STATUS_GET
         sortQuery = {};
         sortQuery[sortOrderParams[0]] = +sortOrderParams[1];
     }
-    try {
-        // let numProperties = await Property.find({ status: SEARCH_STATUS }).countDocuments();
-        properties = await Property.find(filterConditions)
-            .sort(sortQuery)
-            .skip((pageNumber - 1) * ITEMS_PER_PAGE)
-            .limit(ITEMS_PER_PAGE);
-        if (properties) {
-            addDisplayPriceProperties(properties);
 
-            //quick maths
-            const COUNT_PROPERTIES = await Property.find(filterConditions).countDocuments();
-            paginationData["pageNumber"] = pageNumber;
-            paginationData["hasNextPage"] = ITEMS_PER_PAGE * pageNumber < COUNT_PROPERTIES;
-            paginationData["hasPreviousPage"] = pageNumber > 1;
-            paginationData["nextPage"] = pageNumber + 1;
-            paginationData["previousPage"] = pageNumber - 1;
-            paginationData["lastPage"] = Math.ceil(COUNT_PROPERTIES / ITEMS_PER_PAGE);
-            paginationData["count_properties"] = COUNT_PROPERTIES;
+    return new Promise((resolve, reject) => {
+        const COUNT_PROPERTIES = propertiesListings.length;
 
-            returnedData["properties"] = properties;
-            returnedData["paginationData"] = paginationData;
+        paginationData["pageNumber"] = pageNumber;
+        paginationData["hasNextPage"] = ITEMS_PER_PAGE * pageNumber < COUNT_PROPERTIES;
+        paginationData["hasPreviousPage"] = pageNumber > 1;
+        paginationData["nextPage"] = pageNumber + 1;
+        paginationData["previousPage"] = pageNumber - 1;
+        paginationData["lastPage"] = Math.ceil(COUNT_PROPERTIES / ITEMS_PER_PAGE);
+        paginationData["count_properties"] = COUNT_PROPERTIES;
 
-            return returnedData;
-        }
-    } catch (err) {
-        console.log("No properties found", err);
-        returnedData["properties"] = [];
-        returnedData["paginationData"] = {};
-        return returnedData;
-    }
+        returnedData["properties"] = propertiesListings;
+        returnedData["paginationData"] = paginationData;
+
+        resolve(returnedData);
+    });
 };

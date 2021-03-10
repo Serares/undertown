@@ -1,22 +1,22 @@
-<%- include('../../includes/header.ejs') %>
+<%- include('../includes/header.ejs') %>
 <link rel="stylesheet" href="/css/loading_spinner.css">
 </head>
 
 <body class="page-load">
-    <%- include('../../includes/preload.ejs') %>
+    <%- include('../includes/preload.ejs') %>
 
     <!-- Wrapper Start -->
     <div id="page_wrapper" class="container-fluid">
         <div class="row">
             <header id="header" class="w-100 bg_white nav-on-top">
                 <!-- Nav Header Start -->
-                <%- include('../../includes/navbar.ejs') %>
+                <%- include('../includes/navbar.ejs') %>
                 <!-- Nav Header End -->
             </header>
 
             <!-- Banner Section Start -->
             <!-- TODO ADD THIS TO INCLUDES -->
-            <%- include('../../includes/banner_section.ejs', {pageTitle: pageTitle, imageUrl:imageUrl}) %>
+            <%- include('../includes/banner_section.ejs', {pageTitle: pageTitle, imageUrl:imageUrl}) %>
             <!-- Banner Section End -->
 
             <!-- Property List Start -->
@@ -78,7 +78,7 @@
                                             </div>
                                             <div class="col-lg-12 col-md-6">
                                                 <div class="form-group">
-                                                    <%- include('../../includes/property_types_dropdown.ejs', {property_type: property_type}) %>
+                                                    <%- include('../includes/property_types_dropdown.ejs', {property_type: property_type}) %>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
@@ -159,7 +159,7 @@
                                 </div>
                             </div>
                             <!-- End Property list -->
-                            <%- include('../../includes/pagination.ejs') %>
+                            <%- include('../includes/pagination.ejs') %>
                         </div>
                     </div>
                 </div>
@@ -167,7 +167,7 @@
             <!-- Property List End -->
 
             <!-- Footer Section Start -->
-            <%- include('../../includes/footer.ejs') %>
+            <%- include('../includes/footer.ejs') %>
             <!-- Footer Section End -->
 
             <!-- Find Part Satrt -->
@@ -179,7 +179,7 @@
         <input type="hidden" value="<%-property_type%>" id="property_type" />
     </div>
     <!-- Wrapper End -->
-    <%- include('../../includes/scripts.ejs') %>
+    <%- include('../includes/scripts.ejs') %>
     <script src="/js/custom/properties.js"></script>
     <script src="/js/custom/sliders.js"></script>
 </body>

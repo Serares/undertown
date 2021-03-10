@@ -1,8 +1,8 @@
 <div class="column mix mix_all <%- propertyInfo.propertyType %> col-lg-4 col-md-6">
   <div class="property_grid_1 property_item bg-white mb_30">
-      <%- include('./thumbnail.ejs' , {status: propertyInfo.status, thumbnail: propertyInfo.thumbnail, id: propertyInfo.shortId}) %>
+      <%- include('./thumbnail.ejs' , {status: propertyInfo.transactionStatus, thumbnail: propertyInfo.thumbnail, id: propertyInfo.shortId}) %>
           <div class="property_text p-3">
-              <%- include('./title.ejs' , {status: propertyInfo.status, title: propertyInfo.title, address:propertyInfo.address, id: propertyInfo.shortId}) %>
+              <%- include('./title.ejs' , {status: propertyInfo.transactionStatus, title: propertyInfo.title, address:propertyInfo.address, id: propertyInfo.shortId}) %>
                   <div class="quantity">
                       <ul>
                         <% 

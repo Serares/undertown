@@ -7,7 +7,7 @@ const router = Router();
 router.route("/")
     .get(homeController.getHomepage)
     .post([
-        body("property_status", "Selectează chirii/vânzări")
+        body("property_status", "Selectează câmpul")
             .exists({ checkFalsy: true })
     ], homeController.postHomepage);
 

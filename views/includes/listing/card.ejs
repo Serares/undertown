@@ -1,0 +1,43 @@
+<div class="col-md-12">
+    <div class="property_list_1 property_item bg-white mb_30">
+        <div class="zoom_effect_1"> 
+         <a href="/${createPropertyPath(property.status)}/${property._id}">
+            <img src="/${property.thumbnail}" alt="Image Found">
+         </a>
+         <div class="upper_2">
+                                    <i class="far fa-images"></i>
+                                    <span>${property.imagini.length}</span>
+                                </div>
+        </div>
+            <div class="float-right property_list_details p-3">
+                <div class="property_text">
+                    <h5 class="title">
+                        <a href="/${createPropertyPath(property.status)}/${property._id}">${property.titlu}</a>
+                    </h5>
+                    <span class="my-3 d-block"><i class="fas fa-map-marker-alt"></i>
+                    ${property.adresa} </span>
+                    <!-- caracteristici prev -->
+            <div class="quantity">
+                        <ul>
+                            ${addCaracteristici(property.caracteristici)}
+                        </ul>
+                    </div>
+                </div>
+                <div class="bed_area d-table w-100">
+                    <ul>
+                        <li>${property.displayPrice}</li>
+                        <li><a href="/${createPropertyPath(property.status)}/${property._id}">
+                                                <button type="button"
+                                                    class="mx-5 btn btn-primary">Detalii</button>
+                                            </a>
+                                        </li>
+                        <li class="icon_medium">
+                        <a href="#">
+                            <i class="flaticon-like"></i>
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -5,12 +5,12 @@ export class CustomError extends Error implements IError{
     private _statusCode: number;
     private _statusMessage: string;
 
-    constructor(m: string) {
+    constructor(m: string, statusCode?: number, statusMessage?: string) {
         super(m);
         Object.setPrototypeOf(this, CustomError.prototype);
         this._message = m;
-        this._statusCode = 401;
-        this._statusMessage = "";
+        this._statusCode = statusCode || 401;
+        this._statusMessage = statusMessage || "";
     }
 
     get statusCode(){

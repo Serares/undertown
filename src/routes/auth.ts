@@ -1,9 +1,9 @@
+/*
 import { Router, Request, Response, NextFunction } from "express";
 import { AuthController } from "../controllers/auth";
 // this is the middleware that helps with validation
 import { check, body } from "express-validator/check";
 import { User } from "../models/user";
-import bodyParser from "body-parser";
 import { blockAuthenticated } from "../middleware/isAuth";
 import { RequestSessionType } from "../interfaces/RequestSessionType";
 
@@ -97,9 +97,5 @@ export class AuthRouter {
     private blockIfAuthenticated(req: RequestSessionType | any, res: Response, next: NextFunction): void {
         blockAuthenticated(req, res, next);
     }
-
-    private config(): void {
-        this._router.use(bodyParser.urlencoded({ extended: false }));
-        this._router.use(bodyParser.json());
-    }
 }
+*/

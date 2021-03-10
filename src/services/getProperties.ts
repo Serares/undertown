@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { IProperty, Property } from "../models/property";
-import { SEARCH_STATUS } from "../controllers/home";
-// TODO create this as an interface or something:
-import { getPropertyTypes } from "../utils/getPropertyTypes";
+import { SEARCH_STATUS } from "../interfaces/ESearchStatus";
+
 import { CustomError } from "../utils/Error";
 
 export const getProperties = async function (req: Request, res: Response, next: NextFunction, searchCode: SEARCH_STATUS) {
@@ -29,38 +27,21 @@ export const getProperties = async function (req: Request, res: Response, next: 
     try {
         const property_type = req.query.property_type || "";
         const search_input = req.query.search_input || "";
-        let propertyTypes = [];
 
-        propertyTypes = await getPropertyTypes();
-        //get biggest price
-        const biggestPriceProperty: IProperty[] = await Property.find({})
-            .sort({ pret: -1 })
-            .limit(1);
-        if (biggestPriceProperty.length > 0) {
-            biggestPrice = biggestPriceProperty[0].pret;
+        //TODO get biggest price
+        const biggestPriceProperty = [1000];
 
-            return res.status(200).render("pages/home/properties", {
-                path: `/${pagePath}`,
-                pageTitle: pageTitle,
-                imageUrl: "/img/banner-pages.jpg",
-                maxPrice: biggestPrice,
-                search_status: searchCode,
-                search_input: search_input,
-                property_type: property_type,
-                propertyTypes: propertyTypes
-            });
-        } else {
-            return res.status(401).render("pages/home/properties", {
-                path: `/${pagePath}`,
-                pageTitle: pageTitle,
-                imageUrl: "/img/banner-pages.jpg",
-                maxPrice: biggestPrice,
-                search_status: searchCode,
-                search_input: search_input,
-                property_type: property_type,
-                propertyTypes: propertyTypes
-            });
-        }
+        biggestPrice = biggestPriceProperty[0];
+
+        return res.status(200).render("pages/properties", {
+            path: `/${pagePath}`,
+            pageTitle: pageTitle,
+            imageUrl: "/img/banner-pages.jpg",
+            maxPrice: biggestPrice,
+            search_status: searchCode,
+            search_input: search_input,
+            property_type: property_type
+        });
 
     } catch (err) {
         //TODO make a function to avoid repetition
