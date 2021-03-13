@@ -14,9 +14,11 @@ import { propertyTypes } from "./modelView/values";
 
 const app = express();
 
-app.use(express.static(path.join(process.cwd(), "public")));
 app.set("views", path.join(process.cwd(), "views"));
 app.set("view engine", "ejs");
+
+
+app.use(express.static(path.join(process.cwd(),"dist","public")));
 
 app.use(session({ secret: SESSION_SECRET, cookie: { maxAge: 60000 } }));
 app.use(flash());

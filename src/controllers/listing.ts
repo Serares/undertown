@@ -18,12 +18,67 @@ export const getSale = (req: Request, res: Response, next: NextFunction): Promis
     return getProperties(req, res, next, SEARCH_STATUS.SALE);
 };
 
+// rest endpoints
+let cardsProperties = [
+    {
+        shortId: 1,
+        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
+        propertyType: 1,
+        title: "Lucs apartments",
+        address: "Bd Roseti",
+        surface: 200,
+        rooms: 3,
+        price: 103,
+        transactionStatus: 1
+    },
+    {
+        shortId: 2,
+        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
+        propertyType: 2,
+        title: "Casa",
+        address: "strada meduzei",
+        rooms: 2,
+        surface: 100,
+        price: 202,
+        transactionStatus: 2
+    },
+    {
+        shortId: 4,
+        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
+        propertyType: 3,
+        title: "teren",
+        address: "strada meduzei",
+        surface: 100,
+        price: 201,
+        transactionStatus: 2
+    }
+]
+/**
+ * @route /getRentCards
+ */
+export const getRentCards = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+    
+    return res.status(200).json({
+        properties: JSON.stringify(cardsProperties)
+    })
+}
+
+/**
+ * @route /getSaleCards
+ */
+export const getSaleCards = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+    
+    return res.status(200).json({
+        properties: JSON.stringify(cardsProperties)
+    })
+}
+
 /**
  * @route POST /filter
  * Sending back a json with filtered properties
  */
 export const filter = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-    
+
     try {
         const dbInformations = await queriedProperties(req, null);
         const properties = dbInformations.properties;
@@ -58,5 +113,5 @@ export const filter = async (req: Request, res: Response, next: NextFunction): P
             next(error);
         }
     }
-    
+
 };
