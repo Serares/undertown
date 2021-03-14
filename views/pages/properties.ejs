@@ -18,9 +18,9 @@
             <!-- TODO ADD THIS TO INCLUDES -->
             <%- include('../includes/banner_section.ejs', {pageTitle: pageTitle, imageUrl:imageUrl}) %>
             <!-- Banner Section End -->
-
+            
             <!-- Property List Start -->
-            <section class="full_row py_80 bg_gray">
+            <section class="full_row py_80 bg_gray" id="properties-page">
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-4">
@@ -154,15 +154,17 @@
                             </div>
                             <!-- Property List Start -->
                             <div class="row" id="properties-row">
-                                <div>
-
-                                </div>
+                                
                             </div>
                             <!-- End Property list -->
                             <%- include('../includes/pagination.ejs') %>
                         </div>
                     </div>
                 </div>
+        
+        <input type="hidden" value="<%-maxPrice%>" id="max_price_input" />
+        <input ref="searchStatus" type="hidden" value="<%-search_status%>" id="search_status" />
+        <input type="hidden" value="<%-property_type%>" id="property_type" />
             </section>
             <!-- Property List End -->
 
@@ -174,9 +176,7 @@
             <a href="#" id="scroll"><i class="fas fa-arrow-up"></i></a>
             <!-- Find Part Satrt -->
         </div>
-        <input type="hidden" value="<%-maxPrice%>" id="max_price_input" />
-        <input type="hidden" value="<%-search_status%>" id="search_status" />
-        <input type="hidden" value="<%-property_type%>" id="property_type" />
+        
     </div>
     <!-- Wrapper End -->
     <%- include('../includes/scripts.ejs') %>
