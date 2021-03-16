@@ -96,7 +96,7 @@ const featuredProperties = [
         surface: 200,
         rooms: 3,
         price: 103,
-        transactionStatus: 1
+        transactionType: 1
     },
     {
         shortId: 2,
@@ -107,7 +107,7 @@ const featuredProperties = [
         rooms: 2,
         surface: 100,
         price: 202,
-        transactionStatus: 2
+        transactionType: 2
     },
     {
         shortId: 4,
@@ -117,7 +117,7 @@ const featuredProperties = [
         address: "strada meduzei",
         surface: 100,
         price: 201,
-        transactionStatus: 2
+        transactionType: 2
     }
 ];
 

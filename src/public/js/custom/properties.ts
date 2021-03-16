@@ -98,7 +98,7 @@ import axios from 'axios';
             <div class="col-md-12">
                 <div class="property_list_1 property_item bg-white mb_30">
                     <div class="zoom_effect_1">
-                     <a href="/${createPropertyPath(property.transactionStatus)}/${property.shortId}">
+                     <a href="/${createPropertyPath(property.transactionType)}/${property.shortId}">
                         <img src="${property.thumbnail}" alt="Image Found">
                      </a>
                      <div class="upper_2">
@@ -109,7 +109,7 @@ import axios from 'axios';
                         <div class="float-right property_list_details p-3">
                             <div class="property_text">
                                 <h5 class="title">
-                                    <a href="/${createPropertyPath(property.transactionStatus)}/${property.shortId}">${property.title}</a>
+                                    <a href="/${createPropertyPath(property.transactionType)}/${property.shortId}">${property.title}</a>
                                 </h5>
                                 <span class="my-3 d-block"><i class="fas fa-map-marker-alt"></i>
                                 ${property.address} </span>
@@ -123,7 +123,7 @@ import axios from 'axios';
                             <div class="bed_area d-table w-100">
                                 <ul>
                                     <li>${property.displayPrice}</li>
-                                    <li><a href="/${createPropertyPath(property.transactionStatus)}/${property.shortId}">
+                                    <li><a href="/${createPropertyPath(property.transactionType)}/${property.shortId}">
                                                             <button type="button"
                                                                 class="mx-5 btn btn-primary">Detalii</button>
                                                         </a>

@@ -24,23 +24,21 @@
                                   Chirii
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                  <a class="dropdown-item" href="/chirii/apartamente">Apartamente</a>
-                                  <a class="dropdown-item" href="/chirii/case">Case</a>
-                                  <div class="dropdown-divider"></div>
-                                  <a class="dropdown-item" href="#">Terenuri</a>
+                                  <% for (propType of propertyTypes) {%>
+                                    <a class="dropdown-item" href="/chirii/<%= propType[1].toLowerCase()%>"><%- propType[1]%></a>
+                                    <%} %>
                                 </div>
                               </li>
                               <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle <%= 
                                 path === '/vanzari' ||  path === '/vanzari_s' ? 
                                 'active' : '' %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Vanzare
+                                Vanzari
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                  <a class="dropdown-item" href="#">Apartamente</a>
-                                  <a class="dropdown-item" href="#">Case</a>
-                                  <div class="dropdown-divider"></div>
-                                  <a class="dropdown-item" href="#">Terenuri</a>
+                                  <% for (propType of propertyTypes) {%>
+                                    <a class="dropdown-item" href="/vanzari/<%= propType[1].toLowerCase()%>"><%- propType[1]%></a>
+                                    <%} %>
                                 </div>
                               </li>
                               <li class="nav-item"> <a

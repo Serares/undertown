@@ -1,44 +1,34 @@
 import { NextFunction, Request, Response } from "express";
 import { SEARCH_STATUS } from "../interfaces/ESearchStatus";
-
+import { validationResult } from "express-validator";
 import { CustomError } from "../utils/Error";
 
-type propertyEndpoints = "apartament" | "casa" | "teren";
-
-let propertyTypesMap = {
-    "apartament" : 1,
-    "casa": 2,
-    "teren": 3
-};
 
 export const getProperties = async function (req: Request, res: Response, next: NextFunction, searchCode: SEARCH_STATUS): Promise<void> {
-    let propertyType = req.params.propertyType;
+    let errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        // TODO render validation errors
+        return res.redirect("/404");
+    }
+    //@ts-ignore
+    let propertyType: endpointsParams = req.params.propertyType;
     let pageTitle: string;
     let pagePath: string = "";
     let biggestPrice: number = 0;
-    // i need to send the sort and filter parameters when navigating through pages
-    // figure out how
-    // this function does not return properties actually 
-    //TODO rename this function
+    
+    //TODO find a way to not hardcode the strings
     switch (searchCode) {
         case (SEARCH_STATUS.SALE):
             pageTitle = "Vanzare";
-            pagePath = "vanzare" + propertyType;
+            pagePath = "vanzari" + propertyType;
             break;
         case (SEARCH_STATUS.RENT):
             pageTitle = "Inchiriere";
-            pagePath = "inchiriere" + propertyType;
+            pagePath = "chirii" + propertyType;
             break;
         default:
             pageTitle = "";
             break;
-    }
-
-    //@ts-ignore
-    let propertyTypeString: propertyEndpoints = req.params.propertyType;
-
-    if(!propertyTypesMap[propertyTypeString]) {
-        return res.redirect("/404");
     }
 
     try {

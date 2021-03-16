@@ -21,7 +21,7 @@ const propertiesListings = [
         surface: 200,
         rooms: 3,
         price: 103,
-        transactionStatus: 1,
+        transactionType: 1,
         imagesNumber: 9
     }
 ];

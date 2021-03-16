@@ -31,47 +31,38 @@ let cardsProperties = [
         surface: 200,
         rooms: 3,
         price: 103,
-        transactionStatus: 1
+        transactionType: 1
     },
     {
         shortId: 2,
         thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
-        propertyType: 2,
+        propertyType: 1,
         title: "Casa",
         address: "strada meduzei",
         rooms: 2,
         surface: 100,
         price: 202,
-        transactionStatus: 2
+        transactionType: 2
     },
     {
         shortId: 4,
         thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
-        propertyType: 3,
+        propertyType: 1,
         title: "teren",
         address: "strada meduzei",
         surface: 100,
         price: 201,
-        transactionStatus: 2
+        transactionType: 2
     }
 ]
 /**
- * @route /getRentCards
+ * @route GET /listings/:transactionType/:propertyType
+ * sending properties information 
  */
-export const getRentCards = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-    
+export const listings = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+    console.log(req.params);
     return res.status(200).json({
-        properties: JSON.stringify(cardsProperties)
-    })
-}
-
-/**
- * @route /getSaleCards
- */
-export const getSaleCards = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-    
-    return res.status(200).json({
-        properties: JSON.stringify(cardsProperties)
+        properties: JSON.stringify(cardsProperties.filter((value)=>{return value.propertyType === 1}))
     })
 }
 
