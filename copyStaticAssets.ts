@@ -1,6 +1,7 @@
 import * as shell from "shelljs";
 
-// shell.cp("-R", "src/public/js", "dist/public/js/");
+shell.mkdir("dist/public");
+shell.mkdir("dist/public/js");
 shell.cp("-R", "src/public/js/lib", "dist/public/js/lib");
 shell.cp("-R", "src/public/webfonts", "dist/public/webfonts");
 shell.cp("-R", "src/public/layerslider", "dist/public/layerslider");
