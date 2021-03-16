@@ -1,55 +1,73 @@
 <link rel="stylesheet" href="/css/nav-bar.css">
-
-<div class="main_header_1">
+<div class="main_header_1" id="navigation_component">
         <div class="container">
                 <div class="row">
                         <div class="col-md-12 col-sm-12">
-                                <nav class="navbar navbar-expand-lg navbar-light w-100"> <a class="navbar-brand"
-                                                href="/"><img class="nav-logo" src="/img/ut-navlogo-transp.png"
-                                                        alt="logo"></a>
-                                        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                                                data-target="#navbarSupportedContent"
-                                                aria-controls="navbarSupportedContent" aria-expanded="false"
-                                                aria-label="Toggle navigation"> <span
-                                                        class="navbar-toggler-icon"></span> </button>
+                                <nav class="navbar navbar-expand-lg">
+                                  <a class="navbar-brand" href="/">
+                                    <img class="nav-logo" src="/img/ut-navlogo-transp.png" alt="logo">
+                                  </a>
+                                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                          <span class="navbar-toggler-icon"></span>
+                                        </button>
+                                      
                                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                                <ul class="navbar-nav ml-5">
-                                                        <li class="nav-item"> <a
-                                                                        class="nav-link <%= path === '/' ? 'active' : '' %>"
-                                                                        href="/">Acasa</a>
-                                                        </li>
-                                                        <li class="nav-item"> <a class="nav-link <%= 
-                                                                        path === '/inchiriere' ||  path === '/inchiriere_s' ? 
-                                                                        'active' : '' %>"
-                                                                        href="/inchirieri">Inchiriere</a>
-                                                        </li>
-                                                        <li class="nav-item"> <a class="nav-link <%= 
-                                                                        path === '/vanzare' || path === '/vanzare_s' ? 
-                                                                        'active' : '' %>" href="/vanzare">Vanzare</a>
-                                                        </li>
-                                                        <li class="nav-item"> <a
-                                                                        class="nav-link <%= path === '/about' ? 'active' : '' %>"
-                                                                        href="/about">Despre noi</a>
-                                                        </li>
-                                                        <li class="nav-item"> <a
-                                                                        class="nav-link <%= path === '/contact' ? 'active' : '' %>"
-                                                                        href="/contact">Contact</a></li>
-                                                        <% if (isAuthenticated) { %>
-                                                                <li class="nav-item"> <a class="nav-link" href="#"
-                                                                        id="basic_logout">Delogare</a></li>
-                                                        <%} else {%>
-                                                                <li class="nav-item"> <a
-                                                                        class="nav-link <%= path === '/signup' ? 'active' : '' %>"
-                                                                        href="/signup">Creează cont</a></li>
-                                                        <li class="nav-item"> <a
-                                                                        class="nav-link <%= path === '/login' ? 'active' : '' %>"
-                                                                        href="/login">Intră in cont</a></li>
-                                                        <% } %>
-                                                </ul>
-                                                <div class="submit_property ml-2"><a class="btn btn_primary_bg"
-                                                                href="/submit_property">Adauga proprietate</a></div>
+                                          <ul class="navbar-nav mr-auto">
+                                            <li class="nav-item"> <a
+                                              class="nav-link <%= path === '/' ? 'active' : '' %>"
+                                              href="/">Acasa</a>
+                              </li>
+                              <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle <%= 
+                                path === '/chirii' ||  path === '/chirii_s' ? 
+                                'active' : '' %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Chirii
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                  <a class="dropdown-item" href="/chirii/apartamente">Apartamente</a>
+                                  <a class="dropdown-item" href="/chirii/case">Case</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Terenuri</a>
+                                </div>
+                              </li>
+                              <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle <%= 
+                                path === '/vanzari' ||  path === '/vanzari_s' ? 
+                                'active' : '' %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Vanzare
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                  <a class="dropdown-item" href="#">Apartamente</a>
+                                  <a class="dropdown-item" href="#">Case</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Terenuri</a>
+                                </div>
+                              </li>
+                              <li class="nav-item"> <a
+                                              class="nav-link <%= path === '/about' ? 'active' : '' %>"
+                                              href="/about">Despre noi</a>
+                              </li>
+                              <li class="nav-item"> <a
+                                              class="nav-link <%= path === '/contact' ? 'active' : '' %>"
+                                              href="/contact">Contact</a></li>
+                              <% if (isAuthenticated) { %>
+                                      <li class="nav-item"> <a class="nav-link" href="#"
+                                              id="basic_logout">Delogare</a></li>
+                              <%} else {%>
+                                      <li class="nav-item"> <a
+                                              class="nav-link <%= path === '/signup' ? 'active' : '' %>"
+                                              href="/signup">Creează cont</a></li>
+                              <li class="nav-item"> <a
+                                              class="nav-link <%= path === '/login' ? 'active' : '' %>"
+                                              href="/login">Intră in cont</a></li>
+                              <% } %>
+                                            
+
+                                          </ul>
+                                          <div class="submit_property ml-2"><a class="btn btn_primary_bg"
+                                            href="/submit_property">Adauga proprietate</a></div>
                                         </div>
-                                </nav>
+                                      </nav>
                         </div>
                 </div>
         </div>

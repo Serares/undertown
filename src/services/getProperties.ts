@@ -3,7 +3,16 @@ import { SEARCH_STATUS } from "../interfaces/ESearchStatus";
 
 import { CustomError } from "../utils/Error";
 
-export const getProperties = async function (req: Request, res: Response, next: NextFunction, searchCode: SEARCH_STATUS) {
+type propertyEndpoints = "apartament" | "casa" | "teren";
+
+let propertyTypesMap = {
+    "apartament" : 1,
+    "casa": 2,
+    "teren": 3
+};
+
+export const getProperties = async function (req: Request, res: Response, next: NextFunction, searchCode: SEARCH_STATUS): Promise<void> {
+    let propertyType = req.params.propertyType;
     let pageTitle: string;
     let pagePath: string = "";
     let biggestPrice: number = 0;
@@ -14,21 +23,29 @@ export const getProperties = async function (req: Request, res: Response, next: 
     switch (searchCode) {
         case (SEARCH_STATUS.SALE):
             pageTitle = "Vanzare";
-            pagePath = "vanzare";
+            pagePath = "vanzare" + propertyType;
             break;
         case (SEARCH_STATUS.RENT):
             pageTitle = "Inchiriere";
-            pagePath = "inchiriere";
+            pagePath = "inchiriere" + propertyType;
             break;
         default:
             pageTitle = "";
             break;
     }
+
+    //@ts-ignore
+    let propertyTypeString: propertyEndpoints = req.params.propertyType;
+
+    if(!propertyTypesMap[propertyTypeString]) {
+        return res.redirect("/404");
+    }
+
     try {
         const property_type = req.query.property_type || "";
         const search_input = req.query.search_input || "";
 
-        //TODO get biggest price
+        //TODO get biggest price in a property collection
         const biggestPriceProperty = [1000];
 
         biggestPrice = biggestPriceProperty[0];

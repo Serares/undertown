@@ -4,15 +4,17 @@ import { Request, Response, NextFunction } from "express";
 import { SEARCH_STATUS } from "../interfaces/ESearchStatus";
 import { CustomError } from "../utils/Error";
 
+
+
 /**
- * @route GET /inchirieri
+ * @route GET /chirii/:propertyType
  */
 export const getRent = (req: Request, res: Response, next: NextFunction): Promise<void> => {
     return getProperties(req, res, next, SEARCH_STATUS.RENT);
 };
 
 /**
- * @route GET /vanzare
+ * @route GET /vanzari/:propertyType
  */
 export const getSale = (req: Request, res: Response, next: NextFunction): Promise<void> => {
     return getProperties(req, res, next, SEARCH_STATUS.SALE);

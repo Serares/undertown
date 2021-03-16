@@ -2,13 +2,14 @@ import { Router } from "express";
 import { body, check } from "express-validator";
 import * as listingsController from "../controllers/listing";
 const router = Router();
-
-router.get("/inchirieri", listingsController.getRent);
-
-router.get("/vanzare", listingsController.getSale);
+/**
+ * mvc routes
+ */
+router.get("/chirii/:propertyType", listingsController.getRent);
+router.get("/vanzari/:propertyType", listingsController.getSale);
 
 /**
-* filter routes
+* REST routes
 */
 router.post("/filter", listingsController.filter);
 
