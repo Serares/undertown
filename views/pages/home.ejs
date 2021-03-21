@@ -28,14 +28,14 @@
                                 <form action="/" method="POST" class="property_filter_input" id="home_form">
                                     <div class="row">
                                         <div
-                                            class="col-lg-2 col-sm-6 <%= validationErrors.find(e => e.param === 'property_status') ? 'invalid' : '' %>">
-                                            <select class="selectpicker form-control" name="property_status">
+                                            class="col-lg-2 col-sm-6 <%= validationErrors.find(e => e.param === 'transactionType') ? 'invalid' : '' %>">
+                                            <select class="selectpicker form-control" name="transactionType">
                                                 <option selected disabled>Chirii/Vanzari</option>
                                                 <option value="2">Inchiriere</option>
                                                 <option value="1">Vanzare</option>
                                             </select>
                                         </div>
-                                        <div class="col-lg-2 col-sm-6">
+                                        <div class="col-lg-2 col-sm-6 <%= validationErrors.find(e => e.param === 'propertyType') ? 'invalid' : '' %>">
                                             <%- include('../includes/property_types_dropdown.ejs') %>
                                         </div>
                                         <div class="col-lg-5 col-sm-8">
@@ -88,8 +88,8 @@
                                     <!-- Tab Content -->
                                     <div class="row filter-list clearfix">
                                         <% for(let property of featuredProperties) { %>
-                                            <%- include('../includes/homepage/card.ejs' , {propertyInfo: property})  %>
-                                        <% }%>
+                                            <%- include('../includes/homepage/card.ejs', {propertyInfo: property})  %>
+                                        <% } %>
 
                                     </div>
                                     <!-- End tab content -->

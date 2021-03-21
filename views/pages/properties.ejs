@@ -31,10 +31,9 @@
                                         <div class="row">
                                             <div class="col-lg-12 col-sm-8">
                                                 <p>Căutat după:</p>
-
                                             </div>
                                             <div class="col-lg-12 col-sm-8">
-                                                <input id="search_input" value="<%-search_input%>" name="search_input"
+                                                <input id="search_input" value="<%-searchInput%>" name="searchInput"
                                                     class="form-control mb-4" type="text"
                                                     placeholder="Caută o adresă, Ex: Dristor">
                                             </div>
@@ -43,10 +42,10 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="price_range mb-5">
-                                                    <div class="price-filter"> <span class="price-slider">
+                                                    <!-- <div class="price-filter"> <span class="price-slider">
                                                             <input class="filter_price" type="text" name="price"
-                                                                value="0;<%- maxPrice %>" />
-                                                        </span> </div>
+                                                                value="0;" />
+                                                        </span> </div> -->
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
@@ -65,7 +64,7 @@
                                             <div class="col-lg-12">
                                                 <h4 class="widget-title mb-4">Filtre</h4>
                                             </div>
-                                            <!-- TODO dynamically crete those fields -->
+                                            <!-- TODO dynamically create those fields -->
                                             <div class="col-lg-12 col-md-6">
                                                 <div class="form-group">
                                                     <select class="selectpicker form-control" name="property_status">
@@ -78,7 +77,7 @@
                                             </div>
                                             <div class="col-lg-12 col-md-6">
                                                 <div class="form-group">
-                                                    <%- include('../includes/property_types_dropdown.ejs', {property_type: property_type}) %>
+                                                    <%- include('../includes/property_types_dropdown.ejs') %>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
@@ -88,7 +87,7 @@
                                                 <div class="price_range mb-5">
                                                     <div class="etaj-filter"> <span class="etaj-slider">
                                                             <input class="etaj_filter" type="text" name="etaj"
-                                                                value="0;<%- maxPrice %>" />
+                                                                value="0;" />
                                                         </span> </div>
                                                 </div>
                                             </div>
@@ -161,10 +160,6 @@
                         </div>
                     </div>
                 </div>
-        
-        <input type="hidden" value="<%-maxPrice%>" id="max_price_input" />
-        <input ref="searchStatus" type="hidden" value="<%-search_status%>" id="search_status" />
-        <input type="hidden" value="<%-property_type%>" id="property_type" />
             </section>
             <!-- Property List End -->
 
@@ -182,6 +177,10 @@
     <%- include('../includes/scripts.ejs') %>
     <script src="/js/custom/sliders.js"></script>
     <script src="/js/custom/listings/index.js"></script>
+    <script>
+        renderListings("<%- fetchUrl %>")
+    </script>
+
 </body>
 
 </html>

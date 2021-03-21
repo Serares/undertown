@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core';
+import { ETransactionType } from '../../../../src/interfaces/ETransactionType';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -22,13 +23,14 @@ const useStyles = makeStyles((theme) => ({
 
 function priceFilters() {
     let maxValue = 2000;
-
 }
 
-const Housing = () => {
+type HousingProps = {
+    transactionType: ETransactionType
+}
+
+const Housing: React.FunctionComponent<HousingProps> = ({ transactionType }) => {
     const classes = useStyles();
-
-
     return (
         <React.Fragment>
             <Grid container spacing={3} className={classes.filterGrid}>
@@ -40,8 +42,6 @@ const Housing = () => {
                         <InputLabel htmlFor="outlined-age-native-simple">min</InputLabel>
                         <Select
                             native
-
-
                             label="Suprafata"
                             inputProps={{
                                 name: 'suprafata',

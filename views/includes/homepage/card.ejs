@@ -5,12 +5,15 @@
               <%- include('./title.ejs' , {status: propertyInfo.transactionType, title: propertyInfo.title, address:propertyInfo.address, id: propertyInfo.shortId}) %>
                   <div class="quantity">
                       <ul>
-                        <% 
-                        var propertyFeatures = propertyInfo.features;
-
-                        for(let feature in propertyFeatures) {%>
-                            <li><%= propertyFeatures[feature]["display"] %> <%= propertyFeatures[feature]["value"] %>  </li>
-                          <% } %>
+                          <% switch(propertyInfo.propertyType) {
+                            case(1):
+                            case(2): %>
+                            <%- include('./details/housing.ejs' , {rooms: propertyInfo.rooms, surface: propertyInfo.surface}) %>
+                            <% break;
+                            case(3): %>
+                            <%- include('./details/land.ejs' , {surface: propertyInfo.surface}) %>
+                            <% break;
+                        } %>
                       </ul>
                   </div>
           </div>

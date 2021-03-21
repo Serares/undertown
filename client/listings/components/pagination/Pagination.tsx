@@ -10,16 +10,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const PaginationComponent = ({ pagesNumber }) => {
-    const classes = useStyles();
 
-    const handleCHange = (e: any, value: any) => {
-        console.log(value);
-    }
+//@ts-ignore
+const PaginationComponent = ({ pagesNumber, handleChange }) => {
+    const classes = useStyles();
 
     return (
         <div className={classes.root}>
-            <Pagination count={pagesNumber} color="primary" onChange={handleCHange} />
+            <Pagination count={pagesNumber} color="primary" onChange={handleChange} />
         </div>
     );
 };

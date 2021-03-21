@@ -25,7 +25,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                   <% for (propType of propertyTypes) {%>
-                                    <a class="dropdown-item" href="/chirii/<%= propType[1].toLowerCase()%>"><%- propType[1]%></a>
+                                    <a class="dropdown-item" href="/chirii-<%= propType[1]["display"].toLowerCase()%>"><%- propType[1]["display"]%></a>
                                     <%} %>
                                 </div>
                               </li>
@@ -37,7 +37,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                   <% for (propType of propertyTypes) {%>
-                                    <a class="dropdown-item" href="/vanzari/<%= propType[1].toLowerCase()%>"><%- propType[1]%></a>
+                                    <a class="dropdown-item" href="/vanzari-<%= propType[1]["display"].toLowerCase()%>"><%- propType[1]["display"]%></a>
                                     <%} %>
                                 </div>
                               </li>

@@ -1,6 +1,6 @@
-<select class="selectpicker form-control" name="property_type">
+<select class="selectpicker form-control" name="propertyType">
     <option value="" selected disabled>Tipul Proprietății</option>
     <% for(let prop of propertyTypes) { %>
-    <option value="<%=prop[0]%>"><%= prop[1] %></option>
+    <option value="<%=prop[1]['dbValue']%>"><%= prop[1]['display'] %></option>
     <% } %>
 </select>

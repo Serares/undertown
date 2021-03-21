@@ -1,26 +1,26 @@
-import { getProperties } from "../services/getProperties";
+// import { getProperties } from "../services/getProperties";
 import { queriedProperties } from "../services/queryProperties";
 import { Request, Response, NextFunction } from "express";
-import { SEARCH_STATUS } from "../interfaces/ESearchStatus";
+import { TRANSACTION_TYPE } from "../interfaces/ETransactionType";
+import { EPropertyTypes } from "../interfaces/EPropertyTypes";
+import { PropertyTypes, TransactionTypes } from "../modelView/values";
 import { CustomError } from "../utils/Error";
+import axios from "axios";
+import { ICardProperty } from "../interfaces/ICardProperty";
 
 
+type GetListingsRequest = Request & {
+    params: {
+        propertyType: "1" | "2" | "3",
+        transactionType: "1" | "2"
+    }
+}
 
-/**
- * @route GET /chirii/:propertyType
- */
-export const getRent = (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    return getProperties(req, res, next, SEARCH_STATUS.RENT);
+type RenderListingsRequest = Request & {
+    params: { propertyType: "apartamente" | "case" | "terenuri" }
 };
+type RenderListingsPageFunction = (req: RenderListingsRequest, res: Response, next: NextFunction, transactionType: { dbValue: number, endpoint: string, display: string }) => void;
 
-/**
- * @route GET /vanzari/:propertyType
- */
-export const getSale = (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    return getProperties(req, res, next, SEARCH_STATUS.SALE);
-};
-
-// rest endpoints
 let cardsProperties = [
     {
         shortId: 1,
@@ -54,57 +54,88 @@ let cardsProperties = [
         price: 201,
         transactionType: 2
     }
-]
+];
+
 /**
- * @route GET /listings/:transactionType/:propertyType
- * sending properties information 
+ * rendering properties.ejs
+ * composing fetch url that react app will use to get properties cards
  */
-export const listings = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
-    console.log(req.params);
-    return res.status(200).json({
-        properties: JSON.stringify(cardsProperties.filter((value)=>{return value.propertyType === 1}))
-    })
+const renderListingsPage: RenderListingsPageFunction = (req, res, next, transactionType) => {
+    try {
+        if (typeof req.params.propertyType === "undefined") {
+            throw new Error("No property type provided");
+        }
+
+        let pageTitle: string[] = new Array();
+        /**
+         * Url for getListings
+         * /listings/:transactionType-:propertyType
+         */
+        let fetchUrl: string;
+
+        let propertyTypeParam = req.params.propertyType;
+
+        pageTitle.push(transactionType["endpoint"]);
+        pageTitle.push(propertyTypeParam);
+
+        fetchUrl = `/listings/${transactionType.dbValue}-`;
+
+        Object.entries(PropertyTypes).forEach((value) => {
+            if (propertyTypeParam === value[1]["endpoint"]) {
+                fetchUrl += value[1]["dbValue"]
+            }
+        })
+
+        // create fetch url for client
+        return res.status(200).render("pages/properties", {
+            pageTitle: pageTitle.join(" "),
+            imageUrl: "/img/banner-pages.jpg",
+            path: "chirii",
+            searchInput: "",
+            fetchUrl: fetchUrl
+        });
+
+    } catch (err) {
+        //TODO make a function to avoid repetition
+        console.log("Got an error querying the DB: ", err);
+        const error = new CustomError("Network error, from renderListingsPage");
+        error.statusCode = 500;
+        error.statusMessage = err.toString();
+        next(error);
+    }
 }
 
 /**
- * @route POST /filter
- * Sending back a json with filtered properties
+ * @route GET /chirii-:propertyType
  */
-export const filter = async (req: Request, res: Response, next: NextFunction): Promise<Response> => {
+export const getRent = (req: RenderListingsRequest, res: Response, next: NextFunction): void => {
+    renderListingsPage(req, res, next, TransactionTypes.RENT);
+};
+
+/**
+ * @route GET /vanzari-:propertyType
+ */
+export const getSale = (req: RenderListingsRequest, res: Response, next: NextFunction): void => {
+    renderListingsPage(req, res, next, TransactionTypes.SALE)
+};
+
+
+/**
+ * @route GET /listings/:transactionType-:propertyType
+ */
+export const getListings = async (req: GetListingsRequest, res: Response, next: NextFunction) => {
+
+    let fetchedData: Array<ICardProperty> = cardsProperties;
 
     try {
-        const dbInformations = await queriedProperties(req, null);
-        const properties = dbInformations.properties;
-        const paginationData = dbInformations.paginationData;
+        // axios request to /db_api
+        return res.status(200).json({
+            properties: fetchedData
+        })
 
-        if (!properties) {
-            const error = new CustomError("Something went wrong");
-            error.statusCode = 404;
-            error.statusMessage = "Can't find properties when filtering";
-            throw error;
-        }
-
-        if (properties.length < 1) {
-            return res.status(404).json({ message: "No properties found", properties: [] });
-        }
-
-        return res.status(200).json(
-            {
-                message: "Filtered properties",
-                properties: JSON.stringify(properties),
-                paginationData: JSON.stringify(paginationData)
-            });
     } catch (err) {
-        if (err.statusCode === 404) {
-            console.log(err);
-            return res.status(404).json({ message: err.status });
-        } else {
-            console.log("Got an error line 140:", err);
-            const error = new CustomError("Network error");
-            error.statusCode = 500;
-            error.statusMessage = "Server error";
-            next(error);
-        }
+        //TODO make a function to avoid repetition
+        res.status(500).json({ message: "Error occured" })
     }
 
-};
+}

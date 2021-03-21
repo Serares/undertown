@@ -1,11 +1,16 @@
 import * as React from 'react';
-
 import { makeStyles, Typography } from '@material-ui/core';
-import { EPropertyTypes } from "../../../../src/interfaces/properties/EPropertyTypes";
+import { EPropertyTypes } from "../../../../src/interfaces/EPropertyTypes";
+import { ETransactionType } from '../../../../src/interfaces/ETransactionType';
 import Housing from './Housing';
 import Land from './Land';
 
-export const FilterForm = ({ propertyType }) => {
+type FilterFormProps = {
+    propertyType: EPropertyTypes,
+    transactionType: ETransactionType
+}
+
+export const FilterForm: React.FunctionComponent<FilterFormProps> = ({ propertyType, transactionType }) => {
     const [state, setState] = React.useState({
         age: '',
         name: 'hai',
@@ -18,17 +23,17 @@ export const FilterForm = ({ propertyType }) => {
             [name]: event.target.value,
         });
     };
-
+    //TODO create a schema from where to render select inputs
     const formTypeRender = (): React.ReactElement => {
         let renderedComponent;
 
         switch (propertyType) {
             case (EPropertyTypes.APARTMENT):
             case (EPropertyTypes.HOUSE):
-                renderedComponent = <Housing />
+                renderedComponent = <Housing transactionType={transactionType} />
                 break;
             case (EPropertyTypes.LANDANDCOMMERCIAL):
-                renderedComponent = <Land />
+                renderedComponent = <Land transactionType={transactionType} />
                 break;
             default:
                 renderedComponent = <div>No property type found</div>;
