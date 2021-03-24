@@ -6,6 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core';
 import { ETransactionType } from '../../../../src/interfaces/ETransactionType';
+import { EPropertyTypes } from '../../../../src/interfaces/EPropertyTypes';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -21,16 +22,64 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function priceFilters() {
-    let maxValue = 2000;
-}
-
 type HousingProps = {
-    transactionType: ETransactionType
+    transactionType: ETransactionType,
+    propertyType: EPropertyTypes,
+    filterProperties: (filterType: string, data: string | [string, string]) => void
 }
 
-const Housing: React.FunctionComponent<HousingProps> = ({ transactionType }) => {
+const Housing: React.FunctionComponent<HousingProps> = ({ propertyType, transactionType, filterProperties }) => {
+    let generateSurfaceFilters = () => {
+        let maxValue;
+        let interval;
+        if (propertyType === EPropertyTypes.APARTMENT) {
+            maxValue = 300;
+            interval = 30;
+        } else {
+            maxValue = 500;
+            interval = 50;
+        }
+
+        let options = [<option key={"surfaceNone"} aria-label="None" value="" />];
+        for (let i = interval; i <= maxValue; i += interval) {
+            let option = <option key={i + "_s"} value={i}>{i} mp</option>
+            options.push(option)
+        }
+        return options;
+    };
+
+    let generatePriceFilters = () => {
+        let maxValue;
+        let interval;
+        if (transactionType === ETransactionType.RENT) {
+            maxValue = 4000;
+            interval = 100;
+        } else {
+            maxValue = 400000;
+            interval = 10000
+        }
+
+        let options = [<option key={"priceNone"} aria-label="None" value="" />];
+        for (let i = 0; i <= maxValue; i += interval) {
+            let option = <option key={i + "_price"} value={i}>{i.toLocaleString("ro-RO")} €</option>
+            options.push(option)
+        }
+
+        return options;
+    }
+
     const classes = useStyles();
+
+    const updateState = (e: any, ...args: string[]) => {
+
+        if (args.length > 1) {
+            //@ts-ignore
+            filterProperties(args[0], [args[1], e.target.value]);
+        } else {
+            filterProperties(args[0], e.target.value);
+        }
+    }
+
     return (
         <React.Fragment>
             <Grid container spacing={3} className={classes.filterGrid}>
@@ -43,91 +92,83 @@ const Housing: React.FunctionComponent<HousingProps> = ({ transactionType }) => 
                         <Select
                             native
                             label="Suprafata"
+                            onChange={(e) => { updateState(e, "surface", "min") }}
                             inputProps={{
                                 name: 'suprafata',
                                 id: 'outlined-age-native-simple',
                             }}
                         >
-                            <option aria-label="None" value="" />
-                            <option value={10}>Ten</option>
-                            <option value={20}>Twenty</option>
-                            <option value={30}>Thirty</option>
+                            {generateSurfaceFilters()}
                         </Select>
                     </FormControl>
                     <FormControl variant="outlined" color="primary" className={classes.formControl}>
                         <InputLabel htmlFor="outlined-age-native-simple">max</InputLabel>
                         <Select
                             native
-
-
                             label="Suprafata"
+                            onChange={(e) => { updateState(e, "surface", "max") }}
                             inputProps={{
                                 name: 'suprafata',
                                 id: 'outlined-age-native-simple',
                             }}
                         >
-                            <option aria-label="None" value="" />
-                            <option value={10}>Ten</option>
-                            <option value={20}>Twenty</option>
-                            <option value={30}>Thirty</option>
+                            {generateSurfaceFilters()}
                         </Select>
                     </FormControl>
                 </Grid>
                 <Grid item>
+                    <Typography>
+                        Camere:
+                    </Typography>
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel htmlFor="outlined-age-native-simple">Camere</InputLabel>
                         <Select
                             native
-                            value={0}
-
-                            label="Suprafata"
+                            label="Camere"
+                            onChange={(e) => { updateState(e, "rooms") }}
                             inputProps={{
-                                name: 'suprafata',
+                                name: 'camere',
                                 id: 'outlined-age-native-simple',
                             }}
                         >
                             <option aria-label="None" value="" />
-                            <option value={10}>Ten</option>
-                            <option value={20}>Twenty</option>
-                            <option value={30}>Thirty</option>
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4+</option>
                         </Select>
                     </FormControl>
                 </Grid>
                 <Grid item>
+                    <Typography>
+                        Preț:
+                    </Typography>
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel htmlFor="outlined-age-native-simple">Pret min</InputLabel>
                         <Select
                             native
-                            value={0}
-
-                            label="Suprafata"
+                            label="Pret min"
+                            onChange={(e) => { updateState(e, "price", "min") }}
                             inputProps={{
-                                name: 'suprafata',
+                                name: 'pret',
                                 id: 'outlined-age-native-simple',
                             }}
                         >
-                            <option aria-label="None" value="" />
-                            <option value={10}>Ten</option>
-                            <option value={20}>Twenty</option>
-                            <option value={30}>Thirty</option>
+                            {generatePriceFilters()}
                         </Select>
                     </FormControl>
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel htmlFor="outlined-age-native-simple">Pret max</InputLabel>
                         <Select
                             native
-                            value={0}
-
-                            label="Suprafata"
+                            label="Pret max"
+                            onChange={(e) => { updateState(e, "price", "max") }}
                             inputProps={{
-                                name: 'suprafata',
+                                name: 'pret',
                                 id: 'outlined-age-native-simple',
                             }}
                         >
-                            <option aria-label="None" value="" />
-                            <option value={10}>Ten</option>
-                            <option value={20}>Twenty</option>
-                            <option value={30}>Thirty</option>
+                            {generatePriceFilters()}
                         </Select>
                     </FormControl>
                 </Grid>

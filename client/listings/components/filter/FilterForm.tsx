@@ -7,22 +7,11 @@ import Land from './Land';
 
 type FilterFormProps = {
     propertyType: EPropertyTypes,
-    transactionType: ETransactionType
+    transactionType: ETransactionType,
+    filterProperties: (filterType: string, data: any) => any
 }
 
-export const FilterForm: React.FunctionComponent<FilterFormProps> = ({ propertyType, transactionType }) => {
-    const [state, setState] = React.useState({
-        age: '',
-        name: 'hai',
-    });
-
-    const handleChange = (event: any) => {
-        const name = event.target.name;
-        setState({
-            ...state,
-            [name]: event.target.value,
-        });
-    };
+export const FilterForm: React.FunctionComponent<FilterFormProps> = ({ filterProperties, propertyType, transactionType }) => {
     //TODO create a schema from where to render select inputs
     const formTypeRender = (): React.ReactElement => {
         let renderedComponent;
@@ -30,10 +19,10 @@ export const FilterForm: React.FunctionComponent<FilterFormProps> = ({ propertyT
         switch (propertyType) {
             case (EPropertyTypes.APARTMENT):
             case (EPropertyTypes.HOUSE):
-                renderedComponent = <Housing transactionType={transactionType} />
+                renderedComponent = <Housing propertyType={propertyType} transactionType={transactionType} filterProperties={filterProperties} />
                 break;
             case (EPropertyTypes.LANDANDCOMMERCIAL):
-                renderedComponent = <Land transactionType={transactionType} />
+                renderedComponent = <Land filterProperties={filterProperties} transactionType={transactionType} />
                 break;
             default:
                 renderedComponent = <div>No property type found</div>;
