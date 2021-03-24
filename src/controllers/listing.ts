@@ -1,13 +1,8 @@
-// import { getProperties } from "../services/getProperties";
-import { queriedProperties } from "../services/queryProperties";
 import { Request, Response, NextFunction } from "express";
-import { TRANSACTION_TYPE } from "../interfaces/ETransactionType";
-import { EPropertyTypes } from "../interfaces/EPropertyTypes";
 import { PropertyTypes, TransactionTypes } from "../modelView/values";
 import { CustomError } from "../utils/Error";
-import axios from "axios";
 import { ICardProperty } from "../interfaces/ICardProperty";
-
+import faker from "faker";
 
 type GetListingsRequest = Request & {
     params: {
@@ -36,7 +31,7 @@ let cardsProperties = [
     {
         shortId: 2,
         thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
-        propertyType: 1,
+        propertyType: 2,
         title: "Casa",
         address: "strada meduzei",
         rooms: 2,
@@ -47,7 +42,7 @@ let cardsProperties = [
     {
         shortId: 4,
         thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
-        propertyType: 1,
+        propertyType: 3,
         title: "teren",
         address: "strada meduzei",
         surface: 100,
@@ -125,12 +120,31 @@ export const getSale = (req: RenderListingsRequest, res: Response, next: NextFun
  */
 export const getListings = async (req: GetListingsRequest, res: Response, next: NextFunction) => {
 
-    let fetchedData: Array<ICardProperty> = cardsProperties;
+    // let fetchedData: Array<ICardProperty> = cardsProperties;
+
+    let fetchedData: Array<ICardProperty> = [];
+
+    for (let i = 0; i < 20; i++) {
+        let prop = {
+            shortId: faker.random.uuid(),
+            thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
+            propertyType: Number(req.params.propertyType),
+            title: faker.address.city(),
+            address: faker.address.county(),
+            surface: faker.finance.amount(),
+            rooms: faker.random.number(4),
+            price: faker.finance.amount()
+        };
+        //@ts-ignore
+        fetchedData.push(prop);
+    }
 
     try {
         // axios request to /db_api
         return res.status(200).json({
-            properties: fetchedData
+            properties: fetchedData,
+            propertyType: Number(req.params.propertyType),
+            transactionType: Number(req.params.transactionType)
         })
 
     } catch (err) {
