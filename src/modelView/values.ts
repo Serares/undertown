@@ -1,5 +1,3 @@
-import { EPropertyTypes } from "../interfaces/properties/EPropertyTypes";
-
 export const landFeatures = [
     {
         display: "Suprafață",
@@ -18,10 +16,40 @@ export const housingFeatures = [
     }
 ];
 
-const displayPropertyTypes = {
-    1: "Apartamente",
-    2: "Case",
-    3: "Terenuri"
+export type ModelViewDictionary = {
+    display: string;
+    endpoint: string;
+    dbValue: number;
+}
+
+export const TransactionTypes: {[entry: string]: ModelViewDictionary} = {
+    RENT: {
+        display: "Chirii",
+        endpoint: "chirii",
+        dbValue: 2
+    },
+    SALE: {
+        display: "Vanzari",
+        endpoint: "vanzari",
+        dbValue: 1
+    }
 };
 
-export const propertyTypes = Object.entries(displayPropertyTypes);
+export const PropertyTypes: {[entry: string]: ModelViewDictionary} = {
+    APARTMENTS: {
+        display: "Apartamente",
+        endpoint: "apartamente",
+        dbValue: 1
+    },
+    HOUSE: {
+        display: "Case",
+        endpoint: "case",
+        dbValue: 2
+    },
+    LAND: {
+        display: "Terenuri",
+        endpoint: "terenuri",
+        dbValue: 3
+    }
+}
+
