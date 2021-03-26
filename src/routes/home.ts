@@ -7,7 +7,9 @@ const router = Router();
 router.route("/")
     .get(homeController.getHomepage)
     .post([
-        body("property_status", "Selectează câmpul")
+        body("transactionType", "Selectează câmpul")
+            .exists({ checkFalsy: true }),
+        body("propertyType", "Selectează câmpul")
             .exists({ checkFalsy: true })
     ], homeController.postHomepage);
 

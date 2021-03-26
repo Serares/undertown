@@ -117,6 +117,7 @@ export const getSale = (req: RenderListingsRequest, res: Response, next: NextFun
 
 /**
  * @route GET /listings/:transactionType-:propertyType
+ * e.g. -> /listings/1-2
  */
 export const getListings = async (req: GetListingsRequest, res: Response, next: NextFunction) => {
 
@@ -125,15 +126,16 @@ export const getListings = async (req: GetListingsRequest, res: Response, next: 
     let fetchedData: Array<ICardProperty> = [];
 
     for (let i = 0; i < 20; i++) {
-        let prop = {
-            shortId: faker.random.uuid(),
+        let prop: ICardProperty = {
+            shortId: faker.random.number(10000),
             thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
             propertyType: Number(req.params.propertyType),
             title: faker.address.city(),
             address: faker.address.county(),
-            surface: faker.finance.amount(),
-            rooms: faker.random.number(4),
-            price: faker.finance.amount()
+            surface: +faker.finance.amount(50, 500),
+            rooms: faker.random.number(4) || 1,
+            price: +faker.finance.amount(100, 1000),
+            transactionType: Number(req.params.transactionType)
         };
         //@ts-ignore
         fetchedData.push(prop);

@@ -10,13 +10,12 @@ import ErrorRouter from "./routes/error";
 import homeRouter from "./routes/home";
 import listingRouter from "./routes/listing";
 import { GCS_BUCKET, SESSION_SECRET } from "./utils/secrets";
-import { propertyTypes } from "./modelView/values";
+import { PropertyTypes, TransactionTypes } from "./modelView/values";
 
 const app = express();
 
 app.set("views", path.join(process.cwd(), "views"));
 app.set("view engine", "ejs");
-
 
 app.use(express.static(path.join(process.cwd(),"dist","public")));
 
@@ -39,7 +38,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req: Request, res: Response, next: NextFunction) => {
     // TODO this is added just so views don't crash
     res.locals.isAuthenticated = false;
-    res.locals.propertyTypes = propertyTypes;
+    res.locals.propertyTypes = Object.entries(PropertyTypes);
+    res.locals.transactionTypes = Object.entries(TransactionTypes);
     next();
 });
 
@@ -57,9 +57,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // })
 
 // initiating routes
-app.use("/", homeRouter);
 app.use(listingRouter);
 // app.use(authRouter.router);
+app.use("/", homeRouter);
 app.use(ErrorRouter);
 
 

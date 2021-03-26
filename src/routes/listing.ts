@@ -1,24 +1,22 @@
 import { Router } from "express";
-import { body, check, param} from "express-validator";
+import { body, check, param } from "express-validator";
+import { PropertyTypes, TransactionTypes } from "../modelView/values";
 import * as listingsController from "../controllers/listing";
 const router = Router();
 
-const endpointsParams: string[] = ["apartamente" ,"case" ,"terenuri"]
-
+//TODO rename the endpoints after each property because properties shold not be relative like ID's are, properties are always the same
+// do that at a latter stage
 /**
  * mvc routes
  */
-router.get("/chirii/:propertyType", [
-    param("propertyType", "No property type provided")
-    .isIn(endpointsParams)
-],listingsController.getRent);
-router.get("/vanzari/:propertyType", listingsController.getSale);
+router.get(`/${TransactionTypes.RENT.endpoint}-:propertyType`, listingsController.getRent);
+
+router.get(`/${TransactionTypes.SALE.endpoint}-:propertyType`, listingsController.getSale);
 
 /**
 * REST routes
 */
-router.post("/filter", listingsController.filter);
-router.get("/listings/:transactionType/:propertyType", listingsController.listings);
+router.get("/listings/:transactionType-:propertyType", listingsController.getListings);
 
 
 export default router;
