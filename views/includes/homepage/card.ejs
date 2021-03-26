@@ -1,8 +1,24 @@
 <div class="column mix mix_all <%- propertyInfo.propertyType %> col-lg-4 col-md-6">
   <div class="property_grid_1 property_item bg-white mb_30">
-      <%- include('./thumbnail.ejs' , {status: propertyInfo.transactionType, thumbnail: propertyInfo.thumbnail, id: propertyInfo.shortId}) %>
+      <% 
+        var propertyUrl = "/";
+        transactionTypes.forEach((value)=>{
+            if(value[1]["dbValue"] === propertyInfo.transactionType) {
+                propertyUrl += value[1]["endpoint"] + "-"
+            }
+        })
+
+        propertyTypes.forEach((value)=>{
+            if(value[1]["dbValue"] === propertyInfo.propertyType) {
+                propertyUrl += value[1]["endpoint"]
+            }
+        })
+
+        propertyUrl += `/${propertyInfo.shortId}`
+      %>
+      <%- include('./thumbnail.ejs' , {propertyUrl:propertyUrl, status: propertyInfo.transactionType, thumbnail: propertyInfo.thumbnail, id: propertyInfo.shortId}) %>
           <div class="property_text p-3">
-              <%- include('./title.ejs' , {status: propertyInfo.transactionType, title: propertyInfo.title, address:propertyInfo.address, id: propertyInfo.shortId}) %>
+              <%- include('./title.ejs' , {propertyUrl:propertyUrl, status: propertyInfo.transactionType, title: propertyInfo.title, address:propertyInfo.address, id: propertyInfo.shortId}) %>
                   <div class="quantity">
                       <ul>
                           <% switch(propertyInfo.propertyType) {
