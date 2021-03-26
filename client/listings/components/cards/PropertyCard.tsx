@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import { Features } from './Features';
 import { ICardProperty } from '../../../../src/interfaces/ICardProperty';
 import { EPropertyTypes } from "../../../../src/interfaces/EPropertyTypes";
-
+import { PropertyTypes, TransactionTypes } from '../../../../src/modelView/values';
 
 const useStyles = makeStyles({
   root: {
@@ -41,10 +41,9 @@ type PropetyCardProps = {
   propertyValues: ICardProperty
 }
 
-
 export const PropertyCard: React.FunctionComponent<PropetyCardProps> = ({ propertyValues }) => {
   const classes = useStyles();
-  const { thumbnail, title, address, propertyType } = propertyValues;
+  const { thumbnail, title, address, propertyType, transactionType } = propertyValues;
 
   let features: any = {
     surface: propertyValues.surface,
@@ -58,17 +57,36 @@ export const PropertyCard: React.FunctionComponent<PropetyCardProps> = ({ proper
     features.rooms = propertyValues.rooms
   };
 
+  const propertyUrl = () => {
+    let url = "/";
+    Object.entries(TransactionTypes).forEach((value) => {
+      if (value[1]["dbValue"] === transactionType) {
+        url += value[1]["endpoint"] + "-"
+      }
+    })
+
+    Object.entries(PropertyTypes).forEach((value) => {
+      if (value[1]["dbValue"] === propertyType) {
+        url += value[1]["endpoint"]
+      }
+    })
+
+    url += `/${propertyValues.shortId}`;
+    return url;
+  }
+
   return (
     <Grid item md={12} sm={12}>
       <Card className={classes.root}>
         <CardActionArea className={classes.actionArea}>
-          <CardMedia
-            className={classes.media}
-            image={thumbnail}
-            title="Imagine"
-          />
+          <a href={propertyUrl()}>
+            <CardMedia
+              className={classes.media}
+              image={thumbnail}
+              title="Imagine"
+            />
+          </a>
         </CardActionArea>
-
         <div className={classes.details}>
           <Typography gutterBottom variant="h5" component="h2">
             {title}

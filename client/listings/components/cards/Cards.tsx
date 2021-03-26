@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { PropertyCard } from './PropertyCard';
+import { ICardProperty } from '../../../../src/interfaces/ICardProperty';
 
 const useStyles = makeStyles((theme) => ({
     heroContent: {
@@ -30,7 +31,7 @@ export const Cards = ({ properties }) => {
             <main>
                 <Container className={classes.cardGrid} maxWidth="lg">
                     <Grid container spacing={2} className={classes.cardsContainer}>
-                        {properties.map((property: any) => (
+                        {properties.map((property: ICardProperty) => (
                             <PropertyCard
                                 key={property.shortId}
                                 propertyValues={property}
