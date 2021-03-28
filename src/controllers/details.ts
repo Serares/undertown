@@ -1,92 +1,100 @@
-import { getSingleProperty } from "../services/getSingleProperty";
+import { Request, Response, NextFunction } from 'express';
 import faker from 'faker';
+import { dbApi } from '../services/axios';
 
-const featProperties = [
-    {
-        identification: {
-            propertyType: "apartment",
-            alias: "123123",
-            agent: "Vlady Object.ID",
-            ownerData: "Burlan Cornelia"
-        },
-        localization: {
-            residentialComplex: false,
-            county: "Bucuresti",
-            sector: "Sector 5",
-            address: "Calea Plevnei"
-        },
-        price: {
-            rent: {
-                currency: "EUR",
-                per_month: 700
-            },
-            sale: {
-                currency: "EUR",
-                price: 30000
-            },
-            includesVAT: true,
-            details: "nu persoanelor sub 18 ani",
-            comission: "30%"
-        },
+
+// TODO create propertyDetails type
+const renderDetailsPage = (req: Request, res: Response, next: NextFunction, propertyDetails: any) => {
+    return res.render("pages/single_property", {
+        propertyInfo: propertyDetails,
+        pageTitle: propertyDetails.title,
+        //TODO path
+        path: "/TODO"
+    })
+}
+
+/**
+ * @route GET /transactionType-apartamante/:shortId
+ */
+export const getApartment = (req: Request, res: Response, next: NextFunction) => {
+    /*
+    dbApi.get(`/${}-`)
+        .then((data) => {
+            renderDetailsPage(req, res, next, data);
+        })
+        .catch(err => {
+            next(err);
+        })
+        */
+    let fakedDetailsPage = {
+        shortId: faker.random.number(1000),
+        price: faker.random.number(10000),
+        propertyType: faker.random.number(3) || 1,
+        images: ["https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg", "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg"],
+        title: "Luxury Apartment Shuttle",
+        address: faker.address.county(),
         features: {
-            homeType: "apartament",
+            rooms: faker.random.number(4),
+            buildingType: "bloc",
             partitioning: "decomandat",
             floor: 4,
             comfort: "lucs",
-            usableArea: 33,
-            totalUsavleArea: 24,
-            builtArea: 12,
-            title: "Luxury Apartment Shuttle",
-            description: "Super bomba"
+            usableArea: faker.random.number(50),
+            totalUsableArea: faker.random.number(50),
+            constructionYear: "2005",
+            structure: "beton",
+            buildingHeight: "S+P+4 Etaje",
+            orientation: "Sud-Vest"
         },
-        rooms: {
-            number: 1,
-            kitchens: 3,
-            bathrooms: 1,
-            balconies: 1,
-            garages: 2,
-            parkinglots: 2
-        },
-        buildingType: {
-            type: "bloc de apartamente",
-            floorsNumber: 21,
-            basement: true,
-            semiBasement: true,
-            groundFloor: true,
-            attic: true,
-            constructionStatus: "la rosu",
-            finishConstructionYear: "2019",
-            constructionPeriod: "Dupa 2010",
-            resitenceStructure: "something"
-        },
-        energyCertificate: {
-            class: "A",
-            totalConsumption: "10W",
-            co2Emission: "20"
-        },
-        otherDetails: {
-            details: "disponibil imediat",
-            vicii: "vicentiu",
-        },
-        destination: {
-            residential: true,
-            commercial: false,
-            office: false,
-            vacation: false
-        },
-        utility: {
+        // longitude latitude order
+        localization: [25, 44],
+        description: faker.lorem.paragraph(),
+        utilities: {
             general: ["Curent", "Apa", "Canalizare"],
             heatingSystem: ["Centrala Proprie"],
             conditioning: ["Aer conditionat"],
-
+        },
+        amenities: {
+            building: ["Interfon", "Curte"]
         }
-    }
-];
-
-export const getRentDetails = (req, res, next) => {
-
+    };
+    return renderDetailsPage(req, res, next, fakedDetailsPage)
 }
 
-export const getSaleDetails = (req, res, next) => {
-    
+/**
+ * @route GET /transactionType-case/:shortId
+ */
+export const getHouse = (req: Request, res: Response, next: NextFunction) => {
+    /*
+    dbApi.get(`/${}-`)
+        .then((data) => {
+            renderDetailsPage(req, res, next, data);
+        })
+        .catch(err => {
+            next(err);
+        })
+        */
+    let fakedDetailsPage = {
+        
+    };
+    return renderDetailsPage(req, res, next, fakedDetailsPage)
+}
+
+/**
+ * @route GET /transactionType-terenuri/:shortId 
+ */
+export const getLand = (req: Request, res: Response, next: NextFunction) => {
+    /*
+    dbApi.get(`/${}-`)
+        .then((data) => {
+            renderDetailsPage(req, res, next, data);
+        })
+        .catch(err => {
+            next(err);
+        })
+        */
+    let fakedDetailsPage = {
+       
+    };
+    return renderDetailsPage(req, res, next, fakedDetailsPage)
 }

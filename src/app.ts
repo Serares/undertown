@@ -9,6 +9,8 @@ import compression from "compression";
 import ErrorRouter from "./routes/error";
 import homeRouter from "./routes/home";
 import listingRouter from "./routes/listing";
+import detailsRouter from './routes/details';
+
 import { GCS_BUCKET, SESSION_SECRET } from "./utils/secrets";
 import { PropertyTypes, TransactionTypes } from "./modelView/values";
 
@@ -40,6 +42,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     res.locals.isAuthenticated = false;
     res.locals.propertyTypes = Object.entries(PropertyTypes);
     res.locals.transactionTypes = Object.entries(TransactionTypes);
+    res.locals.bannerImageUrl = "/img/hero-image.jpg";
     next();
 });
 
@@ -57,6 +60,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // })
 
 // initiating routes
+app.use(detailsRouter);
 app.use(listingRouter);
 // app.use(authRouter.router);
 app.use("/", homeRouter);

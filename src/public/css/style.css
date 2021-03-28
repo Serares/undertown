@@ -90,7 +90,7 @@ Table of CSS Content arrage with every section name
 
 body {
 	font-size: 14px;
-	font-family: 'Raleway', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-weight: 400;
 	overflow-x: hidden
 }
@@ -106,9 +106,8 @@ a, a:hover, a:focus, a:visited {
 }
 
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	margin: 0px;
-	text-transform: uppercase
 }
 
 h1, .h1 {
@@ -431,7 +430,7 @@ textarea.form-control {
 
 .bg_img_5 {
 	/*in Top Banner of all page section*/
-	background-image: url(../img/banner/banner.png);
+	/* background-image: url(../img/banner/banner.png); */
 	background-repeat: no-repeat;
 	background-size: cover;
 }

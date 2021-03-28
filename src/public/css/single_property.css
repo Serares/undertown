@@ -1,3 +1,8 @@
+.single_property_detail {
+    display:flex;
+    flex-direction: column;
+}
+
 .single_property_detail .more_information .list-informations-specificatii {
     width: 100%;
     display: flex;
@@ -42,6 +47,6 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.single_property_detail .property_detalii {
+.single_property_detail .property_details {
     white-space: pre-wrap;
 }

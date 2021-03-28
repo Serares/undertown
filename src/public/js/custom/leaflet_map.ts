@@ -38,7 +38,7 @@ BuildLeafletMap.prototype.setMarker = function () {
 }
 
 //leaflet map js
-var latlngElement = document.querySelector('input[name="latlng"]').value;
-var latlngValues = latlngElement.split(';');
+var lngLatElement = document.querySelector('input[name="lngLat"]').value;
+let lngLat = lngLatElement.split(",");
 var mapId = "mapid";
-var leaflet_map = new BuildLeafletMap(latlngValues[0], latlngValues[1], mapId);
+var leaflet_map = new BuildLeafletMap(lngLat[1], lngLat[0], mapId);

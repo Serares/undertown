@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { PropertyTypes, TransactionTypes } from "../modelView/values";
+import { PropertyTypes, TransactionTypes, ModelViewDictionary } from "../modelView/values";
 import { CustomError } from "../utils/Error";
 import { ICardProperty } from "../interfaces/ICardProperty";
 import faker from "faker";
@@ -11,53 +11,16 @@ type GetListingsRequest = Request & {
     }
 }
 
-type RenderListingsRequest = Request & {
-    params: { propertyType: "apartamente" | "case" | "terenuri" }
-};
-type RenderListingsPageFunction = (req: RenderListingsRequest, res: Response, next: NextFunction, transactionType: { dbValue: number, endpoint: string, display: string }) => void;
-
-let cardsProperties = [
-    {
-        shortId: 1,
-        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
-        propertyType: 1,
-        title: "Lucs apartments",
-        address: "Bd Roseti",
-        surface: 200,
-        rooms: 3,
-        price: 103,
-        transactionType: 1
-    },
-    {
-        shortId: 2,
-        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
-        propertyType: 2,
-        title: "Casa",
-        address: "strada meduzei",
-        rooms: 2,
-        surface: 100,
-        price: 202,
-        transactionType: 2
-    },
-    {
-        shortId: 4,
-        thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
-        propertyType: 3,
-        title: "teren",
-        address: "strada meduzei",
-        surface: 100,
-        price: 201,
-        transactionType: 2
-    }
-];
+type RenderListingsPageFunction = (req: Request, res: Response, next: NextFunction, urlInfo: [ModelViewDictionary, ModelViewDictionary]) => void;
 
 /**
  * rendering properties.ejs
  * composing fetch url that react app will use to get properties cards
+ * urlInfo [TransactionType, PropertyType]
  */
-const renderListingsPage: RenderListingsPageFunction = (req, res, next, transactionType) => {
+const renderListingsPage: RenderListingsPageFunction = (req, res, next, urlInfo) => {
     try {
-        if (typeof req.params.propertyType === "undefined") {
+        if (typeof urlInfo === "undefined") {
             throw new Error("No property type provided");
         }
 
@@ -68,26 +31,16 @@ const renderListingsPage: RenderListingsPageFunction = (req, res, next, transact
          */
         let fetchUrl: string;
 
-        let propertyTypeParam = req.params.propertyType;
+        pageTitle.push(urlInfo[0]["endpoint"]);
+        pageTitle.push(urlInfo[1]["endpoint"]);
 
-        pageTitle.push(transactionType["endpoint"]);
-        pageTitle.push(propertyTypeParam);
-
-        fetchUrl = `/listings/${transactionType.dbValue}-`;
-
-        Object.entries(PropertyTypes).forEach((value) => {
-            if (propertyTypeParam === value[1]["endpoint"]) {
-                fetchUrl += value[1]["dbValue"]
-            }
-        })
+        fetchUrl = `/listings/${urlInfo[0]["dbValue"]}-${urlInfo[1]["dbValue"]}`;
 
         // create fetch url for client
         return res.status(200).render("pages/properties", {
             pageTitle: pageTitle.join(" "),
-            imageUrl: "/img/banner-pages.jpg",
-            path: "chirii",
-            searchInput: "",
-            fetchUrl: fetchUrl
+            fetchUrl: fetchUrl,
+            path: pageTitle.join(" ")
         });
 
     } catch (err) {
@@ -99,21 +52,6 @@ const renderListingsPage: RenderListingsPageFunction = (req, res, next, transact
         next(error);
     }
 }
-
-/**
- * @route GET /chirii-:propertyType
- */
-export const getRent = (req: RenderListingsRequest, res: Response, next: NextFunction): void => {
-    renderListingsPage(req, res, next, TransactionTypes.RENT);
-};
-
-/**
- * @route GET /vanzari-:propertyType
- */
-export const getSale = (req: RenderListingsRequest, res: Response, next: NextFunction): void => {
-    renderListingsPage(req, res, next, TransactionTypes.SALE)
-};
-
 
 /**
  * @route GET /listings/:transactionType-:propertyType
@@ -154,4 +92,25 @@ export const getListings = async (req: GetListingsRequest, res: Response, next: 
         res.status(500).json({ message: "Error occured" })
     }
 
+}
+
+/**
+ * @route GET /transactionType-apartamente
+ */
+export const getApartments = (req: Request, res: Response, next: NextFunction, transactionType: ModelViewDictionary) => {
+    renderListingsPage(req, res, next, [transactionType, PropertyTypes.APARTMENTS]);
+}
+
+/**
+ * @route GET /transactionType-case
+ */
+export const getHouse = (req: Request, res: Response, next: NextFunction, transactionType: ModelViewDictionary) => {
+    renderListingsPage(req, res, next, [transactionType, PropertyTypes.HOUSE]);
+}
+
+/**
+ * @route GET /transactionType-terenuri
+ */
+export const getLand = (req: Request, res: Response, next: NextFunction, transactionType: ModelViewDictionary) => {
+    renderListingsPage(req, res, next, [transactionType, PropertyTypes.LAND]);
 }
