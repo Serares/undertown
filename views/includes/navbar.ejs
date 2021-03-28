@@ -18,8 +18,7 @@
                                               href="/">Acasa</a>
                               </li>
                               <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle <%= 
-                                path === '/chirii' ||  path === '/chirii_s' ? 
+                                <a class="nav-link dropdown-toggle <%= path.indexOf('chirii') > -1 ? 
                                 'active' : '' %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                   Chirii
                                 </a>
@@ -30,8 +29,7 @@
                                 </div>
                               </li>
                               <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle <%= 
-                                path === '/vanzari' ||  path === '/vanzari_s' ? 
+                                <a class="nav-link dropdown-toggle <%= path.indexOf('vanzari') > -1 ? 
                                 'active' : '' %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Vanzari
                                 </a>
@@ -42,8 +40,8 @@
                                 </div>
                               </li>
                               <li class="nav-item"> <a
-                                              class="nav-link <%= path === '/about' ? 'active' : '' %>"
-                                              href="/about">Despre noi</a>
+                                              class="nav-link <%= path === '/despre' ? 'active' : '' %>"
+                                              href="/despre">Despre noi</a>
                               </li>
                               <li class="nav-item"> <a
                                               class="nav-link <%= path === '/contact' ? 'active' : '' %>"
