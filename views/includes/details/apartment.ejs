@@ -1,0 +1,73 @@
+<div class="row more_information my-3 d-block">
+    <h4 class="inner-title mb-4 px-4 subtitle_prop">Descriere: </h4>
+    <p class="property_details px-4 text-dark">
+        <%- propertyInfo.description %>
+    </p>
+</div>
+<% if(Object.keys(propertyInfo.features).length> 0 ) {
+    const propFeatures = propertyInfo.features;
+    %>
+    <div class="row more_information my-3 d-block">
+        <h4 class="inner-title mb-4 px-4 subtitle_prop">Caracteristici: </h4>
+        <ul class="px-4">
+            <li><p><span class="text-primary">Camere</span> - <%- propFeatures.rooms %></p>
+            </li>
+            <li><p><span class="text-primary">Suprafata utila</span> - <%- propFeatures.usableArea %></p>
+            </li>
+            <li><p><span class="text-primary">Suprafata totala</span> - <%- propFeatures.totalUsableArea %></p>
+            </li>
+            <li><p><span class="text-primary">Tip cladire</span> - <%- propFeatures.buildingType %></p>
+            </li>
+            <li><p><span class="text-primary">Partitionare</span> - <%- propFeatures.partitioning %></p>
+            </li>
+            <li><p><span class="text-primary">Etajul</span> - <%- propFeatures.floor %></p>
+            </li>
+            <li><p><span class="text-primary">Confort</span> - <%- propFeatures.comfort %></p>
+            </li>
+        </ul>
+    </div>
+    <% } %>
+        <div class="row more_information my-3 d-block">
+            <h4 class="inner-title mb-4 px-4 subtitle_prop">Utilitati: </h4>
+            <% const propertyUtilities=propertyInfo.utilities %>
+                <ul class="px-4">
+                    <li><p>Utilitati generale -
+                        <% for(let i=0;i < propertyUtilities.general.length; i++) { %>
+                            <span class="text-primary">
+                                <%= propertyUtilities.general[i] %>
+                            </span>
+                            <% } %>
+                        </p>
+                    </li>
+                    <li><p>Sistem incalzire -
+                        <% for(let i=0;i < propertyUtilities.heatingSystem.length; i++) { %>
+                            <span class="text-primary">
+                                <%= propertyUtilities.heatingSystem[i] %>
+                            </span>
+                            <% } %>
+                        </p>
+                    </li>
+                    <li><p>Climatizare -
+                        <% for(let i=0;i < propertyUtilities.conditioning.length; i++) { %>
+                            <span class="text-primary">
+                                <%= propertyUtilities.conditioning[i] %>
+                            </span>
+                            <% } %>
+                        </p>
+                    </li>
+                </ul>
+        </div>
+        <div class="row more_information my-3 d-block">
+            <h4 class="inner-title mb-4 px-4 subtitle_prop">Dotari: </h4>
+            <% const propertyAmenities=propertyInfo.amenities %>
+                <ul class="px-4">
+                    <li><p>Cladire -
+                        <% for(let i=0;i < propertyAmenities.building.length; i++) { %>
+                            <span class="text-primary">
+                                <%= propertyAmenities.building[i] %>
+                            </span>
+                            <% } %>
+                        </p>
+                    </li>
+                </ul>
+        </div>

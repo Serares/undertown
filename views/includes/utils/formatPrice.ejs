@@ -1,7 +1,8 @@
 <span>
     <% var formatter = new Intl.NumberFormat('ro-RO', {
         style: "currency",
-        currency: "EUR"
+        currency: "EUR",
+        maximumSignificantDigits: 1
     })%>
     <%- formatter.format(price) %>
 </span>

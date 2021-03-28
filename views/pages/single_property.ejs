@@ -11,7 +11,6 @@
         min-height: 400px;
     }
 </style>
-<link rel="stylesheet" href="/css/contact.css">
 </head>
 
 <body class="page-load">
@@ -29,142 +28,76 @@
             <!-- Banner Section Start -->
             <%- include('../includes/banner_section.ejs', 
             {pageTitle: pageTitle, 
-                imageUrl:imageUrl, 
                 path: path
             }) %>
             <!-- Banner Section End -->
 
             <!-- Single Property Start -->
+            
             <section class="full_row pt_80 bg_gray">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-8">
+                        <div class="col-lg-12">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="property_slider" id="layerslider" style="width: 800px; height: 400px;">
-                                        <% for(let image in property.imagini) {%>
-                                        <div class="ls-slide" data-ls="duration: 4000;">
-                                            <img src="/<%-property.imagini[image]%>" class="ls-bg"
-                                                alt="Slide background">
-                                            <img src="/<%-property.imagini[image]%>" class="ls-tn" alt="no image found">
+                                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <% for(let i=0; i< propertyInfo.images.length; i++) {%>
+                                                <div class="carousel-item <%- i === 0 ? "active" : "" %>">
+                                                    <img class="d-block w-100" src="<%- propertyInfo.images[i] %>" alt="slide">
+                                                </div>
+                                            <% } %>
                                         </div>
-                                        <%} %>
-
+                                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+                                            data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+                                            data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row mt-5">
                                 <div class="col-md-12">
                                     <div class="single_property_detail">
                                         <div class="row mt-4">
                                             <div class="col-md-12">
-                                                <span class="text_primary price_text"><%- property.displayPrice %></span>
+                                                <span class="text_primary price_text">
+                                                    <%- include("../includes/utils/formatPrice", {price: propertyInfo.price}) %>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="head">
-                                            <h4 class="title mt-2"><%-property.titlu %></h4>
+                                            <h4 class="title mt-2">
+                                                <%-propertyInfo.title %>
+                                            </h4>
                                             <span class=""><i class="fas fa-map-marker-alt"></i>
-                                                <%- property.adresa %></span>
+                                                <span class="text-primary"><%- propertyInfo.address %></span>
+                                            </span>
                                         </div>
-                                        <h4 class="inner-title mb-4 subtitle_prop">Descriere: </h4>
-                                        <p class="property_detalii"><%- property.detalii %></p>
-                                        <% if(property.specificatii) {%>
-                                        <div class="more_information my-5 d-block">
-                                            <h4 class="inner-title mb-4 subtitle_prop">Informatii utile</h4>
-                                            <ul class="list-informations-specificatii">
-                                                <% for(let spec in property.specificatii) { %>
-                                                <li class="specificatii-lists">
-                                                    <span
-                                                        class="specificatii_title"><%-property.specificatii[spec].name %></span>
-                                                    <ul class="specificatii-list">
-                                                        <% for(let spec_no in property.specificatii[spec].specs) {%>
-                                                        <li class="spec-name">
-                                                            -<%- property.specificatii[spec].specs[spec_no] %></li>
-                                                        <%}%>
-                                                    </ul>
-                                                </li>
-                                                <% } %>
-                                                    </ul>
-                                        </div>
-                                        <%} %>
-                                        <!-- google maps in here -->
-
-                                        <div class="single_map mb-5">
-                                            <h4 class="inner-title mb-4">Locație</h4>
-                                            <div id="mapid" class="map-canvas"> </div>
-                                        </div>
+                                        <% switch(propertyInfo.propertyType) { 
+                                            case(1):
+                                            %>
+                                            <%- include("../includes/details/apartment", {propertyInfo: propertyInfo}) %>
+                                        <% break; case(2):%>
+                                        <%- include("../includes/details/apartment", {propertyInfo: propertyInfo}) %>
+                                        <% break; case(3): %>
+                                        <%- include("../includes/details/apartment", {propertyInfo: propertyInfo}) %>
+                                        <% break; 
+                                    } %>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="property_sidebar mt_md_50">
-                                <div class="property_listing sidebar-widget">
-                                    <%if(property.caracteristici) { %>
-                                    <h4 class="widget-title mb-4">Caracteristici:</h4>
-                                    <ul>
-                                        <% for(let carac in property.caracteristici){ %>
-
-                                        <li><span><%- property.caracteristici[carac].key %></span>
-                                            <%-property.caracteristici[carac].value %></li>
-
-                                        <% } %>
-                                    </ul>
-                                    <% } %>
-
-                                </div>
-                                <div class="contact_agent sidebar-widget">
-                                    <div class="author_img"> <img src="img/testimonial/2.png" alt="">
-                                        <div class="agent_info">
-                                            <h5 class="author_name">
-                                                <%- property.persoanaContact.firstName+' ' + property.persoanaContact.lastName%>
-                                            </h5>
-                                            <span><%-property.persoanaContact.phoneNumber %></span>
-                                        </div>
-                                    </div>
-                                    <form id="contact-form">
-                                        <input type="hidden" value="<%-property.persoanaContact.email %>"
-                                            name="CONTACT_PERSON_EMAIL" />
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" name="firstname"
-                                                        placeholder="Prenume">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" name="lastname"
-                                                        placeholder="Nume">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" name="email"
-                                                        placeholder="Email">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <textarea class="form-control" name="message" placeholder="Mesaj"
-                                                        rows="5">Aș dori să aflu mai multe detalii pentru proprietaeta cu id-ul: <%-property._id %></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn_primary"
-                                                    name="submit">Trimite</button>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="error-handel">
-                                                    <div id="success">Mesajul a fost trimis.</div>
-                                                    <div id="error">Eroare la procesarea mesajului, te rog incearcă din
-                                                        nou.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
+                            <div class="row mt-5">
+                                <!-- maps in here -->
+            
+                                <div class="single_map mb-5 col">
+                                    <h4 class="inner-title mb-4">Locație</h4>
+                                    <div id="mapid" class="map-canvas"> </div>
                                 </div>
                             </div>
                         </div>
@@ -179,23 +112,12 @@
             <!-- Find Part Satrt -->
             <a href="#" id="scroll"><i class="fas fa-arrow-up"></i></a>
             <!-- Find Part Satrt -->
-            <input type="hidden" name="latlng" value="<%- latlng %>" />
+            <input type="hidden" name="lngLat" value="<%- propertyInfo.localization %>" />
         </div>
     </div>
     <!-- Wrapper End -->
     <%- include ../includes/scripts.ejs %>
     <script src="/js/custom/leaflet_map.js"></script>
-    <script src="/js/custom/contact.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // Calling LayerSlider on the target element
-            $('#layerslider').layerSlider({
-                thumbnailNavigation: 'always',
-                autoStart: false
-            });
-        });
-
-    </script>
 </body>
 
 </html>
