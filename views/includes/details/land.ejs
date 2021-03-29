@@ -1,0 +1,20 @@
+<div class="row more_information my-3 d-block">
+    <h4 class="inner-title mb-4 px-4 subtitle_prop">Descriere: </h4>
+    <p class="property_details px-4 text-dark">
+        <%- propertyInfo.description %>
+    </p>
+</div>
+<% if(Object.keys(propertyInfo.features).length> 0 ) {
+    const propFeatures = propertyInfo.features;
+    // TODO generate a utility that can loop through a given display/value array of objects and render features, without hardcoding
+    %>
+    <div class="row more_information my-3 d-block">
+        <h4 class="inner-title mb-4 px-4 subtitle_prop">Caracteristici: </h4>
+        <ul class="px-4">
+            <li><p><span class="text-primary">Suprafata utila</span> - <%- propFeatures.usableArea %></p>
+            </li>
+            <li><p><span class="text-primary">Suprafata totala</span> - <%- propFeatures.totalUsableArea %></p>
+            </li>
+        </ul>
+    </div>
+    <% } %>

@@ -1,28 +1,24 @@
-/*
-router.get("/contact", this.homeController.getContactpage);
+import { Router } from 'express';
+import { body, check } from 'express-validator';
+import * as contactController from '../controllers/contact';
 
-this._router.post("/send_email", [
-    //you can add the checks in an array
+const router = Router();
+
+router.get("/contact", contactController.getContactpage);
+
+router.post("/send_email", [
     check("email", "Email invalid")
         .isEmail()
         .isLength({ min: 5 }),
-    //body checks only in the body of the request
-    body(
-        "lastname",
-        //adding this message as a default .withMessage
-        "Nume invalid"
-    )
+    body("lastname","Nume invalid")
         .isLength({ min: 3 })
         .trim(),
-    body(
-        "firstname",
-        //adding this message as a default .withMessage
-        "Nume invalid"
-    )
+    body("firstname","Nume invalid")
         .isLength({ min: 3 })
         .trim(),
     body("message", "Message has a length of less than 6 characters")
         .trim()
         .isLength({ min: 6 })
-], this.homeController.postSendEmail);
-*/
+], contactController.postSendEmail);
+
+export default router;

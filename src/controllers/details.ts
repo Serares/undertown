@@ -75,7 +75,33 @@ export const getHouse = (req: Request, res: Response, next: NextFunction) => {
         })
         */
     let fakedDetailsPage = {
-        
+        shortId: faker.random.number(1000),
+        price: faker.random.number(10000),
+        propertyType: faker.random.number(3) || 1,
+        images: ["https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg", "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg"],
+        title: "Luxury Apartment Shuttle",
+        address: faker.address.county(),
+        features: {
+            rooms: faker.random.number(4),
+            buildingType: "bloc",
+            comfort: "lucs",
+            usableArea: faker.random.number(50),
+            totalUsableArea: faker.random.number(50),
+            constructionYear: "2005",
+            structure: "beton",
+            orientation: "Sud-Vest"
+        },
+        // longitude latitude order
+        localization: [25, 44],
+        description: faker.lorem.paragraph(),
+        utilities: {
+            general: ["Curent", "Apa", "Canalizare"],
+            heatingSystem: ["Centrala Proprie"],
+            conditioning: ["Aer conditionat"],
+        },
+        amenities: {
+            building: ["Interfon", "Curte"]
+        }
     };
     return renderDetailsPage(req, res, next, fakedDetailsPage)
 }
@@ -93,8 +119,21 @@ export const getLand = (req: Request, res: Response, next: NextFunction) => {
             next(err);
         })
         */
+    // TODO create land .ejs
     let fakedDetailsPage = {
-       
+        shortId: faker.random.number(1000),
+        price: faker.random.number(10000),
+        propertyType: faker.random.number(3) || 1,
+        images: ["https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg", "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg"],
+        title: "Luxury Apartment Shuttle",
+        address: faker.address.county(),
+        features: {
+            usableArea: faker.random.number(50),
+            totalUsableArea: faker.random.number(50)
+        },
+        // longitude latitude order
+        localization: [25, 44],
+        description: faker.lorem.paragraph()
     };
     return renderDetailsPage(req, res, next, fakedDetailsPage)
 }

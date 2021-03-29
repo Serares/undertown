@@ -10,5 +10,5 @@ export interface ICardProperty {
     rooms?: number;
     surface: number;
     price: number;
-    transactionType: ETransactionType
+    transactionType: ETransactionType;
 }
