@@ -1,0 +1,19 @@
+// this file is to compile ts for use in browser
+{
+    "compilerOptions": {
+        "lib": [
+            "es6",
+            "dom",
+            "DOM.Iterable"
+        ],
+        "noImplicitAny": true,
+        "allowJs": true,
+        "target": "es5",
+        "strict": true,
+        "module": "es6",
+        "moduleResolution": "node",
+        "outDir": "../dist/public/js/custom",
+        "sourceMap": true,
+        "jsx": "react"
+    }
+}
