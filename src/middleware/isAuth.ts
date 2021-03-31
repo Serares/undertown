@@ -1,22 +1,24 @@
-import {Request, Response, NextFunction} from "express";
-import { RequestSessionType } from "../interfaces/RequestSessionType";
+import { Request, Response, NextFunction } from "express";
+import jwt from 'jsonwebtoken';
+import { TOKEN_SECRET } from '../utils/secrets';
 
-export function blockNotAuthenticatedAndNotAdmin(req: RequestSessionType, res: Response, next: NextFunction): void {
-    //this middleware helps protect routes
-    //in case a user that is not logged in types in browser ' /admin ' or ' /add-product'
-    // the routs will simply not exist
-    if (!req.session.isLoggedIn) {
-        return res.redirect("/");
+
+export const isAuth = (req: Request, res: Response, next: NextFunction) => {
+    const reqHeader = req.headers["authorization"];
+
+    if (typeof reqHeader !== "undefined") {
+        const token = reqHeader.split(" ")[1];
+        jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
+            if (err) {
+                return res.sendStatus(401);
+            }
+            // Add the decoded payload to request.user
+            //@ts-ignore
+            req.user = decoded.user;
+            next();
+        })
+    } else {
+        res.sendStatus(401);
     }
-    if (req.session.user.status !== "admin")
-        return res.status(301).redirect("/");
 
-    next();
-}
-
-export function blockAuthenticated(req: RequestSessionType, res: Response, next: NextFunction): void {
-    if (req.session.isLoggedIn) {
-        return res.redirect("/");
-    }
-    next();
 }

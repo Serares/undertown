@@ -3,15 +3,16 @@ import { createProxyMiddleware } from "http-proxy-middleware";
 import path from "path";
 import helmet from "helmet";
 import compression from "compression";
-// import { AuthRouter } from "./routes/auth";
 import ErrorRouter from "./routes/error";
 import homeRouter from "./routes/home";
 import listingRouter from "./routes/listing";
 import detailsRouter from './routes/details';
 import aboutRouter from "./routes/about";
 import contactRouter from './routes/contact';
+import userRouter from './routes/user';
+import "./config/passport";
 
-import { GCS_BUCKET, SESSION_SECRET } from "./utils/secrets";
+import { GCS_BUCKET } from "./utils/secrets";
 import { PropertyTypes, TransactionTypes } from "./modelView/values";
 
 const app = express();
@@ -36,9 +37,6 @@ app.use(express.urlencoded({ extended: true }));
 // );
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    // TODO this is added just so views don't crash
-    // TODO add the is authenticated guard here
-    res.locals.isAuthenticated = false;
     res.locals.propertyTypes = Object.entries(PropertyTypes);
     res.locals.transactionTypes = Object.entries(TransactionTypes);
     res.locals.bannerImageUrl = "/img/hero-image.jpg";
@@ -46,24 +44,24 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // TODO add error handler to error controller
-// app.use((err: any, req: any, res: any, next: any) => {
-//     console.error(err);
-//     if (err.statusCode) {
-//         res.status(err.statusCode);
-//     }
-//     if (process.env.NODE_ENV === "development") {
-//         res.send(err);
-//     } else {
-//         res.send("<p>Error</p>");
-//     }
-// })
+app.use((err: any, req: any, res: any, next: any) => {
+    console.error(err);
+    if (err.statusCode) {
+        res.status(err.statusCode);
+    }
+    if (process.env.NODE_ENV === "development") {
+        res.send(err);
+    } else {
+        res.send("<p>Error</p>");
+    }
+})
 
 // initiating routes
 app.use(detailsRouter);
 app.use(listingRouter);
 app.use(aboutRouter);
 app.use(contactRouter);
-// app.use(authRouter.router);
+app.use(userRouter);
 app.use("/", homeRouter);
 app.use(ErrorRouter);
 

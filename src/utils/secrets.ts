@@ -14,15 +14,15 @@ export const ENVIRONMENT = process.env.NODE_ENV;
 const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
 logger.debug("ENVIRONMENT IS: " + process.env.NODE_ENV);
 
-export const SESSION_SECRET = process.env["SESSION_SECRET"];
+export const TOKEN_SECRET = process.env["TOKEN_SECRET"];
 export const MONGO_DB = prod ? process.env["MONGO_DB"] : process.env["MONGO_DB_DEV"];
 export const MONGO_DB_SESSION_DB = process.env["MONGO_DB_SESSION_DB"];
 export const GCS_BUCKET = prod ? process.env["GCLOUD_BUCKET_PROD"] : process.env["GCLOUD_BUCKET_DEV"];
 export const SENDGRID_API_KEY = process.env["SENDGRID_API_KEY"];
 export const CONTACT_EMAIL = prod ? process.env["PROD_EMAIL"] : process.env["DEV_EMAIL"];
 
-if (!SESSION_SECRET) {
-    logger.error("No client secret. Set SESSION_SECRET environment variable.");
+if (!TOKEN_SECRET) {
+    logger.error("No client secret. Set TOKEN_SECRET environment variable.");
     process.exit(1);
 }
 

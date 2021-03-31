@@ -1,29 +1,24 @@
-<%- include('../includes/header.ejs') %>
+<%- include('../../includes/header.ejs') %>
 <link rel="stylesheet" href="/css/auth.css">
 </head>
 
 <body class="page-load">
-
-
     <!-- Wrapper Start -->
     <div id="page_wrapper" class="container-fluid">
         <div class="row">
             <header id="header" class="w-100 bg_white nav-on-top">
                 <!-- Nav Header Start -->
-                <%- include('../includes/navbar.ejs') %>
+                <%- include('../../includes/navbar.ejs') %>
                 <!-- Nav Header End -->
             </header>
 
             <!-- Banner Section Start -->
             <!-- TODO ADD THIS TO INCLUDES -->
-            <%- include('../includes/banner_section.ejs', {pageTitle: pageTitle, imageUrl:imageUrl}) %>
+            <%- include('../../includes/banner_section.ejs', {pageTitle: pageTitle}) %>
             <!-- Banner Section End -->
 
             <!-- Sign In Account Start -->
-            <section class="full_row py_100 bg_gray">
-                <% if(errorMessage)  { %>
-                <div><%=errorMessage %></div>
-                <% }%>
+            <section class="full_row py_100 bg_gray" id="loginApp">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
@@ -31,26 +26,31 @@
                                 <div class="header bg_primary">
                                     <h4 class="inner-title text_white">Logheaza-te</h4>
                                 </div>
+                                <p v-if="errors.length">
+                                    <b>Completeaza urmatoarele:</b>
+                                    <ul>
+                                      <li v-for="error in errors">{{ error }}</li>
+                                    </ul>
+                                </p>
                                 <div class="body">
-                                    <p>Log in</span>
-                                    </p>
-                                    <form action="/login" method="POST" novalidate>
+                                    <p>Log in</p>
+                                    <form id="loginForm" action="/login" method="POST" novalidate @submit="checkForm">
                                         <div class="form-group">
-                                            <input name="email" type="email"
-                                                class="form-control <%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
-                                                placeholder="Email Address" value="<%= oldInput.email %>">
+                                            <input v-model="email" name="email" type="email"
+                                                class="form-control"
+                                                placeholder="Email Address" value="">
                                         </div>
                                         <div class="form-group">
-                                            <input name="password" type="password"
-                                                class="form-control <%= validationErrors.find(e => e.param === 'password') ? 'invalid' : '' %>"
-                                                placeholder="Parolă" value="<%= oldInput.password %>">
+                                            <input v-model="password" name="password" type="password"
+                                                class="form-control"
+                                                placeholder="Parolă" value="">
                                         </div>
                                         <div class="form-group">
                                             <button type="submit" name="signin" class="btn btn_primary_bg">Intră in
                                                 cont</button>
                                         </div>
                                     </form>
-                                    <div class="password_recovery">Recuperare Parolă <a href="#">Click Here</a>
+                                    <div class="password_recovery">Recuperare Parolă <a href="#">Apasa aici</a>
                                     </div>
                                 </div>
                                 <div class="footer">Click and read our terms and condition<a href="#">Terms and
@@ -64,7 +64,7 @@
             <!-- Sign In Account End -->
 
             <!-- Footer Section Start -->
-            <%- include('../includes/footer.ejs') %>
+            <%- include('../../includes/footer.ejs') %>
             <!-- Footer Section End -->
 
             <!-- Find Part Satrt -->
@@ -72,9 +72,9 @@
             <!-- Find Part Satrt -->
         </div>
     </div>
+    <script src="/js/auth/main.js"></script>
     <!-- Wrapper End -->
-    <%- include('../includes/scripts.ejs') %>
-    </script>
+    <%- include('../../includes/scripts.ejs') %>
 </body>
 
 </html>
