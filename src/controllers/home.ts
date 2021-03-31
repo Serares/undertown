@@ -110,7 +110,7 @@ export const postHomepage = async (req: PostHomepageRequest, res: Response, next
                 errorMessage: errors.array()[0].msg,
                 validationErrors: errors.array(),
                 oldInput: {
-                    search: req.body.search_input
+                    search: ""
                 }
             });
         } catch (err) {

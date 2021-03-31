@@ -1,8 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import path from "path";
-import flash from "connect-flash";
-import session from "express-session";
 import helmet from "helmet";
 import compression from "compression";
 // import { AuthRouter } from "./routes/auth";
@@ -23,8 +21,6 @@ app.set("view engine", "ejs");
 
 app.use(express.static(path.join(process.cwd(),"dist","public")));
 
-app.use(session({ secret: SESSION_SECRET, cookie: { maxAge: 60000 } }));
-app.use(flash());
 
 app.use(helmet());
 app.use(compression());
@@ -41,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     // TODO this is added just so views don't crash
+    // TODO add the is authenticated guard here
     res.locals.isAuthenticated = false;
     res.locals.propertyTypes = Object.entries(PropertyTypes);
     res.locals.transactionTypes = Object.entries(TransactionTypes);
