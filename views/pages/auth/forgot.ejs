@@ -18,13 +18,13 @@
                     <!-- Banner Section End -->
 
                     <!-- Sign In Account Start -->
-                    <section class="full_row py_100 bg_gray" id="loginApp">
+                    <section class="full_row py_100 bg_gray" id="forgotApp">
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class=" bg_white sign_in_up" role="document">
                                         <div class="header bg_primary">
-                                            <h4 class="inner-title text_white">Logheaza-te</h4>
+                                            <h4 class="inner-title text_white">Recuperare parola</h4>
                                         </div>
                                         <div class="body">
                                             <p>Log in</p>
@@ -33,27 +33,18 @@
                                                 <li v-for="error in errors">{{ error }}</li>
                                             </ul>
                                             </p>
-                                            <form id="loginForm" action="/login" method="POST" novalidate
+                                            <p v-if="success !== null" class="text-primary">{{ success }}</p>
+                                            <form id="forgotForm" action="/user/forgot-password" method="POST" novalidate
                                                 @submit="formSubmit">
                                                 <div class="form-group">
                                                     <input v-model="email" name="email" type="email"
                                                         class="form-control" placeholder="Email Address" value="">
                                                 </div>
                                                 <div class="form-group">
-                                                    <input v-model="password" name="password" type="password"
-                                                        class="form-control" placeholder="Parolă" value="">
-                                                </div>
-                                                <div class="form-group">
-                                                    <button type="submit" name="signin" class="btn btn_primary_bg">Intră
-                                                        in
-                                                        cont</button>
+                                                    <button type="submit" name="signin" class="btn btn_primary_bg">Trimite link de recuperare</button>
                                                 </div>
                                             </form>
-                                            <div class="password_recovery">Recuperare Parolă <a href="/recuperare-parola">Apasa aici</a>
-                                            </div>
                                         </div>
-                                        <div class="footer">Click and read our terms and condition<a href="#">Terms and
-                                                Condition</a></div>
                                     </div>
                                 </div>
                             </div>

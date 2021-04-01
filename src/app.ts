@@ -26,7 +26,7 @@ app.use(express.static(path.join(process.cwd(),"dist","public")));
 app.use(helmet());
 app.use(compression());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 // app.use(createProxyMiddleware(
 //     "/images",
@@ -52,7 +52,7 @@ app.use((err: any, req: any, res: any, next: any) => {
     if (process.env.NODE_ENV === "development") {
         res.send(err);
     } else {
-        res.send("<p>Error</p>");
+        res.send("<p>Error occured please refresh the page</p>");
     }
 })
 
