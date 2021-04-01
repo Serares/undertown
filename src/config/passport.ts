@@ -13,39 +13,21 @@ let user = {
     }
 }
 
-const getUser = () => {
+const getUser = (userCredentials: any) => {
     return new Promise((resolve, reject) => {
+        if(userCredentials.email !== user.email || userCredentials.password !== user.password){
+            resolve(null)
+        }
         resolve(user);
     })
 }
 
-/**
- * sign up using email and password
- */
-passport.use('signup', new LocalStrategy({ usernameField: "email", passwordField: "password" }, async (email, password, done) => {
-    try {
-        // save user
-        const user = await getUser();
-
-        return done(null, user);
-    } catch (error) {
-        done(error);
-    }
-}));
-
 passport.use('login', new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, async (email, password, done) => {
     try {
-        const user = await getUser();
+        const user = await getUser({email, password});
 
         if (!user) {
             return done(null, false, { message: 'User not found' });
-        }
-
-        //@ts-ignore
-        const validate = await user.isValidPassword(password);
-
-        if (!validate) {
-            return done(null, false, { message: 'Wrong Password' });
         }
 
         return done(null, user, { message: 'Logged in Successfully' });

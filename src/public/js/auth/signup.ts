@@ -1,48 +1,40 @@
 import { userRoute } from '../../../services/axios';
 import Vue from 'vue';
 
-export const loginController = () => {
+export const signUpController = () => {
     // tslint:disable no-unused-expression
     new Vue({ // eslint-disable-line no-new
         data() {
             return {
                 errors: [],
                 password: null,
+                confirmPassword: null,
                 email: null,
-                accessURL: "/login"
+                name: null,
+                phoneNumber: null,
+                accessURL: "/signup"
             };
         },
-        el: "#loginApp",
+        el: "#signUpApp",
         methods: {
             formSubmit: function (e: Event) {
                 this.checkForm(e)
-                    .then(this.getAccessToken)
-                    .then(this.saveToken)
-                    .then(this.redirectToHomepage)
+                    .then(this.sendUserData)
+                    .then(this.redirectToLogin)
                     .catch((err) => {
                         //@ts-ignore
                         this.errors.push(...err);
                     })
             },
-            redirectToHomepage: function () {
+            redirectToLogin: function () {
                 return new Promise(resolve => {
-                    window.location.pathname = "/";
+                    // window.location.pathname = "/autentificare";
                     resolve("Redirect success");
-                })
-            },
-            saveToken: function (token: any) {
-                return new Promise((resolve) => {
-                    window.localStorage.setItem("token", token);
-                    resolve("Token saved");
                 })
             },
             checkForm: function (e: Event) {
                 e.preventDefault();
                 return new Promise((resolve, reject) => {
-                    if (this.password && this.email) {
-                        resolve("Validaiton ok")
-                    }
-
                     this.errors = [];
                     let newErrors = [];
 
@@ -54,20 +46,29 @@ export const loginController = () => {
                         //@ts-ignore
                         newErrors.push('Nu ai completat emailul');
                     }
+
+                    if (newErrors.length < 1) {
+                        let formData = {
+                            email: this.email,
+                            password: this.password,
+                            name: this.name,
+                            phoneNumber: this.phoneNumber
+                        }
+                        resolve(formData)
+                    }
+
                     reject(newErrors)
                 })
             },
-            getAccessToken: function () {
+            sendUserData: function (data: any) {
+                console.log(data);
                 return new Promise(async (resolve, reject) => {
                     try {
-                        let response = await userRoute.post(this.accessURL, { email: this.email, password: this.password });
-                        console.log(response);
-                        resolve(response.data.token);
+                        await userRoute.post(this.accessURL, data);
+                        resolve("Success");
                     } catch (err) {
-                        if (Number(err.response.status) === 404) {
-                            reject(["Email sau parola gresite"]);
-                        }
-                        reject(err);
+                        console.log(err);
+                        reject(["Erroare la trimiterea datelor, mai incearca"]);
                     }
                 })
             }
