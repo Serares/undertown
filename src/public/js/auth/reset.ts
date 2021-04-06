@@ -96,9 +96,6 @@ export const resetController = () => {
                 })
 
             }
-        },
-        mounted() {
-            console.log(this.restToken);
         }
     });
 }

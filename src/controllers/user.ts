@@ -104,10 +104,16 @@ export const postLogin = (req: Request, res: Response, next: NextFunction) => {
  * @route GET /adauga-properietate
  */
 export const getSubmitProperty = (req: Request, res: Response, next: NextFunction) => {
-  return res.render("pages/submit_property", {
-    pageTitle: "Adauga",
-    path: "/adauga-proprietate"
-  });
+  // TODO add a better route validation than this
+  let isLoggedIn = Number(req.query.logged);
+  if (isLoggedIn) {
+    return res.render("pages/submit_property", {
+      pageTitle: "Adauga",
+      path: "/adauga-proprietate"
+    });
+  } else {
+    return res.status(301).redirect('/login');
+  }
 }
 
 /**
@@ -144,7 +150,6 @@ export const getResetPassword = (req: Request, res: Response, next: NextFunction
  * @route POST /user/resetPassword
  */
 export const postResetPassword = async (req: Request, res: Response, next: NextFunction) => {
-
   try {
     await body("password", "Password needs minimum 5 characters").isLength({ min: 5 }).run(req);
     //TODO get the user from db_api
@@ -198,7 +203,7 @@ export const postForgotPassword = async (req: Request, res: Response, next: Next
 
     const signSecret = user.password;
     const token = jwt.sign({ id: user.id, email: user.email }, signSecret);
-    
+
     const email = {
       to: req.body.email,
       from: CONTACT_EMAIL,
