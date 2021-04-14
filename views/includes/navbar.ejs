@@ -1,64 +1,63 @@
 <link rel="stylesheet" href="/css/nav-bar.css">
 <div class="main_header_1" id="navigation_component">
-        <div class="container">
-                <div class="row">
-                        <div class="col-md-12 col-sm-12" id="navbarApp">
-                                <nav class="navbar navbar-expand-lg">
-                                  <a class="navbar-brand" href="/">
-                                    <img class="nav-logo" src="/img/ut-navlogo-transp.png" alt="logo">
-                                  </a>
-                                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                          <span class="navbar-toggler-icon"></span>
-                                        </button>
-                                      
-                                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                                          <ul class="navbar-nav mr-auto">
-                                            <li class="nav-item"> <a
-                                              class="nav-link <%= path === '/' ? 'active' : '' %>"
-                                              href="/">Acasa</a>
-                              </li>
-                              <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle <%= path.indexOf('chirii') > -1 ? 
-                                'active' : '' %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  Chirii
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                  <% for (propType of propertyTypes) {%>
-                                    <a class="dropdown-item" href="/chirii-<%= propType[1]["display"].toLowerCase()%>"><%- propType[1]["display"]%></a>
-                                    <%} %>
-                                </div>
-                              </li>
-                              <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle <%= path.indexOf('vanzari') > -1 ? 
-                                'active' : '' %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Vanzari
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                  <% for (propType of propertyTypes) {%>
-                                    <a class="dropdown-item" href="/vanzari-<%= propType[1]["display"].toLowerCase()%>"><%- propType[1]["display"]%></a>
-                                    <%} %>
-                                </div>
-                              </li>
-                              <li class="nav-item"> <a
-                                              class="nav-link <%= path === '/despre' ? 'active' : '' %>"
-                                              href="/despre">Despre noi</a>
-                              </li>
-                              <li class="nav-item"> <a
-                                              class="nav-link <%= path === '/contact' ? 'active' : '' %>"
-                                              href="/contact">Contact</a></li>
-                                      <li class="nav-item" v-if="isLoggedIn"> <a @click="logOut" class="nav-link" href="#"
-                                              id="basic_logout">Delogare</a></li>
-                                      <li class="nav-item" v-if="!isLoggedIn"> <a
-                                              class="nav-link <%= path === '/signup' ? 'active' : '' %>"
-                                              href="/creare-cont">Creează cont</a></li>
-                              <li class="nav-item" v-if="!isLoggedIn"> <a
-                                              class="nav-link <%= path === '/login' ? 'active' : '' %>"
-                                              href="/autentificare">Intră in cont</a></li>
-                                          </ul>
-                                          <div @click="getAddProperty" class="submit_property ml-2"><button class="btn btn_primary_bg">Adauga proprietate</button></div>
-                                        </div>
-                                      </nav>
-                        </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-sm-12" id="navbarApp">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <a class="navbar-brand" href="/">
+            <img class="nav-logo" src="/img/ut-navlogo-transp.png" alt="logo">
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item"> <a class="nav-link <%= path === '/' ? 'active' : '' %>" href="/">Acasa</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle <%= path.indexOf('chirii') > -1 ? 
+                                'active' : '' %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Chirii
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <% for (propType of propertyTypes) {%>
+                    <a class="dropdown-item" href="/chirii-<%= propType[1]["display"].toLowerCase()%>"><%-
+                        propType[1]["display"]%></a>
+                    <%} %>
                 </div>
-        </div>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle <%= path.indexOf('vanzari') > -1 ? 
+                                'active' : '' %>" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  Vanzari
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <% for (propType of propertyTypes) {%>
+                    <a class="dropdown-item" href="/vanzari-<%= propType[1]["display"].toLowerCase()%>"><%-
+                        propType[1]["display"]%></a>
+                    <%} %>
+                </div>
+              </li>
+              <li class="nav-item"> <a class="nav-link <%= path === '/despre' ? 'active' : '' %>" href="/despre">Despre
+                  noi</a>
+              </li>
+              <li class="nav-item"> <a class="nav-link <%= path === '/contact' ? 'active' : '' %>"
+                  href="/contact">Contact</a></li>
+              <li class="nav-item" v-if="isLoggedIn"> <a @click="logOut" class="nav-link" href="#"
+                  id="basic_logout">Delogare</a></li>
+              <li class="nav-item" v-if="!isLoggedIn"> <a class="nav-link <%= path === '/signup' ? 'active' : '' %>"
+                  href="/creare-cont">Creează cont</a></li>
+              <li class="nav-item" v-if="!isLoggedIn"> <a class="nav-link <%= path === '/login' ? 'active' : '' %>"
+                  href="/autentificare">Intră in cont</a></li>
+            </ul>
+            <div @click="getAddProperty" class="submit_property ml-2"><button class="btn btn_primary_bg">Adauga
+                proprietate</button></div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
 </div>

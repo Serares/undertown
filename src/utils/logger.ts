@@ -1,7 +1,6 @@
 import winston from "winston";
-const timeNow = new Date().toTimeString();
+export const timeNow = `${new Date().toLocaleDateString()} ${new Date().toTimeString()}`;
 
-//TODO use logger in all classes
 const options: winston.LoggerOptions = {
     transports: [
         new winston.transports.Console({

@@ -11,8 +11,6 @@ import aboutRouter from "./routes/about";
 import contactRouter from './routes/contact';
 import userRouter from './routes/user';
 import "./config/passport";
-
-import { GCS_BUCKET } from "./utils/secrets";
 import { PropertyTypes, TransactionTypes } from "./modelView/values";
 
 const app = express();
@@ -21,7 +19,6 @@ app.set("views", path.join(process.cwd(), "views"));
 app.set("view engine", "ejs");
 
 app.use(express.static(path.join(process.cwd(),"dist","public")));
-
 
 app.use(helmet());
 app.use(compression());

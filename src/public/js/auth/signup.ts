@@ -1,4 +1,4 @@
-import { userRoute } from '../../../services/axios';
+import { userRoute } from '../../../services/clientRequests';
 import Vue from 'vue';
 
 export const signUpController = () => {
@@ -20,17 +20,11 @@ export const signUpController = () => {
             formSubmit: function (e: Event) {
                 this.checkForm(e)
                     .then(this.sendUserData)
-                    .then(this.redirectToLogin)
+                    .then(() => { window.location.pathname = "/autentificare"; })
                     .catch((err) => {
                         //@ts-ignore
-                        this.errors.push(...err);
+                        this.errors.push(err);
                     })
-            },
-            redirectToLogin: function () {
-                return new Promise(resolve => {
-                    // window.location.pathname = "/autentificare";
-                    resolve("Redirect success");
-                })
             },
             checkForm: function (e: Event) {
                 e.preventDefault();
@@ -68,7 +62,7 @@ export const signUpController = () => {
                         resolve("Success");
                     } catch (err) {
                         console.log(err);
-                        reject(["Erroare la trimiterea datelor, mai incearca"]);
+                        reject("Erroare la trimiterea datelor, mai incearca");
                     }
                 })
             }

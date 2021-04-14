@@ -1,11 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
-import passport from 'passport';
-import { TOKEN_SECRET, SENDGRID_API_KEY, CONTACT_EMAIL } from '../utils/secrets';
-import { body, checkSchema, sanitize, validationResult } from 'express-validator';
-
+import { SENDGRID_API_KEY, CONTACT_EMAIL } from '../utils/secrets';
+import { body, sanitize, validationResult } from 'express-validator';
+import { IRequestUserCredentials } from '../interfaces/IRequestUserCredentials';
+import { EPropertyTypes } from '../interfaces/EPropertyTypes';
+import ISubmitedProperty from '../interfaces/ISubmitedProperty';
+import { dbApiRequest } from '../services/serverRequests';
+import logger, { timeNow } from '../utils/logger';
 import sendgridApi from '@sendgrid/mail';
+
 sendgridApi.setApiKey(SENDGRID_API_KEY);
+
+const sendJSONresponse = function (res: Response, status: number, content: any) {
+  res.status(status).json(content);
+};
 
 let getGigi = (email?: string, id?: string): Promise<any> => {
   return new Promise((resolve, reject) => {
@@ -46,18 +53,31 @@ export const postSignup = async (req: Request, res: Response, next: NextFunction
 
   if (!errors.isEmpty()) {
     // TODO log in winston
-    return res.status(401).json({
+    return sendJSONresponse(res, 401, {
       errors,
       message: "Validation failed"
-    });
+    })
   }
 
-  // send user data to db_api and save the user
+  let dbData = {
+    email: req.body.email,
+    password: req.body.password,
+    name: req.body.name,
+    phoneNumber: req.body.phoneNumber
+  };
 
-  return res.json({
-    message: "Registration success",
-    user: req.body.email
-  })
+  try {
+    const response = await dbApiRequest.post("/user/signup", dbData);
+    return sendJSONresponse(res, 200, response.data);
+  } catch (err) {
+    if (err.response && err.response.status) {
+      logger.debug("Error postSignup -> " + timeNow);
+      return sendJSONresponse(res, err.response.status, err.response.data);
+    }
+
+    return sendJSONresponse(res, 500, { message: "Server error" });
+  }
+
 }
 
 /**
@@ -73,31 +93,37 @@ export const getLogin = (req: Request, res: Response, next: NextFunction) => {
 /**
  * @route POST /user/login
  */
-export const postLogin = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate('login', (err, user, info) => {
-    try {
-      if (err) {
-        const error = new Error('An error occurred.');
+export const postLogin = async (req: Request, res: Response, next: NextFunction) => {
+  await body("email", "Email is not valid").isEmail().run(req);
+  await body("password", "Password must be at least 4 characters long").isLength({ min: 4 }).run(req);
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  await body("email").normalizeEmail({ gmail_remove_dots: false }).run(req);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return sendJSONresponse(res, 401, {
+      errors,
+      message: "Validation failed"
+    })
+  }
 
-        return next(error);
-      }
+  try {
+    const data = {
+      email: req.body.email,
+      password: req.body.password
+    };
 
-      if (!user) {
-        return res.status(404).json({ message: "User not found" })
-      }
-
-      req.login(user, { session: false }, (error) => {
-        if (error) return next(error);
-
-        const payload = { id: user.id, name: user.name, email: user.email };
-        const token = jwt.sign({ user: payload }, TOKEN_SECRET, { expiresIn: "7d" });
-
-        return res.status(200).json({ token });
-      });
-    } catch (error) {
-      return next(error);
+    let response = await dbApiRequest.post("/user/login", data);
+    //TODO find out how the response looks
+    console.log(response);
+    return sendJSONresponse(res, 200, response.data);
+  } catch (err) {
+    if (err.response && err.response.status) {
+      logger.debug("Error postSubmitProperty -> " + timeNow);
+      return sendJSONresponse(res, err.response.status, err.response.data);
     }
-  })(req, res, next);
+
+    return sendJSONresponse(res, 500, { message: "Server error" });
+  }
 }
 
 /**
@@ -117,10 +143,46 @@ export const getSubmitProperty = (req: Request, res: Response, next: NextFunctio
 }
 
 /**
- * @route POST /user/submitProperty
+ * @route POST /adauga-proprietate
  */
-export const postSubmitProperty = (req: Request, res: Response, next: NextFunction) => {
-  // TODO
+export const postSubmitProperty = async (req: IRequestUserCredentials, res: Response, next: NextFunction) => {
+  try {
+
+    let propertyData: ISubmitedProperty = {
+      title: req.body.title,
+      description: req.body.description,
+      transactionType: req.body.transactionType,
+      propertyType: req.body.propertyType,
+      surface: req.body.surface,
+      rooms: null,
+      price: req.body.price,
+      address: req.body.address
+    }
+
+    if (propertyData.propertyType !== EPropertyTypes.LANDANDCOMMERCIAL) {
+      propertyData.rooms = req.body.rooms;
+    }
+
+    if (req.files && req.tokenPayload) {
+      propertyData.imagesURL = req.tokenPayload.imagesURL
+    }
+
+    let objectForDb = {
+      userEmail: req.tokenPayload.email,
+      submitedProperty: propertyData
+    };
+
+
+    let response = await dbApiRequest.post("/user/submitProperty", objectForDb);
+    return sendJSONresponse(res, 200, response.data);
+  } catch (err) {
+    if (err.response && err.response.status) {
+      logger.debug("Error postSubmitProperty -> " + timeNow);
+      return sendJSONresponse(res, err.response.status, err.response.data);
+    }
+
+    return sendJSONresponse(res, 500, { message: "Server error" });
+  }
 }
 
 /**
@@ -130,13 +192,14 @@ export const getResetPassword = (req: Request, res: Response, next: NextFunction
   try {
     let tokenPayload = req.params.resetToken.split(".")[1];
 
+    /* payload structure {shortId: string, email: string} */
     const parsedPayload = Buffer.from(tokenPayload, "base64").toString("binary");
 
     //TODO check if user exists on db
     return res.render("pages/auth/reset", {
       pageTitle: "Resetare parola",
       path: "/resetare-parola",
-      userId: JSON.parse(parsedPayload).id,
+      userId: JSON.parse(parsedPayload).shortId,
       resetToken: req.params.resetToken,
     })
   } catch (err) {
@@ -152,23 +215,19 @@ export const getResetPassword = (req: Request, res: Response, next: NextFunction
 export const postResetPassword = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await body("password", "Password needs minimum 5 characters").isLength({ min: 5 }).run(req);
-    //TODO get the user from db_api
-    const user = await getGigi(null, req.body.userId);
     const errors = validationResult(req);
     if (!errors.isEmpty) {
       return res.status(401).json({ message: "Errors", errors });
     }
-    jwt.verify(req.body.resetToken, user.password, (err: any, decoded: any) => {
-      if (err) {
-        throw err;
-      }
-      // TODO change the password in db_api
-      return res.status(200).json({ message: "Password changed to" + req.body.password })
+    const response = await dbApiRequest.post("/user/resetPassword", {
+      shortId: req.body.userId,
+      newPassword: req.body.password,
+      token: req.body.resetToken
     });
-
+    return sendJSONresponse(res, 200, { message: "Password reset success" });
   } catch (err) {
-    console.log(err);
     //TODO winston log
+    console.log(err);
     res.status(500).json({ message: "Something went wrong" })
   }
 
@@ -194,41 +253,41 @@ export const postForgotPassword = async (req: Request, res: Response, next: Next
 
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({
+      return sendJSONresponse(res, 400, {
         message: "Data is not correct"
       })
     }
-    // TODO get the user from db_api
-    let user = await getGigi(req.body.email);
 
-    const signSecret = user.password;
-    const token = jwt.sign({ id: user.id, email: user.email }, signSecret);
+    const response = await dbApiRequest.post("/user/forgotPassword", { email: req.body.email });
 
     const email = {
       to: req.body.email,
       from: CONTACT_EMAIL,
       subject: "UNDERTOWN MESAJ",
       html: `
-    <h2>Numele: ${user.name}</h2>
-    <h2>Email: ${user.email} </h2>
+    <h2>Numele: ${response.data.name}</h2>
+    <h2>Email: ${response.data.email} </h2>
     <p>Acceseaza linkul de mai jos ca sa-ti resetezi parola</p>
-    <a href="${req.protocol}://${req.get("host")}/resetare-parola/${token}">Link de resetare</a>
+    <a href="${req.protocol}://${req.get("host")}/resetare-parola/${response.data.token}">Link de resetare</a>
   `
     };
 
     sendgridApi.send(email)
       .then((data) => {
-        return res.status(200).json({ message: "Email trimis, cu succes" })
+        return sendJSONresponse(res, 200, { message: "Email trimis, cu succes" });
       })
       .catch((err) => {
         console.log("Eroare trimitere email", req.body.email, err);
-        return res.status(401).json({ message: "Emailul nu a putut fi trimis" })
+        return sendJSONresponse(res, 401, { message: "Emailul nu a putut fi trimis" });
       });
 
   } catch (err) {
-    //TODO winston log
     console.log(err);
-    res.status(500).json({ message: "Something went wrong" });
+    logger.debug("Error in forgotPassword-> " + timeNow);
+    return sendJSONresponse(res, 500, { message: "Something went wrong" });
   }
 }
 
+/**
+ *
+ */

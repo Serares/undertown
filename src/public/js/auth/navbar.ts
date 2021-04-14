@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { isTokenValid } from './utils/methods';
 
 export const navbarController = () => {
     /**
@@ -22,32 +23,23 @@ export const navbarController = () => {
                 window.localStorage.removeItem("token");
                 this.isLoggedIn = false;
             },
-            getAddProperty: function (e: Event) {
+            getAddProperty: function (e: Event) { 
                 if (!this.isLoggedIn) {
                     window.location.pathname = this.redirectUrl;
                 } else {
                     // send request for get add property
                     // add query parameters to validate on server if it's logged in
                     // also validation happens on FE
-                    window.location.pathname = `${this.addPropertyUrl}?logged=${this.isLoggedIn ? 1 : 0}`;
+                    let redirectUrl = new URL(window.location.origin);
+                    redirectUrl.pathname = this.addPropertyUrl;
+                    redirectUrl.searchParams.append("logged", this.isLoggedIn ? "1" : "0");
+                    window.location.href = redirectUrl.href;
                 }
             },
-            isTokenValid: function (): Promise<boolean> {
-                // TODO externalize this method
-                return new Promise((resolve) => {
-                    let token = window.localStorage.getItem("token");
-                    if (token) {
-                        let payload = JSON.parse(window.atob(token.split(".")[1]));
-                        let isTokenValid = payload.exp > Date.now() / 1000;
-                        return resolve(isTokenValid);
-                    } else {
-                        resolve(false);
-                    }
-                })
-            }
+
         },
         mounted() {
-            this.isTokenValid()
+            isTokenValid()
                 .then((bool) => {
                     this.isLoggedIn = bool;
                 })
