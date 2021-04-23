@@ -145,9 +145,8 @@ export const addPropertyController = () => {
                     address: null
                 },
                 user: {
-                    name: null,
-                    email: null,
-                    phone: null
+                    shortId: null,
+                    email: null
                 }
             };
         },
@@ -215,7 +214,7 @@ export const addPropertyController = () => {
                         });
 
                         Object.entries(this.formInputData).forEach((value) => {
-                            formData.append(value[0], JSON.stringify(value[1]));
+                            formData.append(value[0], value[1] || "");
                         })
                         let response = await tokenHeaderRequest.post(this.sendDataUrl, formData);
                         //@ts-ignore
@@ -308,9 +307,9 @@ export const addPropertyController = () => {
                         return;
                     }
                     //@ts-ignore
-                    this.user.name = token.user.name;
+                    this.user.shortId = token.shortId;
                     //@ts-ignore
-                    this.user.email = token.user.email;
+                    this.user.email = token.email;
                 })
         }
     });

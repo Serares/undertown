@@ -1,4 +1,4 @@
-import { userRoute } from '../../../services/axios';
+import { userRoute } from '../../../services/clientRequests';
 import Vue from 'vue';
 
 export const forgotController = () => {

@@ -11,3 +11,4 @@
 coverage
 debug.log
 app.yaml
+package-lock.json

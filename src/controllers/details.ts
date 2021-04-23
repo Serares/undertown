@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import faker from 'faker';
-import { dbApi } from '../services/axios';
+import { dbApiRequest } from '../services/serverRequests';
 
 
 // TODO create propertyDetails type
@@ -73,12 +73,12 @@ export const getHouse = (req: Request, res: Response, next: NextFunction) => {
         .catch(err => {
             next(err);
         })
-        */
+    */
     let fakedDetailsPage = {
         shortId: faker.random.number(1000),
         price: faker.random.number(10000),
         propertyType: faker.random.number(3) || 1,
-        images: ["https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg", "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg"],
+        imagesUrls: ["https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg", "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg"],
         title: "Luxury Apartment Shuttle",
         address: faker.address.county(),
         features: {
@@ -92,7 +92,7 @@ export const getHouse = (req: Request, res: Response, next: NextFunction) => {
             orientation: "Sud-Vest"
         },
         // longitude latitude order
-        localization: [25, 44],
+        coords: [25, 44],
         description: faker.lorem.paragraph(),
         utilities: {
             general: ["Curent", "Apa", "Canalizare"],

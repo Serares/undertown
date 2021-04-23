@@ -11,6 +11,8 @@ export interface IRequestUserCredentials extends Request {
         shortId: string,
         email: string,
         name?: string,
-        imagesURL?: string[]
+        imagesUrls?: string[],
+        //uuid used to keep track of gcs subdirectory of posted images
+        subdirectoryId: string,
     }
 }

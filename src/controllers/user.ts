@@ -7,12 +7,11 @@ import ISubmitedProperty from '../interfaces/ISubmitedProperty';
 import { dbApiRequest } from '../services/serverRequests';
 import logger, { timeNow } from '../utils/logger';
 import sendgridApi from '@sendgrid/mail';
-
+import faker from 'faker';
+import { sendJSONresponse } from '../utils/sendjsonresponse';
 sendgridApi.setApiKey(SENDGRID_API_KEY);
 
-const sendJSONresponse = function (res: Response, status: number, content: any) {
-  res.status(status).json(content);
-};
+
 
 let getGigi = (email?: string, id?: string): Promise<any> => {
   return new Promise((resolve, reject) => {
@@ -157,15 +156,16 @@ export const postSubmitProperty = async (req: IRequestUserCredentials, res: Resp
       rooms: null,
       price: req.body.price,
       address: req.body.address
-    }
+    };
 
     if (propertyData.propertyType !== EPropertyTypes.LANDANDCOMMERCIAL) {
       propertyData.rooms = req.body.rooms;
-    }
+    };
 
     if (req.files && req.tokenPayload) {
-      propertyData.imagesURL = req.tokenPayload.imagesURL
-    }
+      propertyData.imagesUrls = req.tokenPayload.imagesUrls;
+      propertyData.gcsSubfolderId = req.tokenPayload.subdirectoryId;
+    };
 
     let objectForDb = {
       userEmail: req.tokenPayload.email,
@@ -174,7 +174,9 @@ export const postSubmitProperty = async (req: IRequestUserCredentials, res: Resp
 
 
     let response = await dbApiRequest.post("/user/submitProperty", objectForDb);
-    return sendJSONresponse(res, 200, response.data);
+    if (response.data) {
+      return sendJSONresponse(res, 200, response.data);
+    }
   } catch (err) {
     if (err.response && err.response.status) {
       logger.debug("Error postSubmitProperty -> " + timeNow);
@@ -288,6 +290,3 @@ export const postForgotPassword = async (req: Request, res: Response, next: Next
   }
 }
 
-/**
- *
- */
