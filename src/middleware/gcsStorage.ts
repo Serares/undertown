@@ -2,13 +2,14 @@ import { Request } from "express";
 import multer from "multer";
 import { GCS_BUCKET, GCLOUD_PROJECT_ID } from '../utils/secrets';
 import { IRequestUserCredentials } from "../interfaces/IRequestUserCredentials";
-import logger from "../utils/logger";
+import logger, { timeNow } from "../utils/logger";
 import path from 'path';
 import { nanoid } from 'nanoid';
 
 const serviceKey = path.join(process.cwd(), "config", "keys.json");
 console.log(serviceKey);
 import { Storage } from '@google-cloud/storage';
+import { sendJSONresponse } from "../utils/sendjsonresponse";
 // TODO search other ways of accessing cloud storage besides service accounts
 //TODO add the keys from keys.json to .env and from them create the file at runtime
 const storage = new Storage({
@@ -43,6 +44,7 @@ export const uploadMulter = multer({
     },
 });
 
+// TODO all the upload method should be moved to db_api
 export const sendUploadToGCS = (req: IRequestUserCredentials, res: any, next: any) => {
     if (!req.files && !req.body) {
         return next();
@@ -50,7 +52,7 @@ export const sendUploadToGCS = (req: IRequestUserCredentials, res: any, next: an
     /**
      * subdirectory will be a unique id created when images are uploaded, it will reference the submited GCS images
      */
-    let subdirectory = nanoid(4);
+    let subdirectory = nanoid(7);
 
     if (!subdirectory) {
         return res.status(401).json({ message: "No id generated" })
@@ -95,8 +97,28 @@ export const sendUploadToGCS = (req: IRequestUserCredentials, res: any, next: an
     Promise.all(promises)
         .then(data => {
             promises = [];
-            req.user.payload.user.imagesURL = uploadedImagesUrls;
+            req.tokenPayload.imagesUrls = uploadedImagesUrls;
+            //TODO it's not the best way to do this 
+            req.tokenPayload.subdirectoryId = subdirectory;
             next();
         })
         .catch(next);
+}
+
+
+export const removeUserSubmitedImages = (req: Request, res: any, next: any) => {
+    if (req.params.subfolderId) {
+        //TODO if subfolderID is undefined no error will be thrown so be carefull
+        // because response will be 200 even if nothing is deleted
+        bucket.deleteFiles({ prefix: `userProperties/${req.params.subfolderId}` }, function (err) {
+            if (err) {
+                logger.debug("Error deleting gcs images -> removeUserSubmitedImages " + timeNow + " " + err);
+                sendJSONresponse(res, 500, { message: "error deleting files" })
+            }
+
+            sendJSONresponse(res, 200, { message: "Images deleted success" });
+        })
+    } else {
+        sendJSONresponse(res, 401, { message: "No subfolder id provided" });
+    }
 }
