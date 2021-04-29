@@ -10,7 +10,6 @@ import detailsRouter from './routes/details';
 import aboutRouter from "./routes/about";
 import contactRouter from './routes/contact';
 import userRouter from './routes/user';
-import storageRouter from './routes/storage';
 
 import "./config/passport";
 import { PropertyTypes, TransactionTypes } from "./modelView/values";
@@ -62,7 +61,6 @@ app.use(aboutRouter);
 app.use(contactRouter);
 app.use(userRouter);
 app.use("/", homeRouter);
-app.use("/storage", storageRouter);
 app.use(ErrorRouter);
 
 
