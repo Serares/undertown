@@ -46,7 +46,7 @@ export const PropertyCard: React.FunctionComponent<PropetyCardProps> = ({ proper
   const { thumbnail, title, address, propertyType, transactionType } = propertyValues;
 
   let features: any = {
-    surface: propertyValues.surface,
+    surface: propertyValues.features.usableArea,
     price: propertyValues.price
   };
 
@@ -75,6 +75,17 @@ export const PropertyCard: React.FunctionComponent<PropetyCardProps> = ({ proper
     return url;
   }
 
+  const thumbnailUrlGenerator = (url: string) => {
+    let baseUrl = "";
+    if (!(url.indexOf("http") > -1)) {
+      baseUrl += "https://storage.googleapis.com/undertowndevelopment/";
+    };
+
+    baseUrl += url;
+
+    return baseUrl;
+  }
+
   return (
     <Grid item md={12} sm={12}>
       <Card className={classes.root}>
@@ -82,7 +93,8 @@ export const PropertyCard: React.FunctionComponent<PropetyCardProps> = ({ proper
           <a href={propertyUrl()}>
             <CardMedia
               className={classes.media}
-              image={thumbnail}
+              // TODO don't hardcode urls
+              image={thumbnailUrlGenerator(thumbnail)}
               title="Imagine"
             />
           </a>

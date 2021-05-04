@@ -3,13 +3,30 @@ import { PropertyTypes, TransactionTypes, ModelViewDictionary } from "../modelVi
 import { CustomError } from "../utils/Error";
 import { ICardProperty } from "../interfaces/ICardProperty";
 import faker from "faker";
+import { dbApiRequest } from '../services/serverRequests';
+import { EPropertyTypes } from "../interfaces/EPropertyTypes";
+import { sendJSONresponse } from "../utils/sendjsonresponse";
 
 type GetListingsRequest = Request & {
     params: {
         propertyType: "1" | "2" | "3",
         transactionType: "1" | "2"
     }
+};
+
+const dbApiEndpoints = {
+    [EPropertyTypes.APARTMENT]: "/admin/getAllApartments/",
+    [EPropertyTypes.HOUSE]: "/admin/getAllHouses/",
+    [EPropertyTypes.LANDANDCOMMERCIAL]: "/admin/getAllLands/"
 }
+
+const getAllPropertiesEndpoinGenerator = (propertyType: string, transactionType: string) => {
+    let str = "";
+    //@ts-ignore
+    str = str.concat(dbApiEndpoints[Number(propertyType)]);
+    str = str.concat(transactionType);
+    return str;
+};
 
 type RenderListingsPageFunction = (req: Request, res: Response, next: NextFunction, urlInfo: [ModelViewDictionary, ModelViewDictionary]) => void;
 
@@ -61,35 +78,23 @@ export const getListings = async (req: GetListingsRequest, res: Response, next: 
 
     // let fetchedData: Array<ICardProperty> = cardsProperties;
 
-    let fetchedData: Array<ICardProperty> = [];
-
-    for (let i = 0; i < 20; i++) {
-        let prop: ICardProperty = {
-            shortId: faker.random.number(10000),
-            thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
-            propertyType: Number(req.params.propertyType),
-            title: faker.address.city(),
-            address: faker.address.county(),
-            surface: +faker.finance.amount(50, 500),
-            rooms: faker.random.number(4) || 1,
-            price: +faker.finance.amount(100, 1000),
-            transactionType: Number(req.params.transactionType)
-        };
-        //@ts-ignore
-        fetchedData.push(prop);
-    }
+    // let fetchedData: Array<ICardProperty> = [];
+    const transactionType = req.params.transactionType;
+    const propertyType = req.params.propertyType;
+    let dbEndpoint = getAllPropertiesEndpoinGenerator(propertyType, transactionType);
 
     try {
+        const response = await dbApiRequest.get(dbEndpoint);
+        const properties: ICardProperty[] = response.data;
         // axios request to /db_api
         return res.status(200).json({
-            properties: fetchedData,
+            properties: properties,
             propertyType: Number(req.params.propertyType),
             transactionType: Number(req.params.transactionType)
         })
 
     } catch (err) {
-        //TODO make a function to avoid repetition
-        res.status(500).json({ message: "Error occured" })
+        return sendJSONresponse(res, 500, "Error occured -> getListings")
     }
 
 }

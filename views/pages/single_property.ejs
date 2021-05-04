@@ -42,9 +42,9 @@
                                 <div class="col-md-12">
                                     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                                         <div class="carousel-inner">
-                                            <% for(let i=0; i< propertyInfo.images.length; i++) {%>
+                                            <% for(let i=0; i< propertyInfo.imagesUrls.length; i++) {%>
                                                 <div class="carousel-item <%- i === 0 ? "active" : "" %>">
-                                                    <img class="d-block w-100" src="<%- propertyInfo.images[i] %>" alt="slide">
+                                                    <img class="d-block w-100" src="<%-baseImageUrl + propertyInfo.imagesUrls[i] %>" alt="slide">
                                                 </div>
                                             <% } %>
                                         </div>
@@ -84,9 +84,9 @@
                                             %>
                                             <%- include("../includes/details/apartment", {propertyInfo: propertyInfo}) %>
                                         <% break; case(2):%>
-                                        <%- include("../includes/details/apartment", {propertyInfo: propertyInfo}) %>
+                                        <%- include("../includes/details/house", {propertyInfo: propertyInfo}) %>
                                         <% break; case(3): %>
-                                        <%- include("../includes/details/apartment", {propertyInfo: propertyInfo}) %>
+                                        <%- include("../includes/details/land", {propertyInfo: propertyInfo}) %>
                                         <% break; 
                                     } %>
                                     </div>
@@ -112,7 +112,7 @@
             <!-- Find Part Satrt -->
             <a href="#" id="scroll"><i class="fas fa-arrow-up"></i></a>
             <!-- Find Part Satrt -->
-            <input type="hidden" name="lngLat" value="<%- propertyInfo.localization %>" />
+            <input type="hidden" name="lngLat" value="<%- propertyInfo.coords %>" />
         </div>
     </div>
     <!-- Wrapper End -->

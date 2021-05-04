@@ -24,10 +24,10 @@
                           <% switch(propertyInfo.propertyType) {
                             case(1):
                             case(2): %>
-                            <%- include('./details/housing.ejs' , {rooms: propertyInfo.rooms, surface: propertyInfo.surface}) %>
+                            <%- include('./details/housing.ejs' , {rooms: propertyInfo.rooms, surface: propertyInfo.features.usableArea}) %>
                             <% break;
                             case(3): %>
-                            <%- include('./details/land.ejs' , {surface: propertyInfo.surface}) %>
+                            <%- include('./details/land.ejs' , {surface: propertyInfo.features.usableArea}) %>
                             <% break;
                         } %>
                       </ul>

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import faker from 'faker';
+import { sendJSONresponse } from '../utils/sendjsonresponse';
 import { dbApiRequest } from '../services/serverRequests';
 
 
@@ -9,131 +9,59 @@ const renderDetailsPage = (req: Request, res: Response, next: NextFunction, prop
         propertyInfo: propertyDetails,
         pageTitle: propertyDetails.title,
         //TODO path
-        path: "/TODO"
+        path: `${propertyDetails.title}`
     })
 }
 
 /**
  * @route GET /transactionType-apartamante/:shortId
  */
-export const getApartment = (req: Request, res: Response, next: NextFunction) => {
-    /*
-    dbApi.get(`/${}-`)
-        .then((data) => {
-            renderDetailsPage(req, res, next, data);
-        })
-        .catch(err => {
-            next(err);
-        })
-        */
-    let fakedDetailsPage = {
-        shortId: faker.random.number(1000),
-        price: faker.random.number(10000),
-        propertyType: faker.random.number(3) || 1,
-        images: ["https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg", "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg"],
-        title: "Luxury Apartment Shuttle",
-        address: faker.address.county(),
-        features: {
-            rooms: faker.random.number(4),
-            buildingType: "bloc",
-            partitioning: "decomandat",
-            floor: 4,
-            comfort: "lucs",
-            usableArea: faker.random.number(50),
-            totalUsableArea: faker.random.number(50),
-            constructionYear: "2005",
-            structure: "beton",
-            buildingHeight: "S+P+4 Etaje",
-            orientation: "Sud-Vest"
-        },
-        // longitude latitude order
-        localization: [25, 44],
-        description: faker.lorem.paragraph(),
-        utilities: {
-            general: ["Curent", "Apa", "Canalizare"],
-            heatingSystem: ["Centrala Proprie"],
-            conditioning: ["Aer conditionat"],
-        },
-        amenities: {
-            building: ["Interfon", "Curte"]
-        }
-    };
-    return renderDetailsPage(req, res, next, fakedDetailsPage)
+export const getApartment = async (req: Request, res: Response, next: NextFunction) => {
+    const shortId = req.params.shortId;
+    if (!shortId) {
+        return sendJSONresponse(res, 401, "No id provided");
+    }
+    try {
+        const response = await dbApiRequest.get(`/admin/getApartment/${shortId}`);
+        return renderDetailsPage(req, res, next, response.data);
+
+    } catch (err) {
+        sendJSONresponse(res, 500, "Server error");
+    }
 }
 
 /**
  * @route GET /transactionType-case/:shortId
  */
-export const getHouse = (req: Request, res: Response, next: NextFunction) => {
-    /*
-    dbApi.get(`/${}-`)
-        .then((data) => {
-            renderDetailsPage(req, res, next, data);
-        })
-        .catch(err => {
-            next(err);
-        })
-    */
-    let fakedDetailsPage = {
-        shortId: faker.random.number(1000),
-        price: faker.random.number(10000),
-        propertyType: faker.random.number(3) || 1,
-        imagesUrls: ["https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg", "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg"],
-        title: "Luxury Apartment Shuttle",
-        address: faker.address.county(),
-        features: {
-            rooms: faker.random.number(4),
-            buildingType: "bloc",
-            comfort: "lucs",
-            usableArea: faker.random.number(50),
-            totalUsableArea: faker.random.number(50),
-            constructionYear: "2005",
-            structure: "beton",
-            orientation: "Sud-Vest"
-        },
-        // longitude latitude order
-        coords: [25, 44],
-        description: faker.lorem.paragraph(),
-        utilities: {
-            general: ["Curent", "Apa", "Canalizare"],
-            heatingSystem: ["Centrala Proprie"],
-            conditioning: ["Aer conditionat"],
-        },
-        amenities: {
-            building: ["Interfon", "Curte"]
-        }
-    };
-    return renderDetailsPage(req, res, next, fakedDetailsPage)
+export const getHouse = async (req: Request, res: Response, next: NextFunction) => {
+    const shortId = req.params.shortId;
+    if (!shortId) {
+        return sendJSONresponse(res, 401, "No id provided");
+    }
+    try {
+        const response = await dbApiRequest.get(`/admin/getHouse/${shortId}`);
+        return renderDetailsPage(req, res, next, response.data);
+
+    } catch (err) {
+        sendJSONresponse(res, 500, "Server error");
+    }
+
 }
 
 /**
  * @route GET /transactionType-terenuri/:shortId 
  */
-export const getLand = (req: Request, res: Response, next: NextFunction) => {
-    /*
-    dbApi.get(`/${}-`)
-        .then((data) => {
-            renderDetailsPage(req, res, next, data);
-        })
-        .catch(err => {
-            next(err);
-        })
-        */
-    // TODO create land .ejs
-    let fakedDetailsPage = {
-        shortId: faker.random.number(1000),
-        price: faker.random.number(10000),
-        propertyType: faker.random.number(3) || 1,
-        images: ["https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg", "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg"],
-        title: "Luxury Apartment Shuttle",
-        address: faker.address.county(),
-        features: {
-            usableArea: faker.random.number(50),
-            totalUsableArea: faker.random.number(50)
-        },
-        // longitude latitude order
-        localization: [25, 44],
-        description: faker.lorem.paragraph()
-    };
-    return renderDetailsPage(req, res, next, fakedDetailsPage)
+export const getLand = async (req: Request, res: Response, next: NextFunction) => {
+    const shortId = req.params.shortId;
+    if (!shortId) {
+        return sendJSONresponse(res, 401, "No id provided");
+    }
+    try {
+        const response = await dbApiRequest.get(`/admin/getLand/${shortId}`);
+        return renderDetailsPage(req, res, next, response.data);
+
+    } catch (err) {
+        sendJSONresponse(res, 500, "Server error");
+    }
+
 }

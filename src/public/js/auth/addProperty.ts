@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { isTokenValid, getTokenPayload } from './utils/methods';
 import { tokenHeaderRequest } from '../../../services/clientRequests';
-
+import { URLS } from './utils/urls';
 
 
 export const addPropertyController = () => {
@@ -127,7 +127,7 @@ export const addPropertyController = () => {
     new Vue({ // eslint-disable-line no-new
         data() {
             return {
-                sendDataUrl: "/adauga-proprietate",
+                sendDataUrl: URLS.ADD_PROPERTY,
                 modalId: "modal-message",
                 uploadedFiles: [],
                 errors: [],
@@ -238,7 +238,6 @@ export const addPropertyController = () => {
                 this.successMessage = [];
             },
             save(formData: FormData) {
-                // upload data to the server
                 //@ts-ignore
                 this.currentStatus = uploadStatus.SAVING;
                 upload(formData)

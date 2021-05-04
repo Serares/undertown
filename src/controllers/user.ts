@@ -142,52 +142,6 @@ export const getSubmitProperty = (req: Request, res: Response, next: NextFunctio
 }
 
 /**
- * @route POST /adauga-proprietate
- */
-export const postSubmitProperty = async (req: IRequestUserCredentials, res: Response, next: NextFunction) => {
-  try {
-
-    let propertyData: ISubmitedProperty = {
-      title: req.body.title,
-      description: req.body.description,
-      transactionType: req.body.transactionType,
-      propertyType: req.body.propertyType,
-      surface: req.body.surface,
-      rooms: null,
-      price: req.body.price,
-      address: req.body.address
-    };
-
-    if (propertyData.propertyType !== EPropertyTypes.LANDANDCOMMERCIAL) {
-      propertyData.rooms = req.body.rooms;
-    };
-
-    if (req.files && req.tokenPayload) {
-      propertyData.imagesUrls = req.tokenPayload.imagesUrls;
-      propertyData.gcsSubfolderId = req.tokenPayload.subdirectoryId;
-    };
-
-    let objectForDb = {
-      userEmail: req.tokenPayload.email,
-      submitedProperty: propertyData
-    };
-
-
-    let response = await dbApiRequest.post("/user/submitProperty", objectForDb);
-    if (response.data) {
-      return sendJSONresponse(res, 200, response.data);
-    }
-  } catch (err) {
-    if (err.response && err.response.status) {
-      logger.debug("Error postSubmitProperty -> " + timeNow);
-      return sendJSONresponse(res, err.response.status, err.response.data);
-    }
-
-    return sendJSONresponse(res, 500, { message: "Server error" });
-  }
-}
-
-/**
  * @route GET /resetare-parola/:resetToken
  */
 export const getResetPassword = (req: Request, res: Response, next: NextFunction) => {

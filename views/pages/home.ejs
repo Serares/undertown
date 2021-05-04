@@ -20,8 +20,8 @@
                 <div class="vertical_center w-100">
                     <div class="container">
                         <div class="slider-search-2">
-                            <h3 class="title text_white">Caută proprietatea</h3>
-                            <div class="property_search_form p-4 mt_30 bg_white">
+                            <!-- <h3 class="title text_white">Caută proprietatea</h3> -->
+                            <!-- <div class="property_search_form p-4 mt_30 bg_white">
                                 <% if(errorMessage) { %>
                                 <div id="error_message"><%=errorMessage %></div>
                                 <% }%>
@@ -48,10 +48,10 @@
                                         </div>
                                     </div>
                                 </form>
-                            </div>
+                            </div> -->
                             <div class="my-3">
                             </div>
-                            <span class="h4 text_white">avem o baza de date atent selecționată</span>
+                            <span class="h4 text_white">Avem o baza de date atent selecționată</span>
                         </div>
                     </div>
                 </div>
@@ -61,6 +61,7 @@
 
 
             <!-- Property Tab Start -->
+            <% if(featuredProperties.length > 0) { %>
             <section class="full_row py_80 bg_gray">
                 <div class="container">
                     <div class="row">
@@ -78,8 +79,8 @@
                                     <div class="filters">
                                         <ul class="filter-tabs filter-btns clearfix anim-3-all">
                                             <li class="active filter" data-role="button" data-filter="all">Toate</li>
-                                            <li class="filter" data-role="button" data-filter=".1">Casă</li>
-                                            <li class="filter" data-role="button" data-filter=".2">Apartament</li>
+                                            <li class="filter" data-role="button" data-filter=".1">Apartamente</li>
+                                            <li class="filter" data-role="button" data-filter=".2">Case</li>
                                             <li class="filter" data-role="button" data-filter=".3">Terenuri</li>
                                         </ul>
                                     </div>
@@ -87,10 +88,10 @@
 
                                     <!-- Tab Content -->
                                     <div class="row filter-list clearfix">
-                                        <% for(let property of featuredProperties) { %>
-                                            <%- include('../includes/homepage/card.ejs', {propertyInfo: property})  %>
-                                        <% } %>
-
+                                        
+                                                <% for(let property of featuredProperties) { %>
+                                                    <%- include('../includes/homepage/card.ejs', {propertyInfo: property}) %>
+                                                        <% } %>
                                     </div>
                                     <!-- End tab content -->
                                 </div>
@@ -99,6 +100,7 @@
                     </div>
                 </div>
             </section>
+            <% }%>
             <!-- Property Tab End -->
             <!-- Offer Part Start -->
             <section class="full_row pt_80 bg_white" style="border-top: 1px solid #efefef;">

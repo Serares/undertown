@@ -63,7 +63,6 @@ const App: React.FunctionComponent<AppProps> = ({ fetchUrl }) => {
         }
     };
 
-    //TODO refactor using -> useReducer
     const [listingsState, setListingsState] = React.useState<AppState>(state);
 
     React.useEffect(() => {

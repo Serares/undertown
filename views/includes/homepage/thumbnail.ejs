@@ -2,6 +2,13 @@
     <div class="upper_1 bg_secondary text-white">
         <%- status === 1 ? 'Vanzare' : 'Inchiriere' %>
     </div>
-    <a href="<%- propertyUrl %>"><img
-            src="<%- thumbnail %>" alt="imagine"></a>
+    <%
+        let imageUrl = "";
+        if(!(thumbnail.indexOf("http") > -1)) {
+            imageUrl += baseImageUrl
+        }
+        imageUrl+= thumbnail;
+    %>
+    <a href="<%-propertyUrl %>"><img
+            src="<%-imageUrl%>" alt="imagine"></a>
 </div>

@@ -5,10 +5,7 @@ import { validationResult } from "express-validator/check";
 import { PropertyTypes, TransactionTypes } from "../modelView/values";
 import { ETransactionType } from "../interfaces/ETransactionType";
 import { EPropertyTypes } from "../interfaces/EPropertyTypes";
-import { ICardProperty } from "../interfaces/ICardProperty";
-import faker, { fake } from 'faker';
-
-
+import { dbApiRequest } from '../services/serverRequests';
 
 type PostHomepageRequest = Request & {
     body: {
@@ -17,37 +14,14 @@ type PostHomepageRequest = Request & {
     }
 }
 
-const getFeaturedProperties = (): Promise<Array<ICardProperty>> => {
-    //TODO get from db only last 6 added properties from each collection
-    return new Promise((resolve, reject) => {
-        let fetchedData: Array<ICardProperty> = [];
-
-        for (let i = 0; i < 6; i++) {
-            let prop: ICardProperty = {
-                shortId: faker.random.number(10000),
-                thumbnail: "https://storage.googleapis.com/undertowndevelopment/images/images/1593634707575-apartament-de-vanzare-3-camere-bucuresti-cismigiu-137184720.jpg",
-                propertyType: faker.random.number(3) || 1,
-                title: faker.address.city(),
-                address: faker.address.county(),
-                surface: +faker.finance.amount(50, 500),
-                rooms: faker.random.number(4) || 1,
-                price: +faker.finance.amount(100, 1000),
-                transactionType: faker.random.number(2) || 1
-            };
-            //@ts-ignore
-            fetchedData.push(prop);
-        }
-        resolve(fetchedData)
-    })
-}
-
 /**
 * @route GET /
 */
 export const getHomepage = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     //TODO create url for each property in controller
     try {
-        let properties = await getFeaturedProperties();
+        let response = await dbApiRequest.get("/admin/getFeaturedProperties");
+        let properties = response.data;
         return res.render("pages/home", {
             path: "/",
             pageTitle: "UNDERTOWN",
@@ -68,6 +42,7 @@ export const getHomepage = async (req: Request, res: Response, next: NextFunctio
  * @route POST /
  */
 export const postHomepage = async (req: PostHomepageRequest, res: Response, next: NextFunction): Promise<void> => {
+    // TODO think how to make the query from homepage
     const buildRedirectUrl = (): string => {
         let pathName = "/";
         switch (Number(req.body.transactionType)) {
@@ -102,7 +77,8 @@ export const postHomepage = async (req: PostHomepageRequest, res: Response, next
     if (!errors.isEmpty()) {
         console.log(errors.array());
         try {
-            let properties = await getFeaturedProperties();
+            let response = await dbApiRequest.get("/admin/getFeaturedProperties");
+            let properties = response.data;
             return res.status(422).render("pages/home", {
                 path: "/",
                 pageTitle: "UNDERTOWN",
