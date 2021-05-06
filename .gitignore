@@ -8,7 +8,6 @@
 /js_custom_files
 /nodemon.json
 .idea
-coverage
+coverage/
 debug.log
-app.yaml
 package-lock.json

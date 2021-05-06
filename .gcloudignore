@@ -12,6 +12,14 @@
 # below:
 .git
 .gitignore
+directives
+dist/
+test/
+.vscode/
+.cache/
+debug.log
+coverage/
 
 # Node.js dependencies:
 node_modules/
+
