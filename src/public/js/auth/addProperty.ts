@@ -214,6 +214,7 @@ export const addPropertyController = () => {
                         });
 
                         Object.entries(this.formInputData).forEach((value) => {
+                            //@ts-ignore
                             formData.append(value[0], value[1] || "");
                         })
                         let response = await tokenHeaderRequest.post(this.sendDataUrl, formData);
