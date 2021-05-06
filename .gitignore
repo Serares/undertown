@@ -5,7 +5,6 @@
 .env
 /config
 .vscode
-/js_custom_files
 /nodemon.json
 .idea
 coverage/
