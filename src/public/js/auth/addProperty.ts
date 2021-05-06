@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { isTokenValid, getTokenPayload } from './utils/methods';
+import { getTokenPayload } from './utils/methods';
 import { tokenHeaderRequest } from '../../../services/clientRequests';
 import { URLS } from './utils/urls';
 
@@ -293,22 +293,22 @@ export const addPropertyController = () => {
             }
         },
         mounted() {
-            isTokenValid()
-                .then(bool => {
-                    if (!bool) {
-                        window.location.pathname = "/autentificare"
+            getTokenPayload()
+                .then(data => {
+                    if (!data) {
+                        return window.location.pathname = "/autentificare"
                     }
                     this.reset();
+                    return data;
                 })
-                .then(getTokenPayload)
-                .then((token) => {
-                    if (!token) {
+                .then(payload => {
+                    if (!payload) {
                         return;
                     }
                     //@ts-ignore
-                    this.user.shortId = token.shortId;
+                    this.user.shortId = payload.shortId;
                     //@ts-ignore
-                    this.user.email = token.email;
+                    this.user.email = payload.email;
                 })
         }
     });

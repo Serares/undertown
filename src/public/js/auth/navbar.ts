@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { isTokenValid } from './utils/methods';
+import { getTokenPayload } from './utils/methods';
 
 export const navbarController = () => {
     /**
@@ -13,7 +13,8 @@ export const navbarController = () => {
             return {
                 addPropertyUrl: "/adauga-proprietate",
                 redirectUrl: "/autentificare",
-                isLoggedIn: false
+                isLoggedIn: false,
+                userEmail: ""
             };
         },
         el: "#navbarApp",
@@ -23,7 +24,7 @@ export const navbarController = () => {
                 window.localStorage.removeItem("token");
                 this.isLoggedIn = false;
             },
-            getAddProperty: function (e: Event) { 
+            getAddProperty: function (e: Event) {
                 if (!this.isLoggedIn) {
                     window.location.pathname = this.redirectUrl;
                 } else {
@@ -39,9 +40,13 @@ export const navbarController = () => {
 
         },
         mounted() {
-            isTokenValid()
-                .then((bool) => {
-                    this.isLoggedIn = bool;
+            getTokenPayload()
+                .then((payload) => {
+                    if (!payload) {
+                        return;
+                    }
+                    this.isLoggedIn = true;
+                    this.userEmail = payload.email;
                 })
         }
     });

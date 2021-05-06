@@ -1,33 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { SENDGRID_API_KEY, CONTACT_EMAIL } from '../utils/secrets';
 import { body, sanitize, validationResult } from 'express-validator';
-import { IRequestUserCredentials } from '../interfaces/IRequestUserCredentials';
-import { EPropertyTypes } from '../interfaces/EPropertyTypes';
-import ISubmitedProperty from '../interfaces/ISubmitedProperty';
 import { dbApiRequest } from '../services/serverRequests';
 import logger, { timeNow } from '../utils/logger';
 import sendgridApi from '@sendgrid/mail';
-import faker from 'faker';
 import { sendJSONresponse } from '../utils/sendjsonresponse';
 sendgridApi.setApiKey(SENDGRID_API_KEY);
-
-
-
-let getGigi = (email?: string, id?: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    let user = {
-      name: "Gigi",
-      password: "qiwei1i2easind1",
-      email: CONTACT_EMAIL,
-      id: "3921"
-    };
-    if (email === user.email || id === user.id) {
-      resolve(user);
-    } else {
-      reject("Can't find user")
-    }
-  })
-}
 
 /**
  * @route GET /creare-cont

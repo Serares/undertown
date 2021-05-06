@@ -6,6 +6,7 @@ import { PropertyTypes, TransactionTypes } from "../modelView/values";
 import { ETransactionType } from "../interfaces/ETransactionType";
 import { EPropertyTypes } from "../interfaces/EPropertyTypes";
 import { dbApiRequest } from '../services/serverRequests';
+import logger, { timeNow } from "../utils/logger";
 
 type PostHomepageRequest = Request & {
     body: {
@@ -22,7 +23,7 @@ export const getHomepage = async (req: Request, res: Response, next: NextFunctio
     try {
         let response = await dbApiRequest.get("/admin/getFeaturedProperties");
         let properties = response.data;
-        return res.render("pages/home", {
+        return res.status(200).render("pages/home", {
             path: "/",
             pageTitle: "UNDERTOWN",
             featuredProperties: properties,
@@ -33,6 +34,8 @@ export const getHomepage = async (req: Request, res: Response, next: NextFunctio
             }
         });
     } catch (e) {
+        logger.debug(`Error at getHomepage -> ${e} -> ${timeNow}`);
+        console.log(e);
         const error = new CustomError("Network error", 500, "Home Controller Error");
         next(error);
     }

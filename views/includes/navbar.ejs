@@ -48,6 +48,9 @@
                   href="/contact">Contact</a></li>
               <li class="nav-item" v-if="isLoggedIn"> <a @click="logOut" class="nav-link" href="#"
                   id="basic_logout">Delogare</a></li>
+              <li class="nav-item" v-if="isLoggedIn">
+                <span class="nav-link" href="#" id="basic_logout">Esti logat cu: {{userEmail}}</span>
+              </li>
               <li class="nav-item" v-if="!isLoggedIn"> <a class="nav-link <%= path === '/signup' ? 'active' : '' %>"
                   href="/creare-cont">Creează cont</a></li>
               <li class="nav-item" v-if="!isLoggedIn"> <a class="nav-link <%= path === '/login' ? 'active' : '' %>"
