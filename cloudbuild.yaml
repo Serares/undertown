@@ -1,4 +1,24 @@
 steps:
+- name: node:14.0.0
+  entrypoint: npm
+  args: ["install"]
+- name: node:14.0.0
+  entrypoint: npm
+  args: ["run", "create-env"]
+  env: 
+    - 'DB_API_DEV=${_DB_API_DEV}'
+    - 'DB_API_PROD=${_DB_API_PROD}'
+    - 'FROM_EMAIL=${_FROM_EMAIL}'
+    - 'PROD_EMAIL=${_PROD_EMAIL}'
+    - 'DEV_EMAIL=${_DEV_EMAIL}'
+    - 'MONGO_USER=${_MONGO_USER}'
+    - 'MONGO_PASS=${_MONGO_PASS}'
+    - 'MONGO_DB=${_MONGO_DB}'
+    - 'MONGO_DB_DEV=${_MONGO_DB_DEV}'
+    - 'SENDGRID_API_KEY=${_SENDGRID_API_KEY}'
+    - 'GCLOUD_BUCKET_PROD=${_GCLOUD_BUCKET_PROD}'
+    - 'GCOUD_PROJECT_ID=${_GCOUD_PROJECT_ID}'
+    - 'TOKEN_SECRET=${_TOKEN_SECRET}'
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy"]
 timeout: "1600s"
