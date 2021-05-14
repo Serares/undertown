@@ -20,7 +20,7 @@ steps:
     - 'GCOUD_PROJECT_ID=${_GCOUD_PROJECT_ID}'
     - 'TOKEN_SECRET=${_TOKEN_SECRET}'
 - name: "gcr.io/cloud-builders/npm"
-  args: ["run", "test"]
+  args: ["run", "test-cloud"]
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy"]
 timeout: "1600s"
