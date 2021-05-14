@@ -24,7 +24,7 @@
     "parcel-watch-public-auth": "parcel watch src/public/js/auth/main.ts -d dist/public/js/auth/",
     "parcel-build-public-auth": "parcel build src/public/js/auth/main.ts -d dist/public/js/auth/",
     "test": "jest --forceExit --coverage --verbose",
-    "test-cloud": "jest --forceExit",
+    "test-cloud": "jest --detectOpenHandles --forceExit",
     "watch-node": "nodemon dist/server.js",
     "watch-test": "npm run test -- --watchAll",
     "watch-ts": "tsc -w",
