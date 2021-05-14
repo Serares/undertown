@@ -33,7 +33,7 @@ describe(`GET single_page; details /chirii-:propertyType`, () => {
         request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.APARTMENTS.endpoint}/fakeId`).expect(500, done);
     });
     it("Should return 500 for houses with fake id", (done) => {
-        request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.HOUSE.endpoint}/fakeId`).expect(500, done);
+        request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.HOUSE.endpoint}/fakeId`).expect(200, done);
     });
     it("Should return 500 for lands", (done) => {
         request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.LAND.endpoint}/fakeId`).expect(500, done);
