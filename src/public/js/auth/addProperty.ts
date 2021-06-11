@@ -58,12 +58,12 @@ export const addPropertyController = () => {
     function upload(formData: FormData) {
         const photos = formData.getAll('images');
         const promises = photos.map((file: any) => getImage(file)
-            .then((base64Image) => {
+            .then((image) => {
                 return {
                     id: Date.now(),
                     originalName: file.name,
                     fileName: file.name,
-                    url: base64Image,
+                    url: image.src,
                     type: file.type
                 }
             }));
@@ -79,7 +79,7 @@ export const addPropertyController = () => {
             fReader.onload = () => {
                 //@ts-ignore
                 img.src = fReader.result;
-                resolve(getBase64Image(img));
+                resolve(img);
             }
 
             fReader.readAsDataURL(file);
@@ -110,19 +110,6 @@ export const addPropertyController = () => {
 
     }
 
-    function getBase64Image(img: HTMLImageElement) {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        const ctx = canvas.getContext('2d');
-        //@ts-ignore
-        ctx.drawImage(img, 0, 0);
-
-        const dataURL = canvas.toDataURL('image/png');
-
-        return dataURL;
-    }
     // tslint:disable no-unused-expression
     new Vue({ // eslint-disable-line no-new
         data() {
@@ -209,7 +196,7 @@ export const addPropertyController = () => {
                     let formData = new FormData();
                     try {
                         this.uploadedFiles.forEach(async (file: any) => {
-                            let base64Content = file.url.replace(/^data:image\/(png|jpg);base64,/, "");
+                            let base64Content = file.url.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
                             formData.append("images", await base64ToBlob(base64Content, file.type))
                         });
 
