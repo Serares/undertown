@@ -108,6 +108,14 @@ const App: React.FunctionComponent<AppProps> = ({ fetchUrl }) => {
     };
 
     /**
+     * Reset Filters
+     */
+
+    const resetFilters = () => {
+        
+    }
+
+    /**
      * @param data -> name of filter
      */
     const filterByRooms = (data: string) => {
@@ -117,10 +125,13 @@ const App: React.FunctionComponent<AppProps> = ({ fetchUrl }) => {
         roomFilters = Number(data);
 
         function filterCb(value: ICardProperty) {
-            if (!Number(roomFilters))
-                return true;
+            if (!Number(roomFilters)) return true;
 
-            return value.rooms === roomFilters;
+            if(roomFilters! > 3) {
+                return value.features.rooms! >= roomFilters!;
+            };
+
+            return value.features.rooms === roomFilters;
         }
 
         let newProperties = properties.filter(filterCb);
@@ -191,15 +202,15 @@ const App: React.FunctionComponent<AppProps> = ({ fetchUrl }) => {
 
         function filterCb(value: ICardProperty) {
             if (surfaceFilters.min !== null && surfaceFilters.max !== null) {
-                return Number(value.surface) >= surfaceFilters.min && value.surface <= surfaceFilters.max;
+                return Number(value.features.usableArea) >= surfaceFilters.min && value.features.usableArea <= surfaceFilters.max;
             }
 
             if (surfaceFilters.min !== null) {
-                return Number(value.surface) >= surfaceFilters.min;
+                return Number(value.features.usableArea) >= surfaceFilters.min;
             }
 
             if (surfaceFilters.max !== null && surfaceFilters.max > Number(surfaceFilters.min)) {
-                return Number(value.surface) <= surfaceFilters.max;
+                return Number(value.features.usableArea) <= surfaceFilters.max;
             }
 
             return true;

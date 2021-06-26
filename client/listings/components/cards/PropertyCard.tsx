@@ -54,7 +54,7 @@ export const PropertyCard: React.FunctionComponent<PropetyCardProps> = ({ proper
     propertyValues.propertyType === EPropertyTypes.HOUSE ||
     propertyValues.propertyType === EPropertyTypes.APARTMENT
   ) {
-    features.rooms = propertyValues.rooms
+    features.rooms = propertyValues.features.rooms
   };
 
   const propertyUrl = () => {

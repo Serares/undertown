@@ -33,10 +33,10 @@ const Housing: React.FunctionComponent<HousingProps> = ({ propertyType, transact
         let maxValue;
         let interval;
         if (propertyType === EPropertyTypes.APARTMENT) {
-            maxValue = 300;
+            maxValue = 500;
             interval = 30;
         } else {
-            maxValue = 500;
+            maxValue = 900;
             interval = 50;
         }
 

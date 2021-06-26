@@ -7,9 +7,9 @@ export interface ICardProperty {
     propertyType: EPropertyTypes;
     title: string;
     address: string;
-    rooms?: number;
     features: {
         usableArea: number;
+        rooms?: number;
     };
     price: number;
     transactionType: ETransactionType;
