@@ -4,8 +4,6 @@ import { PropertyTypes, TransactionTypes } from "../modelView/values";
 import * as listingsController from "../controllers/listing";
 const router = Router();
 
-//TODO rename the endpoints after each property because properties should not be relative like ID's are, properties are always the same
-// do that at a latter stage
 /**
  * mvc routes
  */

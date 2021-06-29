@@ -24,7 +24,6 @@ export const postSendEmail = (req: Request, res: Response, next: NextFunction): 
     }
     // if there is no contactPerson(single_property) then use the default email ( contact page )
     console.log("Reciver email", CONTACT_EMAIL);
-    // TODO create an object for this message
     const email = {
         to: CONTACT_EMAIL,
         from: process.env.FROM_EMAIL || "",
