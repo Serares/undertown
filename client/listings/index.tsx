@@ -112,7 +112,22 @@ const App: React.FunctionComponent<AppProps> = ({ fetchUrl }) => {
      */
 
     const resetFilters = () => {
-        
+        let newFilteredProperties = [...listingsState.properties];
+        let newFiltersState = {
+            ...state.filters,
+            price: {
+                ...state.filters.price
+            },
+            surface: {
+                ...state.filters.surface
+            }
+        };
+
+        setListingsState({
+            ...listingsState,
+            filteredProperties: newFilteredProperties,
+            filters: newFiltersState
+        });
     }
 
     /**
@@ -127,7 +142,7 @@ const App: React.FunctionComponent<AppProps> = ({ fetchUrl }) => {
         function filterCb(value: ICardProperty) {
             if (!Number(roomFilters)) return true;
 
-            if(roomFilters! > 3) {
+            if (roomFilters! > 3) {
                 return value.features.rooms! >= roomFilters!;
             };
 
@@ -260,6 +275,7 @@ const App: React.FunctionComponent<AppProps> = ({ fetchUrl }) => {
                         propertyType={listingsState.propertyType}
                         transactionType={listingsState.transactionType}
                         filterProperties={filterProperties}
+                        resetFilters={resetFilters}
                     />
                 </div>
                 {listingsState.isLoading ?

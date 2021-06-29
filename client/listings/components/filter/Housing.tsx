@@ -128,7 +128,7 @@ const Housing: React.FunctionComponent<HousingProps> = ({ propertyType, transact
                             onChange={(e) => { updateState(e, "rooms") }}
                             inputProps={{
                                 name: 'camere',
-                                id: 'outlined-age-native-simple',
+                                id: "outlined-age-native-simple"
                             }}
                         >
                             <option aria-label="None" value="" />
@@ -165,7 +165,7 @@ const Housing: React.FunctionComponent<HousingProps> = ({ propertyType, transact
                             onChange={(e) => { updateState(e, "price", "max") }}
                             inputProps={{
                                 name: 'pret',
-                                id: 'outlined-age-native-simple',
+                                id: 'outlined-age-native-simple'
                             }}
                         >
                             {generatePriceFilters()}
