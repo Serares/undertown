@@ -26,6 +26,9 @@ export const getApartment = async (req: Request, res: Response, next: NextFuncti
         return renderDetailsPage(req, res, next, response.data);
 
     } catch (err) {
+        if(err.response) {
+            return sendJSONresponse(res, err.response.status, err.response.statusText)
+        }
         sendJSONresponse(res, 500, "Server error");
     }
 }
@@ -43,6 +46,9 @@ export const getHouse = async (req: Request, res: Response, next: NextFunction) 
         return renderDetailsPage(req, res, next, response.data);
 
     } catch (err) {
+        if(err.response) {
+            return sendJSONresponse(res, err.response.status, err.response.statusText)
+        }
         sendJSONresponse(res, 500, "Server error");
     }
 
@@ -61,6 +67,9 @@ export const getLand = async (req: Request, res: Response, next: NextFunction) =
         return renderDetailsPage(req, res, next, response.data);
 
     } catch (err) {
+        if(err.response) {
+            return sendJSONresponse(res, err.response.status, err.response.statusText)
+        }
         sendJSONresponse(res, 500, "Server error");
     }
 

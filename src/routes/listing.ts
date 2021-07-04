@@ -16,8 +16,8 @@ router.get(`/${TransactionTypes.SALE.endpoint}-${PropertyTypes.HOUSE.endpoint}`,
 router.get(`/${TransactionTypes.SALE.endpoint}-${PropertyTypes.LAND.endpoint}`,  (req, res, next) => { listingsController.getLand(req, res, next, TransactionTypes.SALE) });
 
 /**
-* REST routes
-*/
+ * REST routes
+ */
 router.get("/listings/:transactionType-:propertyType", listingsController.getListings);
 
 
