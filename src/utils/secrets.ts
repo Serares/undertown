@@ -11,7 +11,7 @@ if (fs.existsSync(".env")) {
 }
 export const ENVIRONMENT = process.env.NODE_ENV;
 // environment will be overriten by launch.json in vscode debug
-const prod = ENVIRONMENT === "production"; // Anything else is treated as 'dev'
+const prod = ENVIRONMENT.toLowerCase() === "production"; // Anything else is treated as 'dev'
 logger.debug("ENVIRONMENT IS: " + process.env.NODE_ENV);
 
 export const TOKEN_SECRET = process.env["TOKEN_SECRET"];

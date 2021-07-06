@@ -19,6 +19,7 @@ steps:
     - 'GCLOUD_BUCKET_PROD=${_GCLOUD_BUCKET_PROD}'
     - 'GCOUD_PROJECT_ID=${_GCOUD_PROJECT_ID}'
     - 'TOKEN_SECRET=${_TOKEN_SECRET}'
+    - 'NODE_ENV=${_NODE_ENV}'
 - name: "gcr.io/cloud-builders/npm"
   args: ["run", "test-cloud"]
 - name: "gcr.io/cloud-builders/gcloud"

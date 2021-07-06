@@ -29,7 +29,7 @@ export const getApartment = async (req: Request, res: Response, next: NextFuncti
         if(err.response) {
             return sendJSONresponse(res, err.response.status, err.response.statusText)
         }
-        sendJSONresponse(res, 500, "Server error");
+        sendJSONresponse(res, 500, "Error Occured");
     }
 }
 
@@ -49,7 +49,7 @@ export const getHouse = async (req: Request, res: Response, next: NextFunction) 
         if(err.response) {
             return sendJSONresponse(res, err.response.status, err.response.statusText)
         }
-        sendJSONresponse(res, 500, "Server error");
+        sendJSONresponse(res, 500, "Error Occured");
     }
 
 }
@@ -70,7 +70,7 @@ export const getLand = async (req: Request, res: Response, next: NextFunction) =
         if(err.response) {
             return sendJSONresponse(res, err.response.status, err.response.statusText)
         }
-        sendJSONresponse(res, 500, "Server error");
+        sendJSONresponse(res, 500, "Error Occured");
     }
 
 }
