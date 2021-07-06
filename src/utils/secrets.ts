@@ -2,17 +2,22 @@ import logger from "./logger";
 import dotenv from "dotenv";
 import fs from "fs";
 // TODO clean .env file for production
-
+let envFile;
 if (fs.existsSync(".env")) {
     logger.debug("Using .env file if in production");
     dotenv.config({ path: ".env" });
+    if (process.env.NODE_ENV.toLowerCase() === "test") {
+        const data = fs.readFileSync(".env");
+        envFile = dotenv.parse(data);
+    }
 } else {
     logger.debug(".env file does not exist");
-}
-export const ENVIRONMENT = process.env.NODE_ENV;
+};
+
+export const ENVIRONMENT = process.env.NODE_ENV.toLowerCase() === "test" ? envFile.NODE_ENV : process.env.NODE_ENV;
 // environment will be overriten by launch.json in vscode debug
 const prod = ENVIRONMENT.toLowerCase() === "production"; // Anything else is treated as 'dev'
-logger.debug("ENVIRONMENT IS: " + process.env.NODE_ENV);
+logger.debug("ENVIRONMENT IS: " + ENVIRONMENT);
 
 export const TOKEN_SECRET = process.env["TOKEN_SECRET"];
 export const MONGO_DB = prod ? process.env["MONGO_DB"] : process.env["MONGO_DB_DEV"];

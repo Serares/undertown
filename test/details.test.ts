@@ -35,10 +35,10 @@ describe(`GET single_page_details /chirii-:propertyType`, () => {
         request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.APARTMENTS.endpoint}/fakeId`).expect(404, (err, res) => {
             if (err) {
                 console.log("API URL ->", DB_API_URL);
-                console.log(err);
-                console.log(res);
+                console.log("ENVIRONMENT ->", process.env.NODE_ENV);
+                return done(err);
             }
-            done();
+            return done();
         });
     });
     it("Should return 404 for houses with fake id", (done) => {
