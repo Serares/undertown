@@ -1,8 +1,9 @@
+/*
 import request from "supertest";
 import app from "../src/app";
 import { TransactionTypes, PropertyTypes } from "../src/modelView/values";
 import { DB_API_URL } from '../src/utils/secrets';
-/*
+
 // describe(`GET single_page; details /chirii-:propertyType`, () => {
 //     it("Should return 200 for apartments with fake id", (done) => {
 //         request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.APARTMENTS.endpoint}/fakeId`).expect(200, done);
@@ -28,7 +29,7 @@ import { DB_API_URL } from '../src/utils/secrets';
 //     });
 // });
 */
-
+/*
 describe(`GET single_page_details /chirii-:propertyType`, () => {
     it("Should return 404 for apartments with fake id", (done) => {
         request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.APARTMENTS.endpoint}/fakeId`).expect(404, (err, res) => {
@@ -47,3 +48,4 @@ describe(`GET single_page_details /chirii-:propertyType`, () => {
         request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.LAND.endpoint}/fakeId`).expect(404, done);
     });
 });
+*/
