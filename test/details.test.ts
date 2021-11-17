@@ -31,7 +31,7 @@ import { DB_API_URL } from '../src/utils/secrets';
 
 describe(`GET single_page_details /chirii-:propertyType`, () => {
     it("Should return 404 for apartments with fake id", (done) => {
-        request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.APARTMENTS.endpoint}/fakeId`).expect(200, (err, res) => {
+        request(app).get(`/${TransactionTypes.RENT.endpoint}-${PropertyTypes.APARTMENTS.endpoint}/fakeId`).expect(404, (err, res) => {
             if (err) {
                 console.log("API URL ->", DB_API_URL);
                 console.log("ENVIRONMENT ->", process.env.NODE_ENV);
