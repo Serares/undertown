@@ -27,7 +27,7 @@ import { DB_API_URL } from '../src/utils/secrets';
 //         request(app).get(`/${TransactionTypes.SALE.endpoint}-${PropertyTypes.LAND.endpoint}/fakeId`).expect(200, done);
 //     });
 // });
-*/
+
 
 describe(`GET single_page_details /chirii-:propertyType`, () => {
     it("Should return 404 for apartments with fake id", (done) => {
